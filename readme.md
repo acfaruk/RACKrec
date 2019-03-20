@@ -3,6 +3,7 @@
 [![Build Status](https://dev.azure.com/facibal/RACKrec/_apis/build/status/acfaruk.RACKrec?branchName=master)](https://dev.azure.com/facibal/RACKrec/_build/latest?definitionId=1&branchName=master)
 ![Build Status](https://img.shields.io/azure-devops/build/facibal/327b7a13-3774-4bc6-b10c-73f1025960a4/1/master.svg)
 ![Test](https://img.shields.io/azure-devops/tests/facibal/RACKrec/1.svg)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ch.uzh.rackrec%3ARACKrec&metric=alert_status)](https://sonarcloud.io/dashboard?id=ch.uzh.rackrec%3ARACKrec)
 ![SonarQube coverage](https://img.shields.io/sonar/http/sonarcloud.io/ch.uzh.rackrec:RACKrec/coverage.svg)
 
 This repository is a group project at the UZH for the Advanced Software Engineering course. The goal is to create a code recommender system.
