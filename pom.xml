@@ -32,6 +32,14 @@
         </pluginManagement>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>bintray-acfaruk-uzh</id>
+            <name>acfaruk-uzh</name>
+            <url>https://api.bintray.com/maven/acfaruk/uzh/RACKrec/;publish=1</url>
+        </repository>
+    </distributionManagement>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
