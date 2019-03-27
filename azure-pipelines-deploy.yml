@@ -14,7 +14,7 @@ steps:
     secureFile: '08d53352-4797-469a-9da8-5b7e94bce2ea'
 
 
-- powershell: 'New-Item -Type Directory -Force "${HOME}/.m2" Copy-Item -Force "$(settingsxml.secureFilePath)" "${HOME}/.m2/settings.xml"'
+- powershell: 'New-Item -Type Directory -Force "${HOME}/.m2" Copy-Item -Force "$($(Agent.TempDirectory)/settings.xml)" "${HOME}/.m2/settings.xml"'
 
 - task: Maven@3
   inputs:
