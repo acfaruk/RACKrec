@@ -17,7 +17,7 @@ public class DefaultModule extends AbstractModule {
     }
 
     public static DefaultModule create(){
-        return new DefaultModule();
+        return new DefaultModule().setKaveData(KaveDataConfig.CONTEXT);
     }
 
     public DefaultModule setKaveData(KaveDataConfig kaveDataConfig){
