@@ -2,7 +2,9 @@ trigger:
   tags:
     include:
       - '*'
-
+  pr:
+    exclude:
+      - '*'
 pool:
   vmImage: 'vs2017-win2016'
 
