@@ -36,7 +36,7 @@ public class IdentifierLemmatizer implements ILemmatizer {
         return this;
     }
     public IdentifierLemmatizer enableCautiosStopWordRemoval () {
-        this.stopWordProvider = new CautiosStopWordProvider();
+        this.stopWordProvider = new ModifiedStopwordProvider();
         return this;
     }
 
