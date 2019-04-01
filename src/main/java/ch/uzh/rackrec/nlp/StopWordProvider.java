@@ -183,8 +183,8 @@ public class StopWordProvider implements IStopWordProvider {
                         "yourself\n" + 
                         "yourselves";
 
-    String[] stopWords = sample.split("\n");
-    List<String> stopWordList = new ArrayList<String>(Arrays.asList());
-    return stopWordList;
-  }
+        String[] stopWords = sample.split("\n");
+        List<String> stopWordList = new ArrayList<String>(Arrays.asList());
+        return stopWordList;
+    }
 }
