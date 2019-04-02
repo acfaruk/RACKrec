@@ -63,7 +63,7 @@ public class IdentifierLemmatizer implements ILemmatizer {
         return lemmas;
     }
 
-    public String tokenizeSentence(String s) {
+    private String tokenizeSentence(String s) {
         return s.replaceAll(
             String.format("%s|%s|%s",
                 "(?<=[A-Z])(?=[A-Z][a-z])",

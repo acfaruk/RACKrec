@@ -8,7 +8,7 @@ import ch.uzh.rackrec.model.Model;
 import ch.uzh.rackrec.model.gen.DefaultModelGenerator;
 import ch.uzh.rackrec.model.gen.ModelGenerator;
 import ch.uzh.rackrec.nlp.IStopWordProvider;
-import ch.uzh.rackrec.nlp.StopWordProvider;
+import ch.uzh.rackrec.nlp.NLTKStopWordProvider;
 
 public class DefaultModule extends AbstractModule {
 
@@ -31,7 +31,7 @@ public class DefaultModule extends AbstractModule {
     protected void configure() {
         bind(Model.class).to(DefaultModel.class);
         bind(ModelGenerator.class).to(DefaultModelGenerator.class);
-        bind(IStopWordProvider.class).to(StopWordProvider.class);
+        bind(IStopWordProvider.class).to(NLTKStopWordProvider.class);
         
         switch (kaveDataConfig){
             case CONTEXT:
