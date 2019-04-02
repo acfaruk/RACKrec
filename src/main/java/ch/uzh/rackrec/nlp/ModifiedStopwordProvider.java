@@ -11,7 +11,6 @@ public class ModifiedStopwordProvider implements IStopWordProvider {
     }
 
     public List<String> getStopWords() {
-
         String[] stopWords = {
             "i",
             "me",

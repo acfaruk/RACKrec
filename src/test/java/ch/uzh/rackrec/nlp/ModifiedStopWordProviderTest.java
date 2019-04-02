@@ -25,7 +25,8 @@ public class ModifiedStopWordProviderTest {
     @Test
     public void getAllStopWords(){
         List<String> allStopWords = sut.getStopWords();
-        assertTrue(allStopWords.size() > 0);
+        boolean providesWords = allStopWords.size() > 0;
+        assertTrue(providesWords);
     }
 
     @Test
