@@ -6,5 +6,4 @@ public interface ILemmatizer {
     List<String> lemmatize(String s);
     ILemmatizer enableStopWordRemoval();
     ILemmatizer enableDuplicateRemoval();
-    ILemmatizer enableCautiosStopWordRemoval();
 }

@@ -19,10 +19,11 @@ public class IdentifierLemmatizer implements ILemmatizer {
 
     private IStopWordProvider stopWordProvider;
 
+
     private Predicate<String> isNotAStopWord = p-> !stopWordProvider.isStopWord(p);
 
     @Inject
-    public IdentifierLemmatizer (IStopWordProvider stopWordProvider) {
+    public IdentifierLemmatizer (IStopWordProvider stopWordProvider){
         this.stopWordProvider = stopWordProvider;
         this.removeStopWords = false;
         this.removeDuplicates = false;
@@ -33,10 +34,6 @@ public class IdentifierLemmatizer implements ILemmatizer {
     }
     public IdentifierLemmatizer enableDuplicateRemoval () {
         this.removeDuplicates = true;
-        return this;
-    }
-    public IdentifierLemmatizer enableCautiosStopWordRemoval () {
-        this.stopWordProvider = new ModifiedStopwordProvider();
         return this;
     }
 
