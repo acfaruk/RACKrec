@@ -38,6 +38,13 @@ public class IdentifierLemmatizerTest {
     }
 
     @Test
+    public void test(){
+        List<String> lemmas = sutWithoutStopWord.lemmatize(camelCaseIdentifier);
+        boolean hasFiveLemmas = lemmas.size() == 5;
+        assertTrue(hasFiveLemmas);
+    }
+
+    @Test
     public void testWithStopWordRemoval(){
         List<String> lemmas = sut.lemmatize(camelCaseIdentifier);
         boolean hasFourLemmas = lemmas.size() == 4;
@@ -45,21 +52,7 @@ public class IdentifierLemmatizerTest {
     }
 
     @Test
-    public void testWithoutStopWordRemoval(){
-        List<String> lemmas = sutWithoutStopWord.lemmatize(camelCaseIdentifier);
-        boolean hasFiveLemmas = lemmas.size() == 5;
-        assertTrue(hasFiveLemmas);
-    }
-
-    @Test
     public void testWithDuplicateRemoval(){
-        List<String> lemmas = sutWithoutDuplicates.lemmatize(camelCaseIdentifier);
-        boolean hasFourLemmas = lemmas.size() == 4;
-        assertTrue(hasFourLemmas);
-    }
-
-    @Test
-    public void testWithDuplicates(){
         List<String> lemmas = sutWithoutDuplicates.lemmatize(camelCaseIdentifier);
         boolean hasFourLemmas = lemmas.size() == 4;
         assertTrue(hasFourLemmas);
