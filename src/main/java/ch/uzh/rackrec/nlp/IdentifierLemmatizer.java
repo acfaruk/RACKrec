@@ -28,17 +28,17 @@ public class IdentifierLemmatizer implements ILemmatizer {
         this.removeStopWords = false;
         this.removeDuplicates = false;
     }
-    public IdentifierLemmatizer enableStopWordRemoval () {
+    public IdentifierLemmatizer enableStopWordRemoval(){
         this.removeStopWords = true;
         return this;
     }
-    public IdentifierLemmatizer enableDuplicateRemoval () {
+    public IdentifierLemmatizer enableDuplicateRemoval(){
         this.removeDuplicates = true;
         return this;
     }
 
     @Override
-    public List<String> lemmatize(String identifier) {
+    public List<String> lemmatize(String identifier){
         String paddedIdentifier = tokenizeSentence(identifier);
         List <String> words = new ArrayList<>(Arrays.asList(paddedIdentifier.split(" ")));
 
