@@ -11,165 +11,113 @@ public class ModifiedStopwordProvider implements IStopWordProvider {
     }
 
     public List<String> getStopWords() {
-        String sample = "a\n" + 
-                        "about\n" + 
-                        "again\n" + 
-                        "against\n" + 
-                        "am\n" + 
-                        "an\n" + 
-                        "and\n" + 
-                        "are\n" + 
-                        "aren't\n" + 
-                        "as\n" + 
-                        "at\n" + 
-                        "be\n" + 
-                        "because\n" + 
-                        "been\n" + 
-                        "being\n" + 
-                        "both\n" + 
-                        "but\n" + 
-                        "by\n" + 
-                        "can't\n" + 
-                        "cannot\n" + 
-                        "could\n" + 
-                        "couldn't\n" + 
-                        "did\n" + 
-                        "didn't\n" + 
-                        "do\n" + 
-                        "does\n" + 
-                        "doesn't\n" + 
-                        "doing\n" + 
-                        "don't\n" + 
-                        "down\n" + 
-                        "during\n" + 
-                        "few\n" + 
-                        "further\n" + 
-                        "had\n" + 
-                        "hadn't\n" + 
-                        "has\n" + 
-                        "hasn't\n" + 
-                        "have\n" + 
-                        "haven't\n" + 
-                        "having\n" + 
-                        "he\n" + 
-                        "he'd\n" + 
-                        "he'll\n" + 
-                        "he's\n" + 
-                        "her\n" + 
-                        "here\n" + 
-                        "here's\n" + 
-                        "hers\n" + 
-                        "herself\n" + 
-                        "him\n" + 
-                        "himself\n" + 
-                        "his\n" + 
-                        "how\n" + 
-                        "how's\n" + 
-                        "i\n" + 
-                        "i'd\n" + 
-                        "i'll\n" + 
-                        "i'm\n" + 
-                        "i've\n" + 
-                        "if\n" + 
-                        "is\n" + 
-                        "isn't\n" + 
-                        "it\n" + 
-                        "it's\n" + 
-                        "its\n" + 
-                        "itself\n" + 
-                        "let's\n" + 
-                        "me\n" + 
-                        "more\n" + 
-                        "most\n" + 
-                        "mustn't\n" + 
-                        "my\n" + 
-                        "myself\n" + 
-                        "no\n" + 
-                        "nor\n" + 
-                        "not\n" + 
-                        "of\n" + 
-                        "off\n" + 
-                        "on\n" + 
-                        "or\n" + 
-                        "other\n" + 
-                        "ought\n" + 
-                        "our\n" + 
-                        "ours   ourselves\n" + 
-                        "out\n" + 
-                        "over\n" + 
-                        "own\n" + 
-                        "same\n" + 
-                        "shan't\n" + 
-                        "she\n" + 
-                        "she'd\n" + 
-                        "she'll\n" + 
-                        "she's\n" + 
-                        "should\n" + 
-                        "shouldn't\n" + 
-                        "so\n" + 
-                        "some\n" + 
-                        "such\n" + 
-                        "than\n" + 
-                        "that's\n" + 
-                        "the\n" + 
-                        "their\n" + 
-                        "theirs\n" + 
-                        "them\n" + 
-                        "themselves\n" + 
-                        "then\n" + 
-                        "there\n" + 
-                        "there's\n" + 
-                        "these\n" + 
-                        "they\n" + 
-                        "they'd\n" + 
-                        "they'll\n" + 
-                        "they're\n" + 
-                        "they've\n" + 
-                        "this\n" + 
-                        "those\n" + 
-                        "through\n" + 
-                        "too\n" + 
-                        "under\n" + 
-                        "until\n" + 
-                        "up\n" + 
-                        "very\n" + 
-                        "was\n" + 
-                        "wasn't\n" + 
-                        "we\n" + 
-                        "we'd\n" + 
-                        "we'll\n" + 
-                        "we're\n" + 
-                        "we've\n" + 
-                        "were\n" + 
-                        "weren't\n" + 
-                        "what\n" + 
-                        "what's\n" + 
-                        "when\n" + 
-                        "when's\n" + 
-                        "where's\n" + 
-                        "which\n" + 
-                        "while\n" + 
-                        "who\n" + 
-                        "who's\n" + 
-                        "whom\n" + 
-                        "why\n" + 
-                        "why's\n" + 
-                        "with\n" + 
-                        "won't\n" + 
-                        "would\n" + 
-                        "wouldn't\n" + 
-                        "you\n" + 
-                        "you'd\n" + 
-                        "you'll\n" + 
-                        "you're\n" + 
-                        "you've\n" + 
-                        "your\n" + 
-                        "yours\n" + 
-                        "yourself\n" + 
-                        "yourselves";
 
-        List<String> stopWords = new ArrayList<String>(Arrays.asList(sample.split("\n")));
-
-        return stopWords;
+        String[] stopWords = {
+            "i",
+            "me",
+            "my",
+            "myself",
+            "we",
+            "our", 
+            "ours", 
+            "ourselves", 
+            "you", 
+            "your", 
+            "yours", 
+            "yourself", 
+            "yourselves", 
+            "he", 
+            "him", 
+            "his", 
+            "himself", 
+            "she", 
+            "her", 
+            "hers", 
+            "herself", 
+            "it", 
+            "its", 
+            "itself", 
+            "they", 
+            "them", 
+            "their", 
+            "theirs", 
+            "themselves", 
+            "what", 
+            "who", 
+            "whom", 
+            "this", 
+            "that", 
+            "these", 
+            "those", 
+            "am", 
+            "is", 
+            "are", 
+            "was", 
+            "were", 
+            "be", 
+            "been", 
+            "being", 
+            "have", 
+            "has", 
+            "had", 
+            "having", 
+            "do", 
+            "does", 
+            "did", 
+            "doing", 
+            "a",
+            "an", 
+            "the",
+            "and", 
+            "but", 
+            "because", 
+            "as", 
+            "at", 
+            "by", 
+            "with", 
+            "about", 
+            "against", 
+            "into", 
+            "through", 
+            "during", 
+            "above", 
+            "up", 
+            "down", 
+            "in", 
+            "out", 
+            "on", 
+            "off", 
+            "over", 
+            "under", 
+            "again", 
+            "further", 
+            "here", 
+            "there", 
+            "why", 
+            "how", 
+            "both", 
+            "few", 
+            "more", 
+            "most", 
+            "other", 
+            "such", 
+            "no", 
+            "only", 
+            "own", 
+            "same",
+            "so", 
+            "than", 
+            "too", 
+            "very", 
+            "s",
+            "t",
+            "can",
+            "will",
+            "just",
+            "don",
+            "should"
+        };
+        List<String> stopWordList = new ArrayList<String>(Arrays.asList(stopWords));
+        return stopWordList;
     }
 }
