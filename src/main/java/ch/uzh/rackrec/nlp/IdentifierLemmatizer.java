@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import com.google.inject.Inject;
 
 import edu.stanford.nlp.simple.Sentence;
-import edu.stanford.nlp.process.*;
 
 public class IdentifierLemmatizer implements ILemmatizer {
     private boolean removeStopWords;
