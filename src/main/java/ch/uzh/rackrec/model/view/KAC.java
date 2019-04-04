@@ -2,12 +2,13 @@ package ch.uzh.rackrec.model.view;
 
 import cc.kave.commons.model.naming.IName;
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class KAC {
     protected String keyword;
-    protected HashMap<Integer, IName> freqToApi;
-    public KAC(String keyword, HashMap<Integer,IName> freqToApi){
+    protected Map<Integer, IName> freqToApi;
+    public KAC(String keyword, Map<Integer,IName> freqToApi){
         this.keyword = keyword;
         this.freqToApi = freqToApi;
     }
@@ -16,7 +17,7 @@ public class KAC {
         return keyword;
     }
 
-    public  HashMap<Integer, IName> getFreqToApi() {
+    public  Map<Integer, IName> getFreqToApi() {
         return freqToApi;
     }
 }
