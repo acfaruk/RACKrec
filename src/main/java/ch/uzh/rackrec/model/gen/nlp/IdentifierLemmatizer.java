@@ -6,6 +6,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
@@ -16,16 +18,19 @@ public class IdentifierLemmatizer implements ILemmatizer {
     private boolean removeStopWords;
     private boolean removeDuplicates;
 
+    private Logger logger;
+    
     private IStopWordProvider stopWordProvider;
 
 
     private Predicate<String> isNotAStopWord = p-> !stopWordProvider.isStopWord(p);
 
     @Inject
-    public IdentifierLemmatizer (IStopWordProvider stopWordProvider){
+    public IdentifierLemmatizer (IStopWordProvider stopWordProvider, Logger logger){
         this.stopWordProvider = stopWordProvider;
         this.removeStopWords = false;
         this.removeDuplicates = false;
+        this.logger = logger;
     }
     public IdentifierLemmatizer enableStopWordRemoval(){
         this.removeStopWords = true;
@@ -38,6 +43,7 @@ public class IdentifierLemmatizer implements ILemmatizer {
 
     @Override
     public List<String> lemmatize(String identifier){
+    	logger.log(Level.FINEST, "Lemmatizing: " + identifier);
         String paddedIdentifier = tokenizeSentence(identifier);
         List <String> words = new ArrayList<>(Arrays.asList(paddedIdentifier.split(" ")));
 
