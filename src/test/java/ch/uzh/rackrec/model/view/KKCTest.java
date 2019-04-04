@@ -5,10 +5,7 @@ import cc.kave.commons.model.naming.impl.v0.types.organization.AssemblyName;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static junit.framework.TestCase.assertTrue;
 
@@ -26,6 +23,7 @@ public class KKCTest {
         keyword1 = "Test";
         keyword2 = "Passed";
         keywordpair = new AbstractMap.SimpleEntry<>(keyword1,keyword2);
+        apis = new ArrayList<>();
         apis.add(new AssemblyName("mscorlib"));
         score = 0.86547;
     }
@@ -34,7 +32,7 @@ public class KKCTest {
         sut = new KKC(keywordpair,apis,score);
         boolean keywordsAreTrue = sut.getKeywordPair() == keywordpair;
         boolean apiListIsTrue = sut.getApis() == apis;
-        boolean scoreIsTrue = sut.getScore() == score;
+        boolean scoreIsTrue = sut.getScore() == 0.86547;
         assertTrue(keywordsAreTrue);
         assertTrue(apiListIsTrue);
         assertTrue(scoreIsTrue);
