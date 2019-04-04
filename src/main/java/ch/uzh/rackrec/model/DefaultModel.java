@@ -1,8 +1,11 @@
 package ch.uzh.rackrec.model;
 
 import ch.uzh.rackrec.model.gen.ModelGenerator;
+import ch.uzh.rackrec.model.view.KAC;
+import ch.uzh.rackrec.model.view.KKC;
 import com.google.inject.Inject;
 
+import java.util.List;
 import java.util.Properties;
 
 public class DefaultModel extends Model {
@@ -11,4 +14,20 @@ public class DefaultModel extends Model {
     public DefaultModel(Properties properties, ModelGenerator modelGenerator) {
         super(properties, modelGenerator);
     }
+
+    @Override
+    public List<KAC> getKAC(List<String> keyword, Integer sigma) {
+        return null;
+    }
+
+    @Override
+    public List<KKC> getKKC(List<KAC> KAC, Double similarity) {
+        return null;
+    }
+
+    @Override
+    public List<String> getContext(String keyword) {
+        return null;
+    }
+
 }
