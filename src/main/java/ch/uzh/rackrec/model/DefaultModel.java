@@ -19,20 +19,17 @@ public class DefaultModel extends Model {
 
     @Override
     public List<KAC> getKAC(List<String> keyword, Integer sigma) {
-        List<KAC> kacList = new ArrayList<KAC>();
-        return kacList;
+        return new ArrayList<>();
     }
 
     @Override
     public List<KKC> getKKC(List<KAC> kac, Double similarity) {
-        List<KKC> kkclist = new ArrayList<KKC>();
-        return kkclist;
+        return new ArrayList<>();
     }
 
     @Override
     public List<String> getContext(String keyword) {
-        List<String> context = new ArrayList<String>();
-        return context;
+        return new ArrayList<>();
     }
 
 }
