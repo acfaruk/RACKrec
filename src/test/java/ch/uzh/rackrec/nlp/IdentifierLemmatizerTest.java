@@ -3,6 +3,11 @@ package ch.uzh.rackrec.nlp;
 import org.junit.Before;
 import org.junit.Test;
 
+import ch.uzh.rackrec.model.gen.nlp.ILemmatizer;
+import ch.uzh.rackrec.model.gen.nlp.IStopWordProvider;
+import ch.uzh.rackrec.model.gen.nlp.IdentifierLemmatizer;
+import ch.uzh.rackrec.model.gen.nlp.NLTKStopWordProvider;
+
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

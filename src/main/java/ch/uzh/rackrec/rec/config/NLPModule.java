@@ -1,7 +1,7 @@
 package ch.uzh.rackrec.rec.config;
 
-import ch.uzh.rackrec.nlp.IStopWordProvider;
-import ch.uzh.rackrec.nlp.NLTKStopWordProvider;
+import ch.uzh.rackrec.model.gen.nlp.IStopWordProvider;
+import ch.uzh.rackrec.model.gen.nlp.NLTKStopWordProvider;
 
 public class NLPModule extends AbstractModule {
 

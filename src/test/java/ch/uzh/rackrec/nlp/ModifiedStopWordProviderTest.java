@@ -3,6 +3,9 @@ package ch.uzh.rackrec.nlp;
 import org.junit.Before;
 import org.junit.Test;
 
+import ch.uzh.rackrec.model.gen.nlp.IStopWordProvider;
+import ch.uzh.rackrec.model.gen.nlp.ModifiedStopwordProvider;
+
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;

@@ -1,13 +1,13 @@
-package ch.uzh.rackrec.nlp;
+package ch.uzh.rackrec.model.gen.nlp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ModifiedStopwordProvider implements IStopWordProvider {
+public class NLTKStopWordProvider implements IStopWordProvider {
 
     public boolean isStopWord(String word) {
-      return getStopWords().contains(word);
+        return getStopWords().contains(word);
     }
 
     public List<String> getStopWords() {
@@ -42,6 +42,7 @@ public class ModifiedStopwordProvider implements IStopWordProvider {
             "theirs", 
             "themselves", 
             "what", 
+            "which", 
             "who", 
             "whom", 
             "this", 
@@ -69,17 +70,29 @@ public class ModifiedStopwordProvider implements IStopWordProvider {
             "the",
             "and", 
             "but", 
+            "if", 
+            "or", 
             "because", 
             "as", 
+            "until", 
+            "while", 
+            "of", 
             "at", 
             "by", 
+            "for", 
             "with", 
             "about", 
             "against", 
+            "between", 
             "into", 
             "through", 
             "during", 
+            "before", 
+            "after", 
             "above", 
+            "below", 
+            "to", 
+            "from", 
             "up", 
             "down", 
             "in", 
@@ -90,21 +103,31 @@ public class ModifiedStopwordProvider implements IStopWordProvider {
             "under", 
             "again", 
             "further", 
+            "then", 
+            "once", 
             "here", 
             "there", 
+            "when", 
+            "where", 
             "why", 
             "how", 
+            "all", 
+            "any", 
             "both", 
+            "each", 
             "few", 
             "more", 
             "most", 
             "other", 
+            "some", 
             "such", 
             "no", 
+            "nor", 
+            "not", 
             "only", 
             "own", 
             "same",
-            "so", 
+             "so", 
             "than", 
             "too", 
             "very", 

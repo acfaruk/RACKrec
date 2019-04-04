@@ -7,8 +7,8 @@ import ch.uzh.rackrec.model.DefaultModel;
 import ch.uzh.rackrec.model.Model;
 import ch.uzh.rackrec.model.gen.DefaultModelGenerator;
 import ch.uzh.rackrec.model.gen.ModelGenerator;
-import ch.uzh.rackrec.nlp.IStopWordProvider;
-import ch.uzh.rackrec.nlp.NLTKStopWordProvider;
+import ch.uzh.rackrec.model.gen.nlp.IStopWordProvider;
+import ch.uzh.rackrec.model.gen.nlp.NLTKStopWordProvider;
 
 public class DefaultModule extends AbstractModule {
 

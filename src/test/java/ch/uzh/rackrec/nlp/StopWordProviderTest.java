@@ -6,6 +6,9 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import ch.uzh.rackrec.model.gen.nlp.IStopWordProvider;
+import ch.uzh.rackrec.model.gen.nlp.NLTKStopWordProvider;
+
 public class StopWordProviderTest {
     IStopWordProvider sut;
     String validStopWord;

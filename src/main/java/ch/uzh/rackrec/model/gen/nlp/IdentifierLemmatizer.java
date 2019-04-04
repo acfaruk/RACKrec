@@ -1,4 +1,4 @@
-package ch.uzh.rackrec.nlp;
+package ch.uzh.rackrec.model.gen.nlp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
