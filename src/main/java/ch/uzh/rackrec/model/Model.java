@@ -6,13 +6,16 @@ import ch.uzh.rackrec.model.view.KKC;
 
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public abstract class Model {
 
     protected final ModelGenerator modelGenerator;
     protected final Properties properties;
+    protected final Logger logger;
 
-    public Model(Properties properties, ModelGenerator modelGenerator) {
+    public Model(Properties properties, ModelGenerator modelGenerator, Logger logger) {
+    	this.logger = logger;
         this.properties = properties;
         this.modelGenerator = modelGenerator;
     }
