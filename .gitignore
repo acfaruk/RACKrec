@@ -12,3 +12,6 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 RACKrec.iml
 example/example.iml
+.settings
+.classpath
+.project
