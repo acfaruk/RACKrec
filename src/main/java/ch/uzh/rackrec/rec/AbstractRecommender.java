@@ -23,7 +23,6 @@ public abstract class AbstractRecommender implements IRecommender<IQuery> {
         this.injector = Guice.createInjector(module);
         this.model = injector.getInstance(Model.class);
 
-        model.setProperties(module.getProperties());
     }
 
     @Override

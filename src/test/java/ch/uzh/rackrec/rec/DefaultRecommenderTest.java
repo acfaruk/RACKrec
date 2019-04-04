@@ -1,8 +1,10 @@
 package ch.uzh.rackrec.rec;
 
-import ch.uzh.rackrec.rec.config.DefaultModule;
+import ch.uzh.rackrec.rec.config.KaveContextModule;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Properties;
 
 public class DefaultRecommenderTest {
 
@@ -13,7 +15,7 @@ public class DefaultRecommenderTest {
 
     @Test
     public void defaultRecommenderCreation(){
-        DefaultModule module = DefaultModule.create();
+        KaveContextModule module = new KaveContextModule(new Properties());
         DefaultRecommender defaultRecommender = new DefaultRecommender(module);
     }
 }

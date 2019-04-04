@@ -7,14 +7,11 @@ import java.util.Properties;
 public abstract class ModelGenerator {
 
     protected final KaveDataSet kaveDataSet;
-    protected Properties properties;
+    protected final Properties properties;
 
-    public ModelGenerator(KaveDataSet kaveDataSet) {
+    public ModelGenerator(Properties properties, KaveDataSet kaveDataSet) {
+        this.properties = properties;
         this.kaveDataSet = kaveDataSet;
     }
 
-    public void setProperties(Properties properties) {
-        kaveDataSet.setProperties(properties);
-        this.properties = properties;
-    }
 }

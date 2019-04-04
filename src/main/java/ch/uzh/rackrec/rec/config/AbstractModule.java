@@ -4,10 +4,10 @@ import java.util.Properties;
 
 public abstract class AbstractModule extends com.google.inject.AbstractModule {
 
-    protected Properties properties;
+    protected final Properties properties;
 
-    public AbstractModule(){
-        this.properties = new Properties();
+    public AbstractModule(Properties properties){
+        this.properties = properties;
     }
 
     public Properties getProperties() {

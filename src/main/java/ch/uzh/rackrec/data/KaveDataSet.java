@@ -3,9 +3,9 @@ package ch.uzh.rackrec.data;
 import java.util.Properties;
 
 public abstract class KaveDataSet {
-    protected Properties properties;
+    protected final Properties properties;
 
-    public void setProperties(Properties properties) {
+    public KaveDataSet(Properties properties){
         this.properties = properties;
     }
 }

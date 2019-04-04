@@ -2,7 +2,6 @@ package ch.uzh.rackrec.example;
 
 import ch.uzh.rackrec.rec.DefaultRecommender;
 import ch.uzh.rackrec.rec.config.DefaultModule;
-import ch.uzh.rackrec.rec.config.KaveDataConfig;
 
 public class Example {
 
