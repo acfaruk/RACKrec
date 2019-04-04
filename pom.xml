@@ -156,5 +156,11 @@
           <version>3.9.2</version>
           <classifier>models-english</classifier>
         </dependency>
+        <!--  SQLite -->
+        <dependency>
+            <groupId>org.xerial</groupId>
+             <artifactId>sqlite-jdbc</artifactId>
+            <version>3.27.2.1</version>
+        </dependency>
     </dependencies>
 </project>
