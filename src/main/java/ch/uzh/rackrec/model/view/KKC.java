@@ -1,22 +1,22 @@
 package ch.uzh.rackrec.model.view;
 
 import cc.kave.commons.model.naming.IName;
-import javafx.util.Pair;
 
 import java.util.List;
+import java.util.Map;
 
 public class KKC {
-    protected Pair<String,String> keywordPair;
+    protected Map.Entry<String,String> keywordPair;
     protected List<IName> apis;
     protected Double score;
 
-    public KKC (Pair<String,String> keywordPair, List<IName> apis, Double score){
+    public KKC (Map.Entry<String,String> keywordPair, List<IName> apis, Double score){
         this.keywordPair = keywordPair;
         this.apis = apis;
         this.score = score;
     }
 
-    public Pair<String, String> getKeywordPair() {
+    public Map.Entry<String, String> getKeywordPair() {
         return keywordPair;
     }
 
