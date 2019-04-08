@@ -9,8 +9,20 @@ public class ModelEntry {
     List<?> tokens;
 
     // The list of APIs references in the Context (API class or method reference on API class)
-    List<?> APIReferences;
+    List<?> apiReferences;
 
     // The enclosing type of the Context (Class name)
     ITypeName enclosingContextType;
+    public ModelEntry(List<?> tokens, List<?> apiReferences, ITypeName enclosingType) throws Exception {
+       	boolean noTokensOrAPIs = tokens.size() == 0 || apiReferences.size() == 0;
+       	boolean contextUndefined = enclosingType == null;
+       	boolean invalidMenuEntry = noTokensOrAPIs || contextUndefined;
+
+        if(invalidMenuEntry) {
+            throw new Exception();
+        }
+        this.tokens = tokens;
+        this.apiReferences = apiReferences;
+        this.enclosingContextType = enclosingType;
+    }
 }
