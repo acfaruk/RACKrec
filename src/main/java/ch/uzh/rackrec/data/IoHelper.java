@@ -25,14 +25,18 @@ public class IoHelper {
 
     public static List<Context> read(String zipFile) {
         LinkedList<Context> res = Lists.newLinkedList();
+
+        IReadingArchive ra = null;
         try {
-            IReadingArchive ra = new ReadingArchive(new File(zipFile));
+            ra = new ReadingArchive(new File(zipFile));
+
             while (ra.hasNext()) {
                 res.add(ra.getNext(Context.class));
             }
-            ra.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            ra.close();
         }
         return res;
     }
