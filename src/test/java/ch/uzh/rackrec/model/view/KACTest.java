@@ -19,7 +19,7 @@ public class KACTest {
     @Before
     public void initialize(){
         keyword = "Test";
-        freqToApi = new HashMap<Integer, IName>();
+        freqToApi = new HashMap<>();
         freqToApi.put(300,new AssemblyName("mscorlib"));
         freqToApi.put(334,new AssemblyName("mscorlib"));
 
@@ -29,7 +29,7 @@ public class KACTest {
     public void test(){
         sut = new KAC(keyword, freqToApi);
         boolean keywordIsTrue = sut.getKeyword().equals("Test");
-        boolean mapIsTrue = sut.getFreqToApi() == freqToApi;
+        boolean mapIsTrue = sut.getRankToApi() == freqToApi;
         assertTrue(keywordIsTrue&&mapIsTrue);
     }
 }

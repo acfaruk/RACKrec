@@ -18,7 +18,7 @@ public class DefaultModel extends Model {
     }
 
     @Override
-    public List<KAC> getKAC(List<String> keyword, Integer sigma) {
+    public List<KAC> getKAC(List<String> keyword, Integer delta) {
         return new ArrayList<>();
     }
 

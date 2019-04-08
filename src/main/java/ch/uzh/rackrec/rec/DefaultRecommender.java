@@ -3,11 +3,11 @@ package ch.uzh.rackrec.rec;
 import cc.kave.commons.model.events.completionevents.Context;
 import cc.kave.commons.model.naming.IName;
 import cc.kave.commons.model.naming.codeelements.IMemberName;
+import ch.uzh.rackrec.model.view.KAC;
 import ch.uzh.rackrec.rec.config.AbstractModule;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class DefaultRecommender extends AbstractRecommender {
 
@@ -35,4 +35,23 @@ public class DefaultRecommender extends AbstractRecommender {
     public int getLastModelSize() {
         return 0;
     }
+
+    public Map<IName,Double> getRackRecomendations(List<String> keywords){
+        Map<IName,Double> apiWithScore = new HashMap<>();
+        List<KAC> kacList = model.getKAC(keywords, Integer.getInteger(module.getProperties().getProperty("delta")));
+        for (KAC kac :kacList){
+            for (Map.Entry<IName, Double> entry : kac.getKacScore().entrySet()){
+                if (apiWithScore.containsKey(entry.getKey())){
+                    apiWithScore.replace(entry.getKey(),entry.getValue()+apiWithScore.get(entry.getKey()));
+                }
+                else {
+                    apiWithScore.put(entry.getKey(),entry.getValue());
+                }
+            }
+        }
+        //TO-DOO Implement KKC
+        return apiWithScore;
+
+    }
+
 }
