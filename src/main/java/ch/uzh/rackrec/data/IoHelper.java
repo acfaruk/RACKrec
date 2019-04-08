@@ -23,23 +23,6 @@ import cc.kave.commons.utils.io.ReadingArchive;
  */
 public class IoHelper {
 
-    public static Context readFirstContext(String dir) {
-        for (String zip : findAllZips(dir)) {
-            List<Context> ctxs = read(zip);
-            return ctxs.get(0);
-        }
-        return null;
-    }
-
-    public static List<Context> readAll(String dir) {
-        LinkedList<Context> res = Lists.newLinkedList();
-
-        for (String zip : findAllZips(dir)) {
-            res.addAll(read(zip));
-        }
-        return res;
-    }
-
     public static List<Context> read(String zipFile) {
         LinkedList<Context> res = Lists.newLinkedList();
         try {
