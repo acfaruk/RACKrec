@@ -15,7 +15,6 @@ public class DefaultRecommenderTest {
 
     @Test
     public void defaultRecommenderCreation(){
-        KaveContextModule module = new KaveContextModule(new Properties());
-        DefaultRecommender defaultRecommender = new DefaultRecommender(module);
+
     }
 }
