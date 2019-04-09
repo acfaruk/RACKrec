@@ -38,8 +38,7 @@ public class IoHelper {
                 res.add(ra.getNext(Context.class));
             }
         } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage());
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Could not open reading archive. ", e);
         } finally {
             if (ra != null){
                 ra.close();
