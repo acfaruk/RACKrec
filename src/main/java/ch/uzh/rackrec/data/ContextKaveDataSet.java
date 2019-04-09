@@ -55,9 +55,9 @@ public class ContextKaveDataSet extends KaveDataSet {
             throw new RuntimeException(message);
         }
 
-        Path path = Paths.get(URI.create(basePath + relativeContextPath));
+        Path path = Paths.get(URI.create("file://" + basePath + relativeContextPath));
 
-        if (Files.exists(path) == false){
+        if (Files.isDirectory(path) == false){
             String message = "The context data folder was not found in: " + path + " please update the folder name.";
             logger.log(Level.SEVERE, message);
             throw new RuntimeException(message);
@@ -74,8 +74,6 @@ public class ContextKaveDataSet extends KaveDataSet {
     }
 
     private void processSlnZip(String slnZip) {
-        int numProcessedContexts = 0;
-
         // open the .zip file ...
         try (IReadingArchive ra = new ReadingArchive(new File(contextPath, slnZip))) {
             logger.log(Level.INFO, "Reading contexts from ");
