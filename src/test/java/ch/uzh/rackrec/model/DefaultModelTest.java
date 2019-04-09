@@ -4,8 +4,11 @@ import ch.uzh.rackrec.data.ContextKaveDataSet;
 import ch.uzh.rackrec.data.KaveDataSet;
 import ch.uzh.rackrec.model.gen.DefaultModelGenerator;
 
+import ch.uzh.rackrec.model.gen.ModelGenerator;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
+import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,17 +17,20 @@ import java.util.logging.Logger;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class DefaultModelTest {
     DefaultModel sut;
-    Logger mockedLogger ;
+    Properties properties;
+    ModelGenerator generatorMock;
+    Logger loggerMock;
 
     @Before
     public void initialize(){
-        mockedLogger = mock(Logger .class);
-        KaveDataSet dataset = new ContextKaveDataSet(new Properties(),mockedLogger);
-        DefaultModelGenerator ModelGenerator = new DefaultModelGenerator(new Properties(), dataset,mockedLogger );
-        sut = new DefaultModel(new Properties(), ModelGenerator, mockedLogger );
+        properties = new Properties();
+        generatorMock = mock(ModelGenerator.class);
+        loggerMock = mock(Logger.class);
+        sut = new DefaultModel(properties, generatorMock, loggerMock);
     }
 
     @Test
