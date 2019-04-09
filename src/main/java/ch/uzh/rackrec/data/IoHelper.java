@@ -10,6 +10,8 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.common.collect.Lists;
 
@@ -23,6 +25,8 @@ import cc.kave.commons.utils.io.ReadingArchive;
  */
 public class IoHelper {
 
+    private static final Logger logger = Logger.getLogger(IoHelper.class.getName());
+
     public static List<Context> read(String zipFile) {
         LinkedList<Context> res = Lists.newLinkedList();
 
@@ -34,9 +38,12 @@ public class IoHelper {
                 res.add(ra.getNext(Context.class));
             }
         } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
             e.printStackTrace();
         } finally {
-            ra.close();
+            if (ra != null){
+                ra.close();
+            }
         }
         return res;
     }
