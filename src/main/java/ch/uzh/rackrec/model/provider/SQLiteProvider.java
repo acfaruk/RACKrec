@@ -177,24 +177,32 @@ public boolean saveMinedContext(ModelEntry modelEntry) throws SQLException {
 	return false;
 }
 
-private void storeTokens(List<?> tokens) {
-	String sql = prepareStoreTokens(tokens);
+protected void storeTokens(List<String> tokens) throws SQLException {
+		Statement statement = conn.createStatement();
+		statement.execute(prepareStoreTokens(tokens));
 }
-public String prepareStoreTokens (List<?>tokens) {
+protected String prepareStoreTokens (List<String>tokens) {
 	String values = tokens.stream()
 		  .map(token -> "(\"" + token + "\"),")
 		  .collect(Collectors.joining("\n"));
 
 	values = terminateSqlStatement(values);
 	String insertTokens = ""
-			+ "INSERT INTO tokens (Token) VALUES "
+			+ "INSERT OR IGNORE INTO tokens (Token) VALUES "
 			+ values;
 
 	return insertTokens;
 }
 
-public String prepareStoreAPI(String api) {
-	String insertAPIs = "INSERT INTO apis (API) VALUES " + "(\"" + api + "\")";
+protected String prepareStoreAPI(List<String> apis) {
+	String values = apis.stream()
+		  .map(token -> "(\"" + token + "\"),")
+		  .collect(Collectors.joining("\n"));
+
+	values = terminateSqlStatement(values);
+	String insertAPIs = ""
+			+ "INSERT OR IGNORE INTO apis (API) VALUES "
+			+ values;
 
 	return insertAPIs;
 }
@@ -217,19 +225,12 @@ private void storeApiContextReference() {
 	
 }
 
-public void storeAPIS(List<String> apis) throws SQLException {
-	for(String api: apis) {
-		try {
-		Statement statement = conn.createStatement();
-		statement.execute(prepareStoreAPI(api));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
+protected void storeAPIS(List<String> apis) throws SQLException {
+	Statement statement = conn.createStatement();
+	statement.execute(prepareStoreAPI(apis));
 }
 
-public List<String> getAPIs() throws SQLException {
+protected List<String> getAPIs() throws SQLException {
 	String getAPIsQuery = ""
 			+ "SELECT API from apis";
 
@@ -242,4 +243,16 @@ public List<String> getAPIs() throws SQLException {
 	return apis;
 }
 
+public List<String> getTokens() throws SQLException {
+	String getTokensQuery = ""
+			+ "SELECT Token from tokens";
+
+	List<String> tokens = new ArrayList<String>();
+	Statement statement = conn.createStatement();
+    ResultSet rs = statement.executeQuery(getTokensQuery);
+    while(rs.next()) {
+    	tokens.add(rs.getString("Token"));
+    }
+	return tokens;
+}
 }

@@ -14,6 +14,9 @@ import java.util.Properties;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import static org.mockito.Mockito.mock;
+
+import cc.kave.commons.model.naming.impl.v0.types.TypeName;
 
 public class SQLiteProviderTest {
 	String testingDB = "./testdb.db";
@@ -36,9 +39,8 @@ public class SQLiteProviderTest {
 	@Test
 	public void testPrepareStoreTokens() {
 		String[] tokens = {"comput", "MD5", "Hash"};
-		List<String> testTokens = new ArrayList<String>(Arrays.asList(tokens));
-		String sqlStatement = provider.prepareStoreTokens(testTokens);
-		String expected = "INSERT INTO tokens (Token) VALUES (\"comput\"),\n(\"MD5\"),\n(\"Hash\");";
+		String sqlStatement = provider.prepareStoreTokens(Arrays.asList(tokens));
+		String expected = "INSERT OR IGNORE INTO tokens (Token) VALUES (\"comput\"),\n(\"MD5\"),\n(\"Hash\");";
 	
 		assertEquals(sqlStatement, expected);
 	}
@@ -46,8 +48,9 @@ public class SQLiteProviderTest {
 	@Test
 	public void testPrepareStoreAPI() {
 		String[] apis = {"someclass.somemethod", "otherclass.othermethod"};
-		String sqlStatement = provider.prepareStoreAPI(apis[0]);
-		String expected = "INSERT INTO apis (API) VALUES (\"someclass.somemethod\")";
+		List<String> testApis = new ArrayList<String>(Arrays.asList(apis));
+		String sqlStatement = provider.prepareStoreAPI(testApis);
+		String expected = "INSERT OR IGNORE INTO apis (API) VALUES (\"someclass.somemethod\"),\n(\"otherclass.othermethod\");";
 		System.out.println(sqlStatement);
 	
 		assertEquals(sqlStatement, expected);
@@ -93,12 +96,51 @@ public class SQLiteProviderTest {
 	public void testStoreApis() throws SQLException {
 		provider.prepareSchemas();
 		assertTrue(provider.tableExists("apis"));
-		String[] apis = {"someclass.somemethod", "otherclass.othermethod"};
+		String[] apis = {"someclass.somemethod", "otherclass.othermethod", "otherclass.othermethod"};
 		provider.storeAPIS(Arrays.asList(apis));
-		
+		provider.storeAPIS(Arrays.asList(apis));
+
 		List<String> apiRows = provider.getAPIs();
 		int actualLength = apiRows.size();
 		int expectedLength = 2;
 		assertEquals(expectedLength, actualLength);
+	}
+
+	@Test
+	public void testStoreTokens() throws SQLException {
+		provider.prepareSchemas();
+		assertTrue(provider.tableExists("tokens"));
+		String[] tokens = {"compu", "md5", "hash"};
+		String[] duplicateTokens = {"hash"};
+		provider.storeTokens(Arrays.asList(tokens));
+		provider.storeTokens(Arrays.asList(duplicateTokens));
+		
+		List<String> tokenRows = provider.getTokens();
+		int actualLength = tokenRows.size();
+		int expectedLength = 3;
+		assertEquals(expectedLength, actualLength);
+	}
+
+	@Test
+	public void testStoreModelEntry() throws Exception {
+		provider.prepareSchemas();
+
+		String[] tokens = {"compu", "md5", "hash"};
+		String[] apis = {"someclass.somemethod", "otherclass.othermethod", "otherclass.othermethod"};
+		TypeName typeName = mock(TypeName.class);
+		
+		ModelEntry entry = new ModelEntry(Arrays.asList(tokens), Arrays.asList(apis), typeName);
+
+		provider.saveMinedContext(entry);
+	
+		List<String> tokenRows = provider.getTokens();
+		int nrOfTokens = tokenRows.size();
+		int expectedNrOfTokens = 3;
+		assertEquals(expectedNrOfTokens, nrOfTokens);
+
+		List<String> apiRows = provider.getAPIs();
+		int nrOfAPIs = apiRows.size();
+		int expectedNrOfApis = 2;
+		assertEquals(expectedNrOfApis, nrOfAPIs);
 	}
 }
