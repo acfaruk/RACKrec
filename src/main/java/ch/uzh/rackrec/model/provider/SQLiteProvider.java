@@ -75,6 +75,11 @@ public class SQLiteProvider implements IDatabaseProvider{
     }
 
     private void createAPITable() throws SQLException {
+    	boolean apiTableExists = tableExists("apis");
+    	if(apiTableExists) {
+    		return;
+    	}
+
         String createAPISchema = ""
             + "CREATE TABLE apis("
             + "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -84,17 +89,25 @@ public class SQLiteProvider implements IDatabaseProvider{
         statement.execute(createAPISchema);
     }
 
-  private void createTokenTable() throws SQLException {
-    String createTokenSchema = ""
-                  + "CREATE TABLE tokens("
-                  + "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
-                  + "Token varchar(255) NOT NULL UNIQUE"
-                  + ")";
-    Statement statement = conn.createStatement();
-    statement.execute(createTokenSchema);
-  }
+	private void createTokenTable() throws SQLException {
+		boolean tokenTableExists = tableExists("tokens");
+		if(tokenTableExists) {
+			return;
+		}
+		String createTokenSchema = ""
+					  + "CREATE TABLE tokens("
+					  + "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+					  + "Token varchar(255) NOT NULL UNIQUE"
+					  + ")";
+		Statement statement = conn.createStatement();
+		statement.execute(createTokenSchema);
+	  }
   
   private void createTokenReferenceTable() throws SQLException {
+		boolean tokenRefTableExists = tableExists("TokenReferences");
+		if(tokenRefTableExists) {
+			return;
+		}
     String createTokenReferenceSchema =  ""
                   + "CREATE TABLE TokenReferences("
                   + "Token int,"
@@ -108,6 +121,10 @@ public class SQLiteProvider implements IDatabaseProvider{
   }
 
     private void createAPIReferenceTable() throws SQLException {
+		boolean apiRefTableExists = tableExists("APIReferences");
+		if(apiRefTableExists) {
+			return;
+		}
     String createAPIReferenceSchema =  ""
                   + "CREATE TABLE APIReferences("
                   + "API int,"
