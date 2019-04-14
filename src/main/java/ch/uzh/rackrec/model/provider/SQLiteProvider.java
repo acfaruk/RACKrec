@@ -147,23 +147,6 @@ public class SQLiteProvider implements IDatabaseProvider{
     }
   }
 
-/*
-  public static void main(String[] args) {
-    
-    Properties props = new Properties();
-    SQLiteProvider provider = new SQLiteProvider(props);
-    try {
-      System.out.println(provider.tableExists("tokens"));
-      System.out.println(provider.tableExists("butter"));
-      System.out.println(provider.getTokensForAPI("Digest"));
-      provider.closeConnection();
-    } catch (SQLException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-  }
-  */
-
   @Override
   public List<String> getTokensForAPI(String api) throws SQLException {
     Statement stmt = conn.createStatement();
