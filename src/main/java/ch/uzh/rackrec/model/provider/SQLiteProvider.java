@@ -172,9 +172,19 @@ public boolean saveMinedContext(ModelEntry modelEntry) throws SQLException {
 	
 	storeAPIS(apis);
 	storeTokens(tokens);
+	storeContext(name);
 	storeApiContextReference();
 	storeTokenContextReference();
 	return false;
+}
+
+private void storeContext(ITypeName name) throws SQLException {
+	// TODO Auto-generated method stub
+	String insertContext = "" 
+			+ "INSERT OR IGNORE INTO Contexts (Context) VALUES (\"" + name + "\")";
+
+	Statement statement = conn.createStatement();
+	statement.execute(insertContext);
 }
 
 protected void storeTokens(List<String> tokens) throws SQLException {
@@ -243,7 +253,20 @@ protected List<String> getAPIs() throws SQLException {
 	return apis;
 }
 
-public List<String> getTokens() throws SQLException {
+protected List<String> getContexts() throws SQLException {
+	String getContextsQuery = ""
+			+ "SELECT Context from Contexts";
+
+	List<String> contexts = new ArrayList<String>();
+	Statement statement = conn.createStatement();
+    ResultSet rs = statement.executeQuery(getContextsQuery);
+    while(rs.next()) {
+    	contexts.add(rs.getString("Context"));
+    }
+	return contexts;
+}
+
+protected List<String> getTokens() throws SQLException {
 	String getTokensQuery = ""
 			+ "SELECT Token from tokens";
 

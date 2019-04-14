@@ -142,5 +142,10 @@ public class SQLiteProviderTest {
 		int nrOfAPIs = apiRows.size();
 		int expectedNrOfApis = 2;
 		assertEquals(expectedNrOfApis, nrOfAPIs);
+
+		List<String> contextRows = provider.getContexts();
+		int nrOfContexts = contextRows.size();
+		int expectedNrOfContexts = 1;
+		assertEquals(expectedNrOfContexts, nrOfContexts);
 	}
 }
