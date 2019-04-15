@@ -15,6 +15,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import cc.kave.commons.model.naming.impl.v0.types.TypeName;
 
@@ -120,6 +121,70 @@ public class SQLiteProviderTest {
 		int expectedLength = 3;
 		assertEquals(expectedLength, actualLength);
 	}
+	
+	@Test
+	public void testStoreNewApiReference() throws SQLException {
+		provider.prepareSchemas();
+		
+		TypeName testContext = mock(TypeName.class);
+        String[] apis = {"someLib.someMethod", "otherLib.otherMethod"};
+		when(testContext.toString()).thenReturn("someClientClass.someMethod");
+		provider.storeAPIS(Arrays.asList(apis));
+		provider.storeContext(testContext);
+		provider.saveApiContextReference("someLib.someMethod", testContext);
+		List<String> storedReferences = provider.getApisForContext(testContext.toString());
+		int actualNumOfReferences = storedReferences.size();
+		int expectedNumOfReferences = 1;
+		assertEquals(expectedNumOfReferences, actualNumOfReferences);
+
+		assertTrue(provider.apiContextReferenceExists("someLib.someMethod", testContext));
+	}
+
+	@Test
+	public void testStoreExistingApiReference() throws SQLException {
+		provider.prepareSchemas();
+
+		TypeName testContext = mock(TypeName.class);
+        String[] apis = {"someLib.someMethod", "otherLib.otherMethod"};
+		when(testContext.toString()).thenReturn("someClientClass.someMethod");
+		provider.storeAPIS(Arrays.asList(apis));
+		provider.storeContext(testContext);
+		provider.saveApiContextReference("someLib.someMethod", testContext);
+		List<String> storedReferences = provider.getApisForContext(testContext.toString());
+
+		int actualNumOfReferences = storedReferences.size();
+		int expectedNumOfReferences = 1;
+
+		assertEquals(expectedNumOfReferences, actualNumOfReferences);
+		assertTrue(provider.apiContextReferenceExists("someLib.someMethod", testContext));
+		assertEquals(0, provider.getApiCountForContext(testContext.toString(),"someLib.someMethod" ));
+
+		provider.saveApiContextReference("someLib.someMethod", testContext);
+		storedReferences = provider.getApisForContext(testContext.toString());
+		actualNumOfReferences = storedReferences.size();
+		assertEquals(expectedNumOfReferences, actualNumOfReferences);
+		assertEquals(1, provider.getApiCountForContext(testContext.toString(),"someLib.someMethod" ));
+        
+		String[] multipleApis = {"someLib.someMethod", "someLib.someMethod"};
+		provider.saveApiContextReference(Arrays.asList(multipleApis), testContext);
+		assertEquals(3, provider.getApiCountForContext(testContext.toString(),"someLib.someMethod" ));
+	}
+
+	@Test
+	public void testStoreMultipleExistingApiReferences() throws SQLException {
+		provider.prepareSchemas();
+
+		TypeName testContext = mock(TypeName.class);
+        String[] apis = {"someLib.someMethod", "otherLib.otherMethod"};
+		when(testContext.toString()).thenReturn("someClientClass.someMethod");
+		provider.storeAPIS(Arrays.asList(apis));
+		provider.storeContext(testContext);
+		provider.saveApiContextReference("someLib.someMethod", testContext);
+
+		String[] multipleApis = {"someLib.someMethod", "someLib.someMethod"};
+		provider.saveApiContextReference(Arrays.asList(multipleApis), testContext);
+		assertEquals(2, provider.getApiCountForContext(testContext.toString(),"someLib.someMethod" ));
+	}
 
 	@Test
 	public void testStoreModelEntry() throws Exception {
@@ -135,7 +200,7 @@ public class SQLiteProviderTest {
 	
 		List<String> tokenRows = provider.getTokens();
 		int nrOfTokens = tokenRows.size();
-		int expectedNrOfTokens = 3;
+		int expectedNrOfTokens = tokens.length;
 		assertEquals(expectedNrOfTokens, nrOfTokens);
 
 		List<String> apiRows = provider.getAPIs();
@@ -147,5 +212,10 @@ public class SQLiteProviderTest {
 		int nrOfContexts = contextRows.size();
 		int expectedNrOfContexts = 1;
 		assertEquals(expectedNrOfContexts, nrOfContexts);
+
+		List<String> contextForApiRows = provider.getApisForContext(typeName.toString());
+		int nrOfApisForCtx = contextForApiRows.size();
+		int expectedNrOfApisForCtx = 2;
+		assertEquals(expectedNrOfApisForCtx, nrOfApisForCtx);
 	}
 }

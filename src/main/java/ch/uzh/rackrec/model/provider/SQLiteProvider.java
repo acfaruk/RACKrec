@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
 
+import cc.kave.commons.model.naming.impl.v0.types.TypeName;
 import cc.kave.commons.model.naming.types.ITypeName;
 
 public class SQLiteProvider implements IDatabaseProvider{
@@ -147,6 +148,82 @@ public class SQLiteProvider implements IDatabaseProvider{
     }
   }
 
+public void saveApiContextReference(String api, ITypeName context) throws SQLException {
+	boolean referenceExistsAlready = apiContextReferenceExists(api, context);
+
+	if(referenceExistsAlready) {
+		updateExistingApiContextReference(api, context);
+	} else {
+		createNewApiContextReference(api, context);
+	}
+}
+
+public void saveApiContextReference(List<String> apis, ITypeName context) throws SQLException {
+	for(String api: apis) {
+		saveApiContextReference(api, context);
+	}
+}
+
+private void updateExistingApiContextReference(String api, ITypeName context) throws SQLException {
+	String updateReference = ""
+			+ "UPDATE APIReferences "
+			+ "SET Count = Count + 1 "
+			+ "WHERE API=(SELECT ID FROM apis WHERE API=\""+ api +"\")"
+			+ "AND Context=(SELECT ID FROM contexts WHERE Context=\""+ context +"\")";
+
+	Statement stmtn = conn.createStatement();
+	stmtn.execute(updateReference);
+}
+
+private void createNewApiContextReference (String api, ITypeName context) throws SQLException {
+	String storeReference = ""
+			+ "INSERT INTO APIReferences (API, Context, Count) VALUES ("
+			+ "(SELECT ID FROM apis WHERE API=\""+api+"\"), (SELECT ID FROM contexts WHERE CONTEXT=\""+ context +"\"), 0)";
+
+	Statement stmt = conn.createStatement();
+	stmt.execute(storeReference);
+}
+
+protected boolean apiContextReferenceExists(String api, ITypeName context) throws SQLException {
+	boolean foundReference = false;
+	String query = ""
+		  + "SELECT * FROM APIReferences WHERE API=(SELECT ID FROM apis WHERE API=\""+ api +"\")"
+		  + "AND Context=(SELECT ID FROM contexts WHERE Context=\""+ context +"\")";
+	Statement stmt = conn.createStatement();
+	ResultSet rs = stmt.executeQuery(query);
+	foundReference = rs.next();
+
+	return foundReference;
+}
+
+public List<String> getApisForContext(String context) throws SQLException {
+	String getApisQuery = "SELECT API FROM APIReferences WHERE Context=(SELECT ID FROM contexts WHERE Context=\""+ context +"\")";
+	Statement stmt = conn.createStatement();
+
+	ResultSet rs = stmt.executeQuery(getApisQuery);
+	List<String> apis = new ArrayList<String>();
+	while(rs.next()) {
+		apis.add(rs.getString("API"));
+	}
+	return apis;
+}
+
+public int getApiCountForContext(String context, String api) throws SQLException {
+	String getApisQuery = ""
+			+ "SELECT Count "
+			+ "FROM APIReferences "
+			+ "WHERE Context=(SELECT ID FROM contexts WHERE Context=\""+ context +"\")"
+			+ "AND "
+			+ "API=(SELECT ID FROM apis WHERE API=\""+ api +"\")";
+
+	Statement stmt = conn.createStatement();
+
+	ResultSet rs = stmt.executeQuery(getApisQuery);
+	int count = 0;
+	count = rs.getInt("Count");
+	return count;
+}
+
   @Override
   public List<String> getTokensForAPI(String api) throws SQLException {
     Statement stmt = conn.createStatement();
@@ -173,12 +250,12 @@ public boolean saveMinedContext(ModelEntry modelEntry) throws SQLException {
 	storeAPIS(apis);
 	storeTokens(tokens);
 	storeContext(name);
-	storeApiContextReference();
+	saveApiContextReference(apis, name);
 	storeTokenContextReference();
 	return false;
 }
 
-private void storeContext(ITypeName name) throws SQLException {
+protected void storeContext(ITypeName name) throws SQLException {
 	// TODO Auto-generated method stub
 	String insertContext = "" 
 			+ "INSERT OR IGNORE INTO Contexts (Context) VALUES (\"" + name + "\")";
@@ -230,10 +307,6 @@ private void storeTokenContextReference() {
 	// TODO Auto-generated method stub
 }
 
-private void storeApiContextReference() {
-	// TODO Auto-generated method stub
-	
-}
 
 protected void storeAPIS(List<String> apis) throws SQLException {
 	Statement statement = conn.createStatement();
