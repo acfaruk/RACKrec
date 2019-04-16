@@ -235,4 +235,78 @@ public class SQLiteProviderTest {
         int expectedNrOfApisForCtx = 2;
         assertEquals(expectedNrOfApisForCtx, nrOfApisForCtx);
     }
+
+    @Test
+    public void testgetTopKEntries() throws Exception {
+        provider.prepareSchemas();
+
+        String[] tokens = {"compu", "md5", "hash"};
+        String[] apis = {"someclass.somemethod", "otherclass.othermethod", "otherclass.othermethod"};
+        TypeName typeName = mock(TypeName.class);
+        
+        ModelEntry entry = new ModelEntry(Arrays.asList(tokens), Arrays.asList(apis), typeName);
+
+        provider.saveMinedContext(entry);
+    
+        List<String> tokenRows = provider.getTokens();
+        int nrOfTokens = tokenRows.size();
+        int expectedNrOfTokens = tokens.length;
+        assertEquals(expectedNrOfTokens, nrOfTokens);
+
+        List<String> apiRows = provider.getAPIs();
+        int nrOfAPIs = apiRows.size();
+        int expectedNrOfApis = 2;
+        assertEquals(expectedNrOfApis, nrOfAPIs);
+
+        List<String> contextRows = provider.getContexts();
+        int nrOfContexts = contextRows.size();
+        int expectedNrOfContexts = 1;
+        assertEquals(expectedNrOfContexts, nrOfContexts);
+
+        List<String> contextForApiRows = provider.getApisForContext(typeName.toString());
+        int nrOfApisForCtx = contextForApiRows.size();
+        int expectedNrOfApisForCtx = 2;
+        assertEquals(expectedNrOfApisForCtx, nrOfApisForCtx);
+        
+        
+        List<String> topKApis = provider.getTopKAPIForToken(4, "compu");
+        assertEquals(topKApis.size(), 2);
+    }
+
+    @Test
+    public void testGetTokensForAPI() throws Exception {
+        provider.prepareSchemas();
+
+        String[] tokens = {"compu", "md5", "hash"};
+        String[] apis = {"someclass.somemethod", "otherclass.othermethod", "otherclass.othermethod"};
+        TypeName typeName = mock(TypeName.class);
+        
+        ModelEntry entry = new ModelEntry(Arrays.asList(tokens), Arrays.asList(apis), typeName);
+
+        provider.saveMinedContext(entry);
+    
+        List<String> tokenRows = provider.getTokens();
+        int nrOfTokens = tokenRows.size();
+        int expectedNrOfTokens = tokens.length;
+        assertEquals(expectedNrOfTokens, nrOfTokens);
+
+        List<String> apiRows = provider.getAPIs();
+        int nrOfAPIs = apiRows.size();
+        int expectedNrOfApis = 2;
+        assertEquals(expectedNrOfApis, nrOfAPIs);
+
+        List<String> contextRows = provider.getContexts();
+        int nrOfContexts = contextRows.size();
+        int expectedNrOfContexts = 1;
+        assertEquals(expectedNrOfContexts, nrOfContexts);
+
+        List<String> contextForApiRows = provider.getApisForContext(typeName.toString());
+        int nrOfApisForCtx = contextForApiRows.size();
+        int expectedNrOfApisForCtx = 2;
+        assertEquals(expectedNrOfApisForCtx, nrOfApisForCtx);
+        
+        
+        List<String> tokensForAPI = provider.getTokensForAPI(apis[0]);
+        assertEquals(tokensForAPI.size(), tokens.length);
+    }
 }

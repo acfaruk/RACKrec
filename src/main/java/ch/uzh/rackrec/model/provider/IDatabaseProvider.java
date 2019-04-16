@@ -7,7 +7,7 @@ public interface IDatabaseProvider {
     void prepareSchemas() throws SQLException;
     void closeConnection();
     List<String> getTokensForAPI(String api) throws SQLException;
-    List<String> getTopKAPIForToken(int k, String keyword);
+    List<String> getTopKAPIForToken(int k, String keyword) throws SQLException;
     boolean saveMinedContext(ModelEntry modelEntry) throws SQLException;
     boolean tableExists(String tableName) throws SQLException;
 }

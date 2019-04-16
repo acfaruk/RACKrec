@@ -273,20 +273,34 @@ public class SQLiteProvider implements IDatabaseProvider{
 
     @Override
     public List<String> getTokensForAPI(String api) throws SQLException {
+    	List<String> tokens = new ArrayList<String>();
+
+        String query = ""
+          + "SELECT Token From tokens WHERE ID IN (SELECT Token FROM TokenReferences WHERE Context IN (SELECT Context FROM APIReferences WHERE API=(SELECT ID FROM apis WHERE API=\"" + api + "\")))";
+        
         Statement stmt = conn.createStatement();
-        String exists = "SELECT * FROM tokens";
-        ResultSet rs = stmt.executeQuery(exists);
-        List<String> tokens = new ArrayList<String>();
+        ResultSet rs = stmt.executeQuery(query);
         while(rs.next()) {
-            tokens.add(rs.getString("token"));
+        	tokens.add(rs.getString("Token"));
         }
+
         return tokens;
     }
 
     @Override
-    public List<String> getTopKAPIForToken(int k, String keyword) {
-        // TODO Auto-generated method stub
-        return null;
+    public List<String> getTopKAPIForToken(int k, String keyword) throws SQLException {
+    	List<String> apis = new ArrayList<String>();
+
+        String query = ""
+          + "SELECT API From apis WHERE ID IN (SELECT API FROM APIReferences WHERE Context IN (SELECT Context FROM TokenReferences WHERE Token=(SELECT ID FROM tokens WHERE Token=\"" + keyword + "\")))";
+        
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        while(rs.next()) {
+        	apis.add(rs.getString("API"));
+        }
+
+        return apis;
     }
 
     @Override
