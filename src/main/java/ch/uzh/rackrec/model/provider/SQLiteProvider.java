@@ -298,13 +298,18 @@ public class SQLiteProvider implements IDatabaseProvider{
 
         String query = ""
           + "WITH ContextsWithKeyword AS (SELECT Context FROM TokenReferences WHERE Token=(SELECT ID FROM tokens WHERE Token=\"" + keyword + "\")),"
-          + "     APIReferencesWithKeyword AS (SELECT API FROM APIReferences WHERE Context IN ContextsWithKeyword)"
-          + "SELECT API From apis WHERE ID IN APIReferencesWithKeyword";
+          + "     APIReferencesWithKeyword AS (SELECT API as ReferencedAPI, Count FROM APIReferences WHERE Context IN ContextsWithKeyword)"
+          + "SELECT API, COUNT, COUNT(*) From apis JOIN APIReferencesWithKeyword on apis.ID=APIReferencesWithKeyword.ReferencedAPI GROUP BY API ORDER BY COUNT(*) DESC";
         
+        System.out.println(query);
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
-        while(rs.next()) {
+        int counter = 0;
+
+        while(rs.next() || counter == k) {
+        	System.out.println(rs.getString("API") + " " + rs.getString("COUNT(*)"));
         	apis.add(rs.getString("API"));
+        	counter++;
         }
 
         return apis;
