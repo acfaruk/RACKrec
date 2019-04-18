@@ -276,7 +276,12 @@ public class SQLiteProvider implements IDatabaseProvider{
     	List<String> tokens = new ArrayList<String>();
 
         String query = ""
-          + "SELECT Token From tokens WHERE ID IN (SELECT Token FROM TokenReferences WHERE Context IN (SELECT Context FROM APIReferences WHERE API=(SELECT ID FROM apis WHERE API=\"" + api + "\")))";
+          + "WITH ContextsWithApi AS (SELECT Context FROM APIReferences WHERE API=(SELECT ID FROM apis WHERE API=\"" + api + "\")),"
+          + "     TokenReferencesWithApi AS (SELECT Token FROM TokenReferences WHERE Context IN ContextsWithApi)"
+          + "SELECT Token From tokens WHERE ID IN TokenReferencesWithApi";
+        
+        
+        System.out.println(query);
         
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
@@ -292,7 +297,9 @@ public class SQLiteProvider implements IDatabaseProvider{
     	List<String> apis = new ArrayList<String>();
 
         String query = ""
-          + "SELECT API From apis WHERE ID IN (SELECT API FROM APIReferences WHERE Context IN (SELECT Context FROM TokenReferences WHERE Token=(SELECT ID FROM tokens WHERE Token=\"" + keyword + "\")))";
+          + "WITH ContextsWithKeyword AS (SELECT Context FROM TokenReferences WHERE Token=(SELECT ID FROM tokens WHERE Token=\"" + keyword + "\")),"
+          + "     APIReferencesWithKeyword AS (SELECT API FROM APIReferences WHERE Context IN ContextsWithKeyword)"
+          + "SELECT API From apis WHERE ID IN APIReferencesWithKeyword";
         
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);

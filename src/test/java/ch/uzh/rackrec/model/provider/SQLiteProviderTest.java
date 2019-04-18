@@ -272,7 +272,6 @@ public class SQLiteProviderTest {
         List<String> topKApis = provider.getTopKAPIForToken(4, "compu");
         assertEquals(topKApis.size(), 2);
     }
-
     @Test
     public void testGetTokensForAPI() throws Exception {
         provider.prepareSchemas();
