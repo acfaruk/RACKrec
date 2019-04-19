@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -160,7 +161,7 @@ public class SQLiteProvider implements IDatabaseProvider{
             + "INSERT INTO TokenReferences (Token, Context, Count) VALUES ("
             + "(SELECT ID FROM tokens WHERE Token=\""+ token +"\"), "
             + "(SELECT ID FROM contexts WHERE Context=\""+ context +"\"),"
-            + " 0)";
+            + " 1)";
 
         Statement stmt = conn.createStatement();
         stmt.execute(storeReference);
@@ -224,8 +225,12 @@ public class SQLiteProvider implements IDatabaseProvider{
 
     private void createNewApiContextReference (String api, ITypeName context) throws SQLException {
         String storeReference = ""
-            + "INSERT INTO APIReferences (API, Context, Count) VALUES ("
-            + "(SELECT ID FROM apis WHERE API=\""+api+"\"), (SELECT ID FROM contexts WHERE CONTEXT=\""+ context +"\"), 0)";
+            + "INSERT INTO APIReferences "
+            + "(API, Context, Count) VALUES ("
+				+ "(SELECT ID FROM apis WHERE API=\""+api+"\"), "
+				+ "(SELECT ID FROM contexts WHERE CONTEXT=\""+ context +"\"),"
+				+ "1"
+			+ ")";
 
         Statement stmt = conn.createStatement();
         stmt.execute(storeReference);
@@ -293,26 +298,29 @@ public class SQLiteProvider implements IDatabaseProvider{
     }
 
     @Override
-    public List<String> getTopKAPIForToken(int k, String keyword) throws SQLException {
+    public List<SimpleEntry<String, Integer>> getTopKAPIForToken(int k, String keyword) throws SQLException {
     	List<String> apis = new ArrayList<String>();
 
         String query = ""
           + "WITH ContextsWithKeyword AS (SELECT Context FROM TokenReferences WHERE Token=(SELECT ID FROM tokens WHERE Token=\"" + keyword + "\")),"
           + "     APIReferencesWithKeyword AS (SELECT API as ReferencedAPI, Count FROM APIReferences WHERE Context IN ContextsWithKeyword)"
-          + "SELECT API, COUNT, COUNT(*) From apis JOIN APIReferencesWithKeyword on apis.ID=APIReferencesWithKeyword.ReferencedAPI GROUP BY API ORDER BY COUNT(*) DESC";
+          + "SELECT API, SUM(COUNT) From apis JOIN APIReferencesWithKeyword on apis.ID=APIReferencesWithKeyword.ReferencedAPI GROUP BY API ORDER BY SUM(COUNT) DESC";
         
         System.out.println(query);
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         int counter = 0;
+        
+        List<SimpleEntry<String, Integer>> elems = new ArrayList<SimpleEntry<String, Integer>>();
 
-        while(rs.next() || counter == k) {
-        	System.out.println(rs.getString("API") + " " + rs.getString("COUNT(*)"));
+        while(rs.next() && counter < k) {
+        	System.out.println(rs.getString("API") + " " + rs.getString("SUM(COUNT)"));
         	apis.add(rs.getString("API"));
+        	elems.add(new SimpleEntry<String, Integer>(rs.getString("API"), rs.getInt("SUM(COUNT)")));
+        	
         	counter++;
         }
-
-        return apis;
+        return elems;
     }
 
     @Override

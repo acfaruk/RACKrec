@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -174,17 +175,17 @@ public class SQLiteProviderTest {
 
         assertEquals(expectedNumOfReferences, actualNumOfReferences);
         assertTrue(provider.apiContextReferenceExists("someLib.someMethod", testContext));
-        assertEquals(0, provider.getApiCountForContext(testContext.toString(),"someLib.someMethod" ));
+        assertEquals(1, provider.getApiCountForContext(testContext.toString(),"someLib.someMethod" ));
 
         provider.saveApiContextReference("someLib.someMethod", testContext);
         storedReferences = provider.getApisForContext(testContext.toString());
         actualNumOfReferences = storedReferences.size();
         assertEquals(expectedNumOfReferences, actualNumOfReferences);
-        assertEquals(1, provider.getApiCountForContext(testContext.toString(),"someLib.someMethod" ));
+        assertEquals(2, provider.getApiCountForContext(testContext.toString(),"someLib.someMethod" ));
         
         String[] multipleApis = {"someLib.someMethod", "someLib.someMethod"};
         provider.saveApiContextReference(Arrays.asList(multipleApis), testContext);
-        assertEquals(3, provider.getApiCountForContext(testContext.toString(),"someLib.someMethod" ));
+        assertEquals(4, provider.getApiCountForContext(testContext.toString(),"someLib.someMethod" ));
     }
 
     @Test
@@ -200,7 +201,7 @@ public class SQLiteProviderTest {
 
         String[] multipleApis = {"someLib.someMethod", "someLib.someMethod"};
         provider.saveApiContextReference(Arrays.asList(multipleApis), testContext);
-        assertEquals(2, provider.getApiCountForContext(testContext.toString(),"someLib.someMethod" ));
+        assertEquals(3, provider.getApiCountForContext(testContext.toString(),"someLib.someMethod" ));
     }
 
     @Test
@@ -258,7 +259,7 @@ public class SQLiteProviderTest {
         provider.saveMinedContext(entryCTX2);
 
         String[] tokensCTX3 = {"compu", "md5", "hash"};
-        String[] apisCTX3 = {"someclass.somemethod" };
+        String[] apisCTX3 = {"someclass.somemethod", "someclass.somemethod", "someclass.somemethod", "someclass.somemethod", "thirdAPI.thridmeth", "fourthAPI.fourthmeth", "fifthAPI.fifthMeth" };
         TypeName typeNameCTX3 = mock(TypeName.class);
         when(typeNameCTX3.toString()).thenReturn("client3");
         
@@ -282,7 +283,7 @@ public class SQLiteProviderTest {
 
         List<String> apiRows = provider.getAPIs();
         int nrOfAPIs = apiRows.size();
-        int expectedNrOfApis = 3;
+        int expectedNrOfApis = 6;
         assertEquals(expectedNrOfApis, nrOfAPIs);
 
         List<String> contextRows = provider.getContexts();
@@ -295,9 +296,13 @@ public class SQLiteProviderTest {
         int expectedNrOfApisForCtx = 2;
         assertEquals(expectedNrOfApisForCtx, nrOfApisForCtx);
         
-        List<String> topKApis = provider.getTopKAPIForToken(4, "compu");
-        assertEquals(topKApis.size(), 2);
-        assertEquals(topKApis.get(0), "someclass.somemethod");
+        int k = 2;
+        List<SimpleEntry<String, Integer>> topKApis = provider.getTopKAPIForToken(k, "compu");
+        assertEquals(k, topKApis.size());
+        assertEquals("someclass.somemethod", topKApis.get(0).getKey());
+        assertEquals("otherclass.othermethod", topKApis.get(1).getKey());
+        assertTrue(6 == topKApis.get(0).getValue());
+        assertTrue(3 == topKApis.get(1).getValue());
     }
     @Test
     public void testGetTokensForAPI() throws Exception {
