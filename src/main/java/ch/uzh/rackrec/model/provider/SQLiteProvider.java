@@ -9,20 +9,19 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
 
-import cc.kave.commons.model.naming.impl.v0.types.TypeName;
 import cc.kave.commons.model.naming.types.ITypeName;
 
 public class SQLiteProvider implements IDatabaseProvider{
     private Connection conn = null;
-    private Properties properties;
     private String dbLocation;
 
     @Inject
-    public SQLiteProvider(Properties properties) {
+    public SQLiteProvider(Properties properties, Logger logger) {
         dbLocation = properties.getProperty("database-file");
 
         try {
@@ -30,9 +29,9 @@ public class SQLiteProvider implements IDatabaseProvider{
             String url = "jdbc:sqlite:" + dbLocation;
             // create a connection to the database
              conn = DriverManager.getConnection(url);
-             System.out.println("Connection to SQLite has been established.");
+             logger.log(null, "Connection to SQLite has been established.");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+             logger.log(null, "Connection to SQLite has been established.");
         }
     }
 
@@ -285,9 +284,6 @@ public class SQLiteProvider implements IDatabaseProvider{
           + "     TokenReferencesWithApi AS (SELECT Token FROM TokenReferences WHERE Context IN ContextsWithApi)"
           + "SELECT Token From tokens WHERE ID IN TokenReferencesWithApi";
         
-        
-        System.out.println(query);
-        
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         while(rs.next()) {
@@ -306,7 +302,6 @@ public class SQLiteProvider implements IDatabaseProvider{
           + "     APIReferencesWithKeyword AS (SELECT API as ReferencedAPI, Count FROM APIReferences WHERE Context IN ContextsWithKeyword)"
           + "SELECT API, SUM(COUNT) From apis JOIN APIReferencesWithKeyword on apis.ID=APIReferencesWithKeyword.ReferencedAPI GROUP BY API ORDER BY SUM(COUNT) DESC";
         
-        System.out.println(query);
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         int counter = 0;
@@ -314,7 +309,6 @@ public class SQLiteProvider implements IDatabaseProvider{
         List<SimpleEntry<String, Integer>> elems = new ArrayList<SimpleEntry<String, Integer>>();
 
         while(rs.next() && counter < k) {
-        	System.out.println(rs.getString("API") + " " + rs.getString("SUM(COUNT)"));
         	apis.add(rs.getString("API"));
         	elems.add(new SimpleEntry<String, Integer>(rs.getString("API"), rs.getInt("SUM(COUNT)")));
         	
