@@ -1,9 +1,17 @@
 package ch.uzh.rackrec.example;
 
+import ch.uzh.rackrec.eval.Metrics;
 import ch.uzh.rackrec.rec.DefaultRecommender;
 import ch.uzh.rackrec.rec.config.KaveContextModule;
 
+import java.util.Collections;
 import java.util.Properties;
+import java.util.Set;
+
+import org.apache.commons.lang3.tuple.Pair;
+
+import cc.kave.commons.model.events.completionevents.Context;
+import cc.kave.commons.model.naming.codeelements.IMemberName;
 
 public class Example {
 
@@ -18,5 +26,14 @@ public class Example {
 
         //create your Recommender, see the readme for available recommenders
         DefaultRecommender rec = new DefaultRecommender(module);
+        
+        //create dummy context for now
+        Context ctx = new Context();
+        Set<Pair<IMemberName, Double>> eventResult = Collections.emptySet();
+        
+        //feed  the context into the reccommender
+        Set<Pair<IMemberName, Double>> reccommenderResult = rec.query(ctx);
+        
+		Metrics metrics = new Metrics(reccommenderResult, eventResult, 10);
     }
 }
