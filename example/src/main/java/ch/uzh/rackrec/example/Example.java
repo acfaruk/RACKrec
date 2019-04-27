@@ -19,21 +19,26 @@ public class Example {
 
         //set up properties object, see the readme for available properties depending on the module type
         Properties props = new Properties();
-        props.setProperty("test", "test");
+        props.setProperty("base-path", "/home/luc/Documents/RACK");
+        props.setProperty("model-path", "/model");
+        props.setProperty("context-path", "/Contexts-170503");
 
         //choose your module, see the readme for available modules
-        KaveContextModule module = new KaveContextModule(props);
+        //KaveContextModule module = new KaveContextModule(props);
 
         //create your Recommender, see the readme for available recommenders
-        DefaultRecommender rec = new DefaultRecommender(module);
+        //DefaultRecommender rec = new DefaultRecommender(module);
         
         //create dummy context for now
         Context ctx = new Context();
         Set<Pair<IMemberName, Double>> eventResult = Collections.emptySet();
+        Set<Pair<IMemberName, Double>> reccommenderResult = Collections.emptySet();
         
         //feed  the context into the reccommender
-        Set<Pair<IMemberName, Double>> reccommenderResult = rec.query(ctx);
+        //Set<Pair<IMemberName, Double>> reccommenderResult = rec.query(ctx);
         
 		Metrics metrics = new Metrics(reccommenderResult, eventResult, 10);
+		
+		System.out.println(metrics.calculateMetricTable());
     }
 }
