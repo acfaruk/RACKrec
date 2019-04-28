@@ -7,14 +7,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
 
+import cc.kave.commons.model.naming.IName;
+import cc.kave.commons.model.naming.impl.v0.types.TypeName;
 import cc.kave.commons.model.naming.types.ITypeName;
+import ch.uzh.rackrec.model.view.KAC;
 
 public class SQLiteProvider implements IDatabaseProvider{
     private Connection conn = null;
@@ -294,7 +299,7 @@ public class SQLiteProvider implements IDatabaseProvider{
     }
 
     @Override
-    public List<SimpleEntry<String, Integer>> getTopKAPIForToken(int k, String keyword) throws SQLException {
+    public KAC getTopKAPIForToken(int k, String keyword) throws SQLException {
     	List<String> apis = new ArrayList<String>();
 
         String query = ""
@@ -307,14 +312,16 @@ public class SQLiteProvider implements IDatabaseProvider{
         int counter = 0;
         
         List<SimpleEntry<String, Integer>> elems = new ArrayList<SimpleEntry<String, Integer>>();
+        
+        Map<Integer, String> kacMap = new HashMap<Integer, String>();
 
         while(rs.next() && counter < k) {
-        	apis.add(rs.getString("API"));
-        	elems.add(new SimpleEntry<String, Integer>(rs.getString("API"), rs.getInt("SUM(COUNT)")));
-        	
+        	kacMap.put(rs.getInt("SUM(COUNT)"), rs.getString("API"));
+      
         	counter++;
         }
-        return elems;
+        KAC kac = new KAC(keyword, kacMap);
+        return kac;
     }
 
     @Override

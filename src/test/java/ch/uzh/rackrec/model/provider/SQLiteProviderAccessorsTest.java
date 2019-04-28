@@ -17,6 +17,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import cc.kave.commons.model.naming.impl.v0.types.TypeName;
+import ch.uzh.rackrec.model.view.KAC;
 
 public class SQLiteProviderAccessorsTest {
     String testingDB = "./testdb.db";
@@ -91,12 +92,10 @@ public class SQLiteProviderAccessorsTest {
         assertEquals(expectedNrOfApisForCtx, nrOfApisForCtx);
         
         int k = 2;
-        List<SimpleEntry<String, Integer>> topKApis = provider.getTopKAPIForToken(k, "compu");
-        assertEquals(k, topKApis.size());
-        assertEquals("someclass.somemethod", topKApis.get(0).getKey());
-        assertEquals("otherclass.othermethod", topKApis.get(1).getKey());
-        assertTrue(6 == topKApis.get(0).getValue());
-        assertTrue(3 == topKApis.get(1).getValue());
+        KAC topKKAC = provider.getTopKAPIForToken(k, "compu");
+        assertEquals(k, topKKAC.getFreqToApi().size());
+        assertEquals("someclass.somemethod", topKKAC.getFreqToApi().get(6));
+        assertEquals("otherclass.othermethod", topKKAC.getFreqToApi().get(3));
     }
     @Test
     public void testGetTokensForAPI() throws Exception {

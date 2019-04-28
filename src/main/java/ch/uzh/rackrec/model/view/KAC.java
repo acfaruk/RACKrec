@@ -6,17 +6,17 @@ import java.util.Map;
 
 public class KAC {
     private String keyword;
-    private Map<Integer, IName> freqToApi;
-    KAC(String keyword, Map<Integer, IName> freqToApi){
+    private Map<Integer, String> freqToApi;
+    public KAC(String keyword, Map<Integer, String> freqToApi){
         this.keyword = keyword;
         this.freqToApi = freqToApi;
     }
 
-    String getKeyword() {
+    public String getKeyword() {
         return keyword;
     }
 
-    Map<Integer, IName> getFreqToApi() {
+    public Map<Integer, String> getFreqToApi() {
         return freqToApi;
     }
 }
