@@ -1,22 +1,24 @@
 package ch.uzh.rackrec.model.view;
 
-import cc.kave.commons.model.naming.IName;
+import cc.kave.commons.model.naming.codeelements.IMethodName;
+import cc.kave.commons.model.naming.impl.v0.codeelements.MethodName;
+
 import java.util.Map;
 
 
 public class KAC {
     private String keyword;
-    private Map<Integer, String> freqToApi;
-    public KAC(String keyword, Map<Integer, String> freqToApi){
+    private Map<Integer, MethodName> freqToApi;
+    public KAC(String keyword, Map<Integer, MethodName> kacMap){
         this.keyword = keyword;
-        this.freqToApi = freqToApi;
+        this.freqToApi = kacMap;
     }
 
     public String getKeyword() {
         return keyword;
     }
 
-    public Map<Integer, String> getFreqToApi() {
+    public Map<Integer, MethodName> getFreqToApi() {
         return freqToApi;
     }
 }

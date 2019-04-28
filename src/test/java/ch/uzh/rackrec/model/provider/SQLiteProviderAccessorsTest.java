@@ -23,7 +23,7 @@ public class SQLiteProviderAccessorsTest {
     String testingDB = "./testdb.db";
     SQLiteProvider provider;
     String[] tokens = {"compu", "md5", "hash"};
-    String[] apis = { "otherclass.othermethod","someclass.somemethod", "otherclass.othermethod"};
+    String[] apis = { "a.type2, project1.M1","a.type1, project1.M1", "a.type2, project1.M1"};
     TypeName typeName = mock(TypeName.class);
     Logger logger = mock(Logger.class);
     ModelEntry entry;
@@ -48,7 +48,7 @@ public class SQLiteProviderAccessorsTest {
     @Test
     public void testgetTopKEntries() throws Exception {
         String[] tokensCTX2 = tokens;
-        String[] apisCTX2 = { "otherclass.othermethod", "someclass.somemethod"};
+        String[] apisCTX2 = { "a.type2, project1.M1", "a.type1, project1.M1"};
         TypeName typeNameCTX2 = mock(TypeName.class);
         when(typeNameCTX2.toString()).thenReturn("client2");
         
@@ -56,7 +56,7 @@ public class SQLiteProviderAccessorsTest {
 		provider.saveMinedContext(entryCTX2);
 
         String[] tokensCTX3 = tokens;
-        String[] apisCTX3 = {"someclass.somemethod", "someclass.somemethod", "someclass.somemethod", "someclass.somemethod", "thirdAPI.thridmeth", "fourthAPI.fourthmeth", "fifthAPI.fifthMeth" };
+        String[] apisCTX3 = {"a.type1, project1.M1", "a.type1, project1.M1", "a.type1, project1.M1", "a.type1, project1.M1", "thirdAPI.thridmeth", "fourthAPI.fourthmeth", "fifthAPI.fifthMeth" };
         TypeName typeNameCTX3 = mock(TypeName.class);
         when(typeNameCTX3.toString()).thenReturn("client3");
         
@@ -64,7 +64,7 @@ public class SQLiteProviderAccessorsTest {
         provider.saveMinedContext(entryCTX3);
 
         String[] tokensCTX4 = {"bla"};
-        String[] apisCTX4 = {"unrelatedclass.somemethod" };
+        String[] apisCTX4 = {"a.type3, project1.M1" };
         TypeName typeNameCTX4 = mock(TypeName.class);
         when(typeNameCTX4.toString()).thenReturn("client4");
         
@@ -94,8 +94,8 @@ public class SQLiteProviderAccessorsTest {
         int k = 2;
         KAC topKKAC = provider.getTopKAPIForToken(k, "compu");
         assertEquals(k, topKKAC.getFreqToApi().size());
-        assertEquals("someclass.somemethod", topKKAC.getFreqToApi().get(6));
-        assertEquals("otherclass.othermethod", topKKAC.getFreqToApi().get(3));
+        assertEquals("MethodName(a.type1, project1.M1)", topKKAC.getFreqToApi().get(6).toString());
+        assertEquals("MethodName(a.type2, project1.M1)", topKKAC.getFreqToApi().get(3).toString());
     }
     @Test
     public void testGetTokensForAPI() throws Exception {

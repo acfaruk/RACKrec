@@ -17,8 +17,10 @@ import java.util.stream.Collectors;
 import com.google.inject.Inject;
 
 import cc.kave.commons.model.naming.IName;
+import cc.kave.commons.model.naming.impl.v0.codeelements.MethodName;
 import cc.kave.commons.model.naming.impl.v0.types.TypeName;
 import cc.kave.commons.model.naming.types.ITypeName;
+import cc.kave.commons.model.ssts.impl.references.MethodReference;
 import ch.uzh.rackrec.model.view.KAC;
 
 public class SQLiteProvider implements IDatabaseProvider{
@@ -313,10 +315,10 @@ public class SQLiteProvider implements IDatabaseProvider{
         
         List<SimpleEntry<String, Integer>> elems = new ArrayList<SimpleEntry<String, Integer>>();
         
-        Map<Integer, String> kacMap = new HashMap<Integer, String>();
+        Map<Integer, MethodName> kacMap = new HashMap<Integer, MethodName>();
 
         while(rs.next() && counter < k) {
-        	kacMap.put(rs.getInt("SUM(COUNT)"), rs.getString("API"));
+        	kacMap.put(rs.getInt("SUM(COUNT)"), new MethodName(rs.getString("API")));
       
         	counter++;
         }
