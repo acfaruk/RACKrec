@@ -1,6 +1,5 @@
 package ch.uzh.rackrec.model.view;
 
-import cc.kave.commons.model.naming.codeelements.IMethodName;
 import cc.kave.commons.model.naming.impl.v0.codeelements.MethodName;
 
 import java.util.Map;
