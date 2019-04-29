@@ -443,7 +443,7 @@ public class SQLiteProvider implements IDatabaseProvider{
         return tokens;
     }
 
-    public String prepareGetContextQuery(String token) {
+    private String prepareGetContextQuery(String token) {
 		String getContextsQuery = ""
 			+ "select token, sum(count) "
 			+ "from tokenreferences "
@@ -459,12 +459,39 @@ public class SQLiteProvider implements IDatabaseProvider{
 		return getContextsQuery;
     	
     }
-    public List<KKC> getKKCForKeywords(Map.Entry<String, String> keywordPair) throws SQLException {
+    public KKC getKKCForKeywords(Map.Entry<String, String> keywordPair) throws SQLException {
         Double score = this.getKKCScore(keywordPair);
-        return null;
+        List<MethodName> correspondingAPIs = this.getAPIsForKeywords(keywordPair);
+
+        return new KKC(keywordPair, correspondingAPIs, score);
     }
 
-	@Override
+    private List<MethodName> getAPIsForKeywords(Map.Entry<String, String> keywordPair) throws SQLException {
+        String getAPIQuery = ""
+            + "WITH RelevantContexts AS("
+                + "SELECT Context "
+                + "FROM TokenReferences "
+                + "Where Token=("
+                    + "Select ID "
+                    + "from tokens "
+                    + "where token=\""+ keywordPair.getKey() + "\" OR "
+                    + "token=\"" + keywordPair.getValue() + "\""
+                + ")"
+            + "), RelevantAPIS AS("
+                + "SELECT API FROM APIReferences WHERE Context IN RelevantContexts"
+            + ")"
+            + "SELECT API From apis Where ID IN RelevantAPIS";
+
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(getAPIQuery);
+        List<MethodName> apis = new ArrayList<MethodName>();
+        while(rs.next()) {
+            apis.add(new MethodName(rs.getString("API")));
+        }
+        return apis;
+    }
+
+    @Override
 	public double getKKCScore(Map.Entry<String, String> keyWordPair) throws SQLException {
 		String getContextsQueryForToken1 = prepareGetContextQuery(keyWordPair.getKey());
 		String getContextsQueryForToken2 = prepareGetContextQuery(keyWordPair.getValue());

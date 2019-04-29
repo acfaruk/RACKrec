@@ -8,6 +8,7 @@ import java.util.*;
 import java.util.logging.Logger;
 
 import ch.uzh.rackrec.model.view.KAC;
+import ch.uzh.rackrec.model.view.KKC;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
