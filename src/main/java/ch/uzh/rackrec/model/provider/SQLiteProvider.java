@@ -5,22 +5,21 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import ch.uzh.rackrec.model.view.KKC;
 import com.google.inject.Inject;
 
-import cc.kave.commons.model.naming.IName;
 import cc.kave.commons.model.naming.impl.v0.codeelements.MethodName;
-import cc.kave.commons.model.naming.impl.v0.types.TypeName;
 import cc.kave.commons.model.naming.types.ITypeName;
-import cc.kave.commons.model.ssts.impl.references.MethodReference;
 import ch.uzh.rackrec.model.view.KAC;
 
 public class SQLiteProvider implements IDatabaseProvider{
@@ -302,8 +301,6 @@ public class SQLiteProvider implements IDatabaseProvider{
 
     @Override
     public KAC getTopKAPIForToken(int k, String keyword) throws SQLException {
-    	List<String> apis = new ArrayList<String>();
-
         String query = ""
           + "WITH ContextsWithKeyword AS (SELECT Context FROM TokenReferences WHERE Token=(SELECT ID FROM tokens WHERE Token=\"" + keyword + "\")),"
           + "     APIReferencesWithKeyword AS (SELECT API as ReferencedAPI, Count FROM APIReferences WHERE Context IN ContextsWithKeyword)"
@@ -312,9 +309,6 @@ public class SQLiteProvider implements IDatabaseProvider{
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         int counter = 0;
-        
-        List<SimpleEntry<String, Integer>> elems = new ArrayList<SimpleEntry<String, Integer>>();
-        
         Map<Integer, MethodName> kacMap = new HashMap<Integer, MethodName>();
 
         while(rs.next() && counter < k) {
@@ -448,4 +442,74 @@ public class SQLiteProvider implements IDatabaseProvider{
         }
         return tokens;
     }
+
+    public String prepareGetContextQuery(String token) {
+		String getContextsQuery = ""
+			+ "select token, sum(count) "
+			+ "from tokenreferences "
+			+ "where context in("
+				+ "select context "
+				+ "from tokenreferences "
+				+ "where token=("
+					+ "select id "
+					+ "from tokens "
+					+ "where token=\""+ token +"\""
+				+ ")"
+			+ ") group by token";
+		return getContextsQuery;
+    	
+    }
+    public List<KKC> getKKCForKeywords(Map.Entry<String, String> keywordPair) throws SQLException {
+        Double score = this.getKKCScore(keywordPair);
+        return null;
+    }
+
+	@Override
+	public double getKKCScore(Map.Entry<String, String> keyWordPair) throws SQLException {
+		String getContextsQueryForToken1 = prepareGetContextQuery(keyWordPair.getKey());
+		String getContextsQueryForToken2 = prepareGetContextQuery(keyWordPair.getValue());
+		Statement stmt = conn.createStatement();
+
+		HashMap<String, Double> c1 = new HashMap<String, Double>();
+		HashMap<String, Double> c2 = new HashMap<String, Double>();
+		
+		ResultSet rs = stmt.executeQuery(getContextsQueryForToken1);
+		while(rs.next()) {
+			parseRow(rs, c1);
+		}
+
+		rs = stmt.executeQuery(getContextsQueryForToken2);
+		while(rs.next()) {
+			parseRow(rs, c2);
+		}
+		
+		return computeCosineSimilarity(c1, c2);
+	}
+	private void parseRow(ResultSet rs, HashMap<String, Double> target) throws SQLException {
+			target.put(""+rs.getInt("Token"), (double) rs.getInt("SUM(Count)"));
+	}
+
+	protected double computeCosineSimilarity(HashMap<String, Double> vector1, HashMap<String, Double> vector2) {
+		  Set<String> sharedKeys = new HashSet<>(vector1.keySet());
+		  Set<String> keysVector1 = vector1.keySet();
+		  Set<String> keysVector2 = vector2.keySet();
+
+		  sharedKeys.retainAll(vector2.keySet());
+		  double sumproduct = 0; 
+		  double A = 0;
+		  double B = 0;
+		  sumproduct = sharedKeys.stream()
+			               		 .mapToDouble(key -> vector1.get(key) * vector2.get(key))
+			               		 .sum();
+		  
+		  A = keysVector1.stream()
+				  		 .mapToDouble(key -> vector1.get(key) * vector1.get(key))
+				  		 .sum();
+
+		  B = keysVector2.stream()
+				  		 .mapToDouble(key -> vector2.get(key) * vector2.get(key))
+				  		 .sum();
+
+		  return sumproduct / Math.sqrt(A * B);
+	}
 }
