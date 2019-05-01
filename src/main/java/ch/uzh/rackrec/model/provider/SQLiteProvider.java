@@ -70,8 +70,8 @@ public class SQLiteProvider implements IDatabaseProvider{
 
         String createContextSchema = ""
             + "CREATE TABLE contexts("
-            + "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + "Context varchar(255) NOT NULL"
+				+ "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ "Context varchar(255) NOT NULL"
             + ")";
         Statement statement = conn.createStatement();
         statement.execute(createContextSchema);
@@ -85,8 +85,8 @@ public class SQLiteProvider implements IDatabaseProvider{
 
         String createAPISchema = ""
             + "CREATE TABLE apis("
-            + "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + "API varchar(255) NOT NULL UNIQUE"
+				+ "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ "API varchar(255) NOT NULL UNIQUE"
             + ")";
         Statement statement = conn.createStatement();
         statement.execute(createAPISchema);
@@ -99,10 +99,10 @@ public class SQLiteProvider implements IDatabaseProvider{
         }
 
         String createTokenSchema = ""
-                      + "CREATE TABLE tokens("
-                      + "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
-                      + "Token varchar(255) NOT NULL UNIQUE"
-                      + ")";
+			+ "CREATE TABLE tokens("
+				+ "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ "Token varchar(255) NOT NULL UNIQUE"
+			+ ")";
         Statement statement = conn.createStatement();
         statement.execute(createTokenSchema);
       }
@@ -114,11 +114,11 @@ public class SQLiteProvider implements IDatabaseProvider{
         }
         String createTokenReferenceSchema =  ""
             + "CREATE TABLE TokenReferences("
-            + "Token int,"
-            + "Context int,"
-            + "Count int,"
-            + "FOREIGN KEY (Token) REFERENCES tokens(ID),"
-            + "FOREIGN KEY (Context) REFERENCES contexts(ID)"
+				+ "Token int,"
+				+ "Context int,"
+				+ "Count int,"
+				+ "FOREIGN KEY (Token) REFERENCES tokens(ID),"
+				+ "FOREIGN KEY (Context) REFERENCES contexts(ID)"
             + ")";
         Statement statement = conn.createStatement();
         statement.execute(createTokenReferenceSchema);
@@ -131,11 +131,11 @@ public class SQLiteProvider implements IDatabaseProvider{
         }
         String createAPIReferenceSchema =  ""
            + "CREATE TABLE APIReferences("
-           + "API int,"
-           + "Context int,"
-           + "Count int,"
-           + "FOREIGN KEY (API) REFERENCES apis(ID),"
-           + "FOREIGN KEY (Context) REFERENCES contexts(ID)"
+			   + "API int,"
+			   + "Context int,"
+			   + "Count int,"
+			   + "FOREIGN KEY (API) REFERENCES apis(ID),"
+			   + "FOREIGN KEY (Context) REFERENCES contexts(ID)"
            + ")";
         Statement statement = conn.createStatement();
         statement.execute(createAPIReferenceSchema);
@@ -186,8 +186,18 @@ public class SQLiteProvider implements IDatabaseProvider{
     private boolean tokenContextReferenceExists(String token, ITypeName context) throws SQLException {
         boolean foundReference = false;
         String query = ""
-           + "SELECT * FROM TokenReferences WHERE Token=(SELECT ID FROM tokens WHERE Token=\""+ token +"\")"
-           + "AND Context=(SELECT ID FROM contexts WHERE Context=\""+ context +"\")";
+           + "SELECT * "
+           + "FROM TokenReferences "
+           + "WHERE Token=("
+			   + "SELECT ID "
+			   + "FROM tokens "
+			   + "WHERE Token=\""+ token +"\""
+		   + ")"
+           + "AND Context=("
+			   + "SELECT ID "
+			   + "FROM contexts "
+			   + "WHERE Context=\""+ context +"\""
+		   + ")";
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         foundReference = rs.next();
@@ -221,8 +231,16 @@ public class SQLiteProvider implements IDatabaseProvider{
         String updateReference = ""
             + "UPDATE APIReferences "
             + "SET Count = Count + 1 "
-            + "WHERE API=(SELECT ID FROM apis WHERE API=\""+ api +"\")"
-            + "AND Context=(SELECT ID FROM contexts WHERE Context=\""+ context +"\")";
+            + "WHERE API=("
+				+ "SELECT ID "
+				+ "FROM apis "
+				+ "WHERE API=\""+ api +"\""
+			+ ")"
+            + "AND Context=("
+				+ "SELECT ID "
+				+ "FROM contexts "
+				+ "WHERE Context=\""+ context +"\""
+			+ ")";
 
         Statement stmtn = conn.createStatement();
         stmtn.execute(updateReference);
@@ -244,8 +262,18 @@ public class SQLiteProvider implements IDatabaseProvider{
     protected boolean apiContextReferenceExists(String api, ITypeName context) throws SQLException {
         boolean foundReference = false;
         String query = ""
-           + "SELECT * FROM APIReferences WHERE API=(SELECT ID FROM apis WHERE API=\""+ api +"\")"
-           + "AND Context=(SELECT ID FROM contexts WHERE Context=\""+ context +"\")";
+           + "SELECT * "
+           + "FROM APIReferences "
+           + "WHERE API=("
+			   + "SELECT ID "
+			   + "FROM apis "
+			   + "WHERE API=\""+ api +"\""
+		   + ")"
+           + "AND Context=("
+			   + "SELECT ID "
+			   + "FROM contexts "
+			   + "WHERE Context=\""+ context +"\""
+		   + ")";
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         foundReference = rs.next();
@@ -254,7 +282,14 @@ public class SQLiteProvider implements IDatabaseProvider{
     }
 
     public List<String> getApisForContext(String context) throws SQLException {
-        String getApisQuery = "SELECT API FROM APIReferences WHERE Context=(SELECT ID FROM contexts WHERE Context=\""+ context +"\")";
+        String getApisQuery = ""
+			+ "SELECT API "
+			+ "FROM APIReferences "
+			+ "WHERE Context=("
+				+ "SELECT ID "
+				+ "FROM contexts "
+				+ "WHERE Context=\""+ context +"\""
+			+ ")";
         Statement stmt = conn.createStatement();
 
         ResultSet rs = stmt.executeQuery(getApisQuery);
@@ -271,7 +306,11 @@ public class SQLiteProvider implements IDatabaseProvider{
             + "FROM APIReferences "
             + "WHERE Context=(SELECT ID FROM contexts WHERE Context=\""+ context +"\")"
             + "AND "
-            + "API=(SELECT ID FROM apis WHERE API=\""+ api +"\")";
+            + "API=("
+				+ "SELECT ID "
+				+ "FROM apis "
+				+ "WHERE API=\""+ api +"\""
+			+ ")";
 
         Statement stmt = conn.createStatement();
 
@@ -286,9 +325,22 @@ public class SQLiteProvider implements IDatabaseProvider{
     	List<String> tokens = new ArrayList<String>();
 
         String query = ""
-          + "WITH ContextsWithApi AS (SELECT Context FROM APIReferences WHERE API=(SELECT ID FROM apis WHERE API=\"" + api + "\")),"
-          + "     TokenReferencesWithApi AS (SELECT Token FROM TokenReferences WHERE Context IN ContextsWithApi)"
-          + "SELECT Token From tokens WHERE ID IN TokenReferencesWithApi";
+          + "WITH ContextsWithApi AS ("
+			  + "SELECT Context "
+			  + "FROM APIReferences "
+			  + "WHERE API=("
+				  + "SELECT ID "
+				  + "FROM apis "
+				  + "WHERE API=\"" + api + "\")"
+			  + "),"
+          + "TokenReferencesWithApi AS ("
+			  + "SELECT Token "
+			  + "FROM TokenReferences "
+			  + "WHERE Context IN ContextsWithApi"
+		  + ")"
+          + "SELECT Token "
+          + "FROM tokens "
+          + "WHERE ID IN TokenReferencesWithApi";
         
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
@@ -302,9 +354,25 @@ public class SQLiteProvider implements IDatabaseProvider{
     @Override
     public KAC getTopKAPIForToken(int k, String keyword) throws SQLException {
         String query = ""
-          + "WITH ContextsWithKeyword AS (SELECT Context FROM TokenReferences WHERE Token=(SELECT ID FROM tokens WHERE Token=\"" + keyword + "\")),"
-          + "     APIReferencesWithKeyword AS (SELECT API as ReferencedAPI, Count FROM APIReferences WHERE Context IN ContextsWithKeyword)"
-          + "SELECT API, SUM(COUNT) From apis JOIN APIReferencesWithKeyword on apis.ID=APIReferencesWithKeyword.ReferencedAPI GROUP BY API ORDER BY SUM(COUNT) DESC";
+          + "WITH ContextsWithKeyword AS ("
+			  + "SELECT Context "
+			  + "FROM TokenReferences "
+			  + "WHERE Token=("
+				  + "SELECT ID "
+				  + "FROM tokens "
+				  + "WHERE Token=\"" + keyword + "\")"
+			  + "),"
+          + "APIReferencesWithKeyword AS ("
+			  + "SELECT API as ReferencedAPI, Count "
+			  + "FROM APIReferences "
+			  + "WHERE Context IN ContextsWithKeyword"
+		  + ")"
+          + "SELECT API, SUM(COUNT) "
+          + "FROM apis "
+          + "JOIN APIReferencesWithKeyword "
+          + "ON apis.ID=APIReferencesWithKeyword.ReferencedAPI "
+          + "GROUP BY API "
+          + "ORDER BY SUM(COUNT) DESC";
         
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
@@ -335,8 +403,7 @@ public class SQLiteProvider implements IDatabaseProvider{
     }
 
     protected void storeContext(ITypeName name) throws SQLException {
-        // TODO Auto-generated method stub
-        String insertContext = "" 
+        String insertContext = ""
            + "INSERT OR IGNORE INTO Contexts (Context) VALUES (\"" + name + "\")";
 
         Statement statement = conn.createStatement();
@@ -394,7 +461,7 @@ public class SQLiteProvider implements IDatabaseProvider{
 
     protected List<String> getAPIs() throws SQLException {
         String getAPIsQuery = ""
-                + "SELECT API from apis";
+            + "SELECT API from apis";
 
         List<String> apis = new ArrayList<String>();
         Statement statement = conn.createStatement();
@@ -407,7 +474,7 @@ public class SQLiteProvider implements IDatabaseProvider{
 
     protected List<String> getContexts() throws SQLException {
         String getContextsQuery = ""
-                + "SELECT Context from Contexts";
+            + "SELECT Context from Contexts";
 
         List<String> contexts = new ArrayList<String>();
         Statement statement = conn.createStatement();
@@ -420,7 +487,7 @@ public class SQLiteProvider implements IDatabaseProvider{
 
     protected List<String> getTokens() throws SQLException {
         String getTokensQuery = ""
-                + "SELECT Token from tokens";
+            + "SELECT Token from tokens";
 
         List<String> tokens = new ArrayList<String>();
         Statement statement = conn.createStatement();
@@ -432,7 +499,14 @@ public class SQLiteProvider implements IDatabaseProvider{
     }
 
     public List<String> getTokensForContext(String context) throws SQLException {
-        String getTokensQuery = "SELECT Token FROM TokenReferences WHERE Context=(SELECT ID FROM contexts WHERE Context=\""+ context +"\")";
+        String getTokensQuery = ""
+            + "SELECT Token "
+            + "FROM TokenReferences "
+            + "WHERE Context=("
+                + "SELECT ID "
+                + "FROM contexts "
+                + "WHERE Context=\""+ context +"\""
+            + ")";
         Statement stmt = conn.createStatement();
 
         ResultSet rs = stmt.executeQuery(getTokensQuery);
@@ -445,17 +519,17 @@ public class SQLiteProvider implements IDatabaseProvider{
 
     private String prepareGetContextQuery(String token) {
 		String getContextsQuery = ""
-			+ "select token, sum(count) "
-			+ "from tokenreferences "
-			+ "where context in("
-				+ "select context "
-				+ "from tokenreferences "
-				+ "where token=("
-					+ "select id "
-					+ "from tokens "
-					+ "where token=\""+ token +"\""
+			+ "SELECT token, SUM(count) "
+			+ "FROM tokenreferences "
+			+ "WHERE context IN("
+				+ "SELECT context "
+				+ "FROM tokenreferences "
+				+ "WHERE token=("
+					+ "SELECT id "
+					+ "FROM tokens "
+					+ "WHERE token=\""+ token +"\""
 				+ ")"
-			+ ") group by token";
+			+ ") GROUP BY token";
 		return getContextsQuery;
     	
     }
@@ -471,13 +545,14 @@ public class SQLiteProvider implements IDatabaseProvider{
             + "WITH RelevantContexts AS("
                 + "SELECT Context "
                 + "FROM TokenReferences "
-                + "Where Token=("
+                + "Where Token IN ("
                     + "Select ID "
                     + "from tokens "
                     + "where token=\""+ keywordPair.getKey() + "\" OR "
                     + "token=\"" + keywordPair.getValue() + "\""
                 + ")"
-            + "), RelevantAPIS AS("
+            + "), "
+            + "RelevantAPIS AS("
                 + "SELECT API FROM APIReferences WHERE Context IN RelevantContexts"
             + ")"
             + "SELECT API From apis Where ID IN RelevantAPIS";
@@ -513,7 +588,7 @@ public class SQLiteProvider implements IDatabaseProvider{
 		return computeCosineSimilarity(c1, c2);
 	}
 	private void parseRow(ResultSet rs, HashMap<String, Double> target) throws SQLException {
-			target.put(""+rs.getInt("Token"), (double) rs.getInt("SUM(Count)"));
+		target.put(""+rs.getInt("Token"), (double) rs.getInt("SUM(Count)"));
 	}
 
 	protected double computeCosineSimilarity(HashMap<String, Double> vector1, HashMap<String, Double> vector2) {
@@ -525,6 +600,7 @@ public class SQLiteProvider implements IDatabaseProvider{
 		  double sumproduct = 0; 
 		  double A = 0;
 		  double B = 0;
+
 		  sumproduct = sharedKeys.stream()
 			               		 .mapToDouble(key -> vector1.get(key) * vector2.get(key))
 			               		 .sum();
