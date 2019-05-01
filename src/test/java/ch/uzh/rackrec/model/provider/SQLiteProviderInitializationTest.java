@@ -41,27 +41,6 @@ public class SQLiteProviderInitializationTest {
     }
 
     @Test
-    public void testPrepareStoreTokens() {
-        String[] tokens = {"comput", "MD5", "Hash"};
-
-        String sqlStatement = provider.prepareStoreTokens(Arrays.asList(tokens));
-        String expected = "INSERT OR IGNORE INTO tokens (Token) VALUES (\"comput\"),\n(\"MD5\"),\n(\"Hash\");";
-    
-        assertEquals(sqlStatement, expected);
-    }
-
-    @Test
-    public void testPrepareStoreAPI() {
-        String[] apis = {"someclass.somemethod", "otherclass.othermethod"};
-
-        List<String> testApis = new ArrayList<String>(Arrays.asList(apis));
-        String sqlStatement = provider.prepareStoreAPI(testApis);
-        String expected = "INSERT OR IGNORE INTO apis (API) VALUES (\"someclass.somemethod\"),\n(\"otherclass.othermethod\");";
-        System.out.println(sqlStatement);
-    
-        assertEquals(sqlStatement, expected);
-    }
-    @Test
     public void testCheckTableExists() throws SQLException {
         boolean tableDoesNotExist = !provider.tableExists(inexistentDatabase);
         

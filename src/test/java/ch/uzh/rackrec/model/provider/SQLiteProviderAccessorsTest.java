@@ -183,9 +183,6 @@ public class SQLiteProviderAccessorsTest {
         boolean relatedOverWeaklyRelated = kkcScoreRelatedKeywords > kkcScoreWeaklyRelatedKeywords;
         boolean weaklyRelatedOverUnrelated = kkcScoreWeaklyRelatedKeywords > kkcScoreUnrelatedKeywords;
 
-        System.out.println(kkcScoreRelatedKeywords);
-        System.out.println(kkcScoreWeaklyRelatedKeywords);
-        System.out.println(kkcScoreUnrelatedKeywords);
         assertTrue(kkcScoreRelatedGreaterNull);
         assertTrue(relatedOverWeaklyRelated);
         assertTrue(weaklyRelatedOverUnrelated);
