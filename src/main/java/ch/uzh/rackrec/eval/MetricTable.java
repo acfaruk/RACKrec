@@ -6,14 +6,22 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class MetricTable {
 	
-	public ArrayList<Pair<String, ArrayList<Double>>> metricTable;
+	private ArrayList<Pair<String, ArrayList<Double>>> metricTable;
 
 		
 	public MetricTable(Integer k) {
-		metricTable = new ArrayList<>();
+		this.metricTable = new ArrayList<>();
 	}
 	
 	public void printTable() {
-		System.out.println("this is a test print statement");
+		System.out.println(this.metricTable);
+	}
+	
+	public void add(Pair<String, ArrayList<Double>> metric) {
+		this.metricTable.add(metric);
+	}
+
+	public Pair<String, ArrayList<Double>> get(int i) {
+		return metricTable.get(i);
 	}
 }
