@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class SQLQueryFactory {
     protected String getTopKCountedAPIsForKeyword(String keyword) {
-        String query = ""
+        return ""
             + "WITH ContextsWithKeyword AS ("
                 + "SELECT Context "
                 + "FROM TokenReferences "
@@ -27,11 +27,9 @@ public class SQLQueryFactory {
             + "ON apis.ID=APIReferencesWithKeyword.ReferencedAPI "
             + "GROUP BY API "
             + "ORDER BY SUM(COUNT) DESC";
-
-        return query;
     }
     protected String getTokensForAPI(String api) {
-        String query = ""
+        return ""
             + "WITH ContextsWithApi AS ("
                 + "SELECT Context "
                 + "FROM APIReferences "
@@ -48,12 +46,10 @@ public class SQLQueryFactory {
             + "SELECT Token "
             + "FROM tokens "
             + "WHERE ID IN TokenReferencesWithApi";
-
-        return query;
     }
 
     protected String getApisFromKeywordPairQuery(String keyword1, String keyword2)  {
-        String getAPIQuery = ""
+        return ""
             + "WITH RelevantContexts AS("
                 + "SELECT Context "
                 + "FROM TokenReferences "
@@ -68,12 +64,10 @@ public class SQLQueryFactory {
                 + "SELECT API FROM APIReferences WHERE Context IN RelevantContexts"
             + ")"
             + "SELECT API From apis Where ID IN RelevantAPIS";
-
-        return getAPIQuery;
     }
 
     protected String getCountedNeighborTokens(String token) {
-        String getTokensQuery = ""
+        return ""
                 + "SELECT token, SUM(count) "
                 + "FROM tokenreferences "
                 + "WHERE context IN("
@@ -85,12 +79,10 @@ public class SQLQueryFactory {
                         + "WHERE token=\""+ token +"\""
                     + ")"
                 + ") GROUP BY token";
-
-        return getTokensQuery;
     }
 
     protected String getAPICountForContext(String context, String api) {
-        String getCountedAPIsQuery = ""
+        return ""
             + "SELECT Count "
             + "FROM APIReferences "
             + "WHERE Context=(SELECT ID FROM contexts WHERE Context=\""+ context +"\")"
@@ -100,12 +92,10 @@ public class SQLQueryFactory {
                 + "FROM apis "
                 + "WHERE API=\""+ api +"\""
             + ")";
-
-        return getCountedAPIsQuery;
     }
 
     protected String getTokenReferences (String token, ITypeName context) {
-        String query = ""
+        return ""
             + "SELECT * "
             + "FROM TokenReferences "
             + "WHERE Token=("
@@ -118,12 +108,10 @@ public class SQLQueryFactory {
                 + "FROM contexts "
                 + "WHERE Context=\""+ context +"\""
             + ")";
-
-        return query;
     }
 
     protected String getAPIReferences(String api, ITypeName context) {
-        String query = ""
+        return ""
             + "SELECT * "
             + "FROM APIReferences "
             + "WHERE API=("
@@ -136,12 +124,10 @@ public class SQLQueryFactory {
                 + "FROM contexts "
                 + "WHERE Context=\""+ context +"\""
             + ")";
-
-        return query;
     }
 
     protected String getApisForContext(String context) {
-        String getApisQuery = ""
+        return ""
             + "SELECT API "
             + "FROM APIReferences "
             + "WHERE Context=("
@@ -149,12 +135,10 @@ public class SQLQueryFactory {
                 + "FROM contexts "
                 + "WHERE Context=\""+ context +"\""
             + ")";
-
-        return getApisQuery;
     }
 
     protected String getTokensFromContext(String context) {
-        String getTokensQuery = ""
+        return ""
             + "SELECT Token "
             + "FROM TokenReferences "
             + "WHERE Context=("
@@ -162,73 +146,57 @@ public class SQLQueryFactory {
                 + "FROM contexts "
                 + "WHERE Context=\""+ context +"\""
             + ")";
-
-        return getTokensQuery;
     }
 
     protected  String getAllTokens() {
-        String getTokensQuery = ""
+        return ""
             + "SELECT Token from tokens";
-
-        return getTokensQuery;
     }
 
     protected String getAllContexts() {
-        String getContextsQuery = ""
+        return ""
             + "SELECT Context from Contexts";
-
-        return getContextsQuery;
     }
 
     protected String getAllAPIs() {
-        String getAPIsQuery = ""
+        return ""
             + "SELECT API from apis";
-
-        return getAPIsQuery;
     }
 
     protected String getSQLiteTable(String table) {
-        String tableExistsQuery = ""
+        return ""
             + "SELECT name "
             + "FROM sqlite_master "
             + "WHERE type='table' "
             + "AND name='" + table + "';";
-
-        return tableExistsQuery;
     }
 
     protected String createContextTable() {
-        String createContextSchema = ""
+        return ""
             + "CREATE TABLE contexts("
                 + "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + "Context varchar(255) NOT NULL"
             + ")";
-
-        return createContextSchema;
     }
 
     protected String createAPITable() {
-        String createAPISchema = ""
+        return ""
             + "CREATE TABLE apis("
                 + "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + "API varchar(255) NOT NULL UNIQUE"
             + ")";
-
-        return createAPISchema;
     }
 
     protected String createTokenTable() {
-        String createTokenSchema = ""
+        return ""
             + "CREATE TABLE tokens("
                 + "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + "Token varchar(255) NOT NULL UNIQUE"
             + ")";
-
-        return createTokenSchema;
     }
 
     protected String createAPIReferenceTable() {
-        String createAPIReferenceSchema =  ""
+        return  ""
             + "CREATE TABLE APIReferences("
                 + "API int,"
                 + "Context int,"
@@ -236,12 +204,10 @@ public class SQLQueryFactory {
                 + "FOREIGN KEY (API) REFERENCES apis(ID),"
                 + "FOREIGN KEY (Context) REFERENCES contexts(ID)"
             + ")";
-
-        return createAPIReferenceSchema;
     }
 
     protected String createTokenReferenceTable() {
-        String createTokenReferenceSchema =  ""
+        return  ""
             + "CREATE TABLE TokenReferences("
                 + "Token int,"
                 + "Context int,"
@@ -249,17 +215,13 @@ public class SQLQueryFactory {
                 + "FOREIGN KEY (Token) REFERENCES tokens(ID),"
                 + "FOREIGN KEY (Context) REFERENCES contexts(ID)"
             + ")";
-
-        return createTokenReferenceSchema;
     }
 
     protected String storeContext(ITypeName name) {
-        String insertContext = ""
+        return ""
             + "INSERT OR IGNORE "
             + "INTO Contexts (Context) "
             +  "VALUES (\"" + name + "\")";
-
-        return insertContext;
     }
 
     protected String storeTokens (List<String>tokens) {
@@ -268,50 +230,42 @@ public class SQLQueryFactory {
                 .collect(Collectors.joining("\n"));
 
         values = terminateSqlStatement(values);
-        String insertTokens = ""
-                + "INSERT OR IGNORE INTO tokens (Token) VALUES "
-                + values;
-
-        return insertTokens;
+        return ""
+            + "INSERT OR IGNORE INTO tokens (Token) VALUES "
+            + values;
     }
 
     protected String storeAPIs(List<String> apis) {
         String values = apis.stream()
-                .map(token -> "(\"" + token + "\"),")
-                .collect(Collectors.joining("\n"));
+                            .map(token -> "(\"" + token + "\"),")
+                            .collect(Collectors.joining("\n"));
 
         values = terminateSqlStatement(values);
-        String insertAPIs = ""
-                + "INSERT OR IGNORE INTO apis (API) VALUES "
-                + values;
-
-        return insertAPIs;
+        return ""
+            + "INSERT OR IGNORE INTO apis (API) VALUES "
+            + values;
     }
 
     protected String storeNewTokenContextReference(String token, ITypeName context) {
-        String storeReference = ""
-                + "INSERT INTO TokenReferences (Token, Context, Count) VALUES ("
-                + "(SELECT ID FROM tokens WHERE Token=\""+ token +"\"), "
-                + "(SELECT ID FROM contexts WHERE Context=\""+ context +"\"),"
-                + " 1)";
-
-        return storeReference;
+        return ""
+            + "INSERT INTO TokenReferences (Token, Context, Count) VALUES ("
+            + "(SELECT ID FROM tokens WHERE Token=\""+ token +"\"), "
+            + "(SELECT ID FROM contexts WHERE Context=\""+ context +"\"),"
+            + " 1)";
     }
 
     protected String storeNewAPIContextReference (String api, ITypeName context) {
-        String storeReference = ""
+        return ""
             + "INSERT INTO APIReferences "
             + "(API, Context, Count) VALUES ("
                 + "(SELECT ID FROM apis WHERE API=\"" + api + "\"), "
                 + "(SELECT ID FROM contexts WHERE CONTEXT=\"" + context + "\"),"
                 + "1"
             + ")";
-
-        return storeReference;
     }
 
     protected String incrementCounterOfAPIReference(String api, ITypeName context) {
-        String updateReference = ""
+        return ""
             + "UPDATE APIReferences "
             + "SET Count = Count + 1 "
             + "WHERE API=("
@@ -324,17 +278,13 @@ public class SQLQueryFactory {
                 + "FROM contexts "
                 + "WHERE Context=\""+ context +"\""
             + ")";
-
-        return updateReference;
     }
     protected String incrementCounterOfTokenRefernce(String token, ITypeName context) {
-        String updateReference = ""
+        return ""
             + "UPDATE TokenReferences "
             + "SET Count = Count + 1 "
             + "WHERE Token=(SELECT ID FROM tokens WHERE Token=\""+ token +"\")"
             + "AND Context=(SELECT ID FROM contexts WHERE Context=\""+ context +"\")";
-
-        return updateReference;
     }
 
     private String terminateSqlStatement(String statement) {
