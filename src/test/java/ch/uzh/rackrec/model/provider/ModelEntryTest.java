@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import static org.mockito.Mockito.mock;
 
 import cc.kave.commons.model.naming.impl.v0.types.TypeName;
 import cc.kave.commons.model.naming.types.ITypeName;
@@ -29,7 +30,7 @@ public class ModelEntryTest {
         validTokens = Arrays.asList(someTokens);
         validAPIs = Arrays.asList(someAPIs);
 
-        validTypeName = new TypeName("[a.b.c.MyType, MyProject] frame,work");
+        validTypeName = mock(TypeName.class);
     }
 
     @After
