@@ -51,6 +51,7 @@ public class SQLiteProvider implements IDatabaseProvider{
         ResultSet rs = statement.executeQuery(tableExistsQuery);
         boolean tableExists = rs.next();
 
+        statement.close();
         return tableExists;
     }
     public void closeConnection() {
@@ -113,6 +114,8 @@ public class SQLiteProvider implements IDatabaseProvider{
         while(rs.next()) {
             apis.add(rs.getString("API"));
         }
+
+        stmt.close();
         return apis;
     }
 
@@ -123,6 +126,7 @@ public class SQLiteProvider implements IDatabaseProvider{
         ResultSet rs = stmt.executeQuery(getApisQuery);
         int count = 0;
         count = rs.getInt("Count");
+        stmt.close();
         return count;
     }
 
@@ -137,6 +141,7 @@ public class SQLiteProvider implements IDatabaseProvider{
             tokens.add(rs.getString("Token"));
         }
 
+        stmt.close();
         return tokens;
     }
 
@@ -155,6 +160,7 @@ public class SQLiteProvider implements IDatabaseProvider{
             counter++;
         }
         KAC kac = new KAC(keyword, kacMap);
+        stmt.close();
         return kac;
     }
 
@@ -201,6 +207,7 @@ public class SQLiteProvider implements IDatabaseProvider{
             parseRow(rs, c2);
         }
 
+        stmt.close();
         return computeCosineSimilarity(c1, c2);
     }
 
@@ -213,6 +220,7 @@ public class SQLiteProvider implements IDatabaseProvider{
         while(rs.next()) {
             tokens.add(rs.getString("Token"));
         }
+        stmt.close();
         return tokens;
     }
 
@@ -224,6 +232,7 @@ public class SQLiteProvider implements IDatabaseProvider{
         ResultSet rs = stmt.executeQuery(query);
         foundReference = rs.next();
 
+        stmt.close();
         return foundReference;
     }
 
@@ -232,16 +241,19 @@ public class SQLiteProvider implements IDatabaseProvider{
 
         Statement statement = conn.createStatement();
         statement.execute(insertContext);
+        statement.close();
     }
 
     protected void storeTokens(List<String> tokens) throws SQLException {
         Statement statement = conn.createStatement();
         statement.execute(queryFactory.storeTokens(tokens));
+        statement.close();
     }
 
     protected void storeAPIS(List<String> apis) throws SQLException {
         Statement statement = conn.createStatement();
         statement.execute(queryFactory.storeAPIs(apis));
+        statement.close();
     }
 
     protected List<String> getAPIs() throws SQLException {
@@ -253,6 +265,7 @@ public class SQLiteProvider implements IDatabaseProvider{
         while(rs.next()) {
             apis.add(rs.getString("API"));
         }
+        statement.close();
         return apis;
     }
 
@@ -265,6 +278,7 @@ public class SQLiteProvider implements IDatabaseProvider{
         while(rs.next()) {
             contexts.add(rs.getString("Context"));
         }
+        statement.close();
         return contexts;
     }
 
@@ -277,6 +291,7 @@ public class SQLiteProvider implements IDatabaseProvider{
         while(rs.next()) {
             tokens.add(rs.getString("Token"));
         }
+        statement.close();
         return tokens;
     }
 
@@ -294,6 +309,7 @@ public class SQLiteProvider implements IDatabaseProvider{
         while(rs.next()) {
             apis.add(new MethodName(rs.getString("API")));
         }
+        stmt.close();
         return apis;
     }
 
@@ -307,6 +323,7 @@ public class SQLiteProvider implements IDatabaseProvider{
 
         Statement statement = conn.createStatement();
         statement.execute(createContextSchema);
+        statement.close();
     }
 
     private void createAPITable() throws SQLException {
@@ -319,6 +336,7 @@ public class SQLiteProvider implements IDatabaseProvider{
 
         Statement statement = conn.createStatement();
         statement.execute(createAPISchema);
+        statement.close();
     }
 
     private void createTokenTable() throws SQLException {
@@ -330,6 +348,7 @@ public class SQLiteProvider implements IDatabaseProvider{
         }
         Statement statement = conn.createStatement();
         statement.execute(createTokenSchema);
+        statement.close();
     }
 
     private void createTokenReferenceTable() throws SQLException {
@@ -341,6 +360,7 @@ public class SQLiteProvider implements IDatabaseProvider{
         }
         Statement statement = conn.createStatement();
         statement.execute(createTokenReferenceSchema);
+        statement.close();
     }
 
     private void createAPIReferenceTable() throws SQLException {
@@ -352,6 +372,7 @@ public class SQLiteProvider implements IDatabaseProvider{
         }
         Statement statement = conn.createStatement();
         statement.execute(createAPIReferenceSchema);
+        statement.close();
     }
 
     private void createNewTokenContextReference(String token, ITypeName context) throws SQLException {
@@ -359,13 +380,15 @@ public class SQLiteProvider implements IDatabaseProvider{
 
         Statement stmt = conn.createStatement();
         stmt.execute(storeReference);
+        stmt.close();
     }
 
     private void updateExistingTokenContextReference(String token, ITypeName context) throws SQLException {
         String updateReference = queryFactory.incrementCounterOfTokenRefernce(token, context);
 
-        Statement stmtn = conn.createStatement();
-        stmtn.execute(updateReference);
+        Statement stmt = conn.createStatement();
+        stmt.execute(updateReference);
+        stmt.close();
     }
 
     private boolean tokenContextReferenceExists(String token, ITypeName context) throws SQLException {
@@ -376,14 +399,16 @@ public class SQLiteProvider implements IDatabaseProvider{
         ResultSet rs = stmt.executeQuery(query);
         foundReference = rs.next();
 
+        stmt.close();
         return foundReference;
     }
 
     private void updateExistingApiContextReference(String api, ITypeName context) throws SQLException {
         String updateReference = queryFactory.incrementCounterOfAPIReference(api, context);
 
-        Statement stmtn = conn.createStatement();
-        stmtn.execute(updateReference);
+        Statement stmt = conn.createStatement();
+        stmt.execute(updateReference);
+        stmt.close();
     }
 
     private void createNewApiContextReference (String api, ITypeName context) throws SQLException {
@@ -391,6 +416,7 @@ public class SQLiteProvider implements IDatabaseProvider{
 
         Statement stmt = conn.createStatement();
         stmt.execute(storeReference);
+        stmt.close();
     }
 
     private void parseRow(ResultSet rs, HashMap<String, Double> target) throws SQLException {
