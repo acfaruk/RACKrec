@@ -24,21 +24,17 @@ public class SQLiteProvider implements IDatabaseProvider{
     private String dbLocation;
     private SQLQueryFactory queryFactory;
     private Logger logger;
+    private final String TOKEN_COLUMN = "Token";
 
 
     @Inject
-    public SQLiteProvider(Properties properties, Logger logger) {
+    public SQLiteProvider(Properties properties, Logger logger) throws SQLException {
         dbLocation = properties.getProperty("database-file");
         queryFactory = new SQLQueryFactory();
         this.logger = logger;
 
-        try {
-            String url = "jdbc:sqlite:" + dbLocation;
-             conn = DriverManager.getConnection(url);
-             logger.log(null, "Connection to SQLite has been established.");
-        } catch (SQLException e) {
-             logger.log(null, e.getLocalizedMessage());
-        }
+        String url = "jdbc:sqlite:" + dbLocation;
+        conn = DriverManager.getConnection(url);
     }
 
     public boolean tableExists(String tableName) throws SQLException {
@@ -108,7 +104,7 @@ public class SQLiteProvider implements IDatabaseProvider{
         try(Statement stmt = conn.createStatement()) {
 
             try (ResultSet rs = stmt.executeQuery(getApisQuery)) {
-                List<String> apis = new ArrayList<String>();
+                List<String> apis = new ArrayList<>();
                 while (rs.next()) {
                     apis.add(rs.getString("API"));
                 }
@@ -136,9 +132,9 @@ public class SQLiteProvider implements IDatabaseProvider{
         try(Statement stmt = conn.createStatement()) {
             try(ResultSet rs = stmt.executeQuery(query)) {
 
-                List<String> tokens = new ArrayList<String>();
+                List<String> tokens = new ArrayList<>();
                 while (rs.next()) {
-                    tokens.add(rs.getString("Token"));
+                    tokens.add(rs.getString(TOKEN_COLUMN));
                 }
 
                 return tokens;
@@ -153,15 +149,14 @@ public class SQLiteProvider implements IDatabaseProvider{
         try(Statement stmt = conn.createStatement()) {
             try(ResultSet rs = stmt.executeQuery(query)) {
                 int counter = 0;
-                Map<Integer, MethodName> kacMap = new HashMap<Integer, MethodName>();
+                Map<Integer, MethodName> kacMap = new HashMap<>();
 
                 while (rs.next() && counter < k) {
                     kacMap.put(rs.getInt("SUM(COUNT)"), new MethodName(rs.getString("API")));
 
                     counter++;
                 }
-                KAC kac = new KAC(keyword, kacMap);
-                return kac;
+                return new KAC(keyword, kacMap);
             }
         }
     }
@@ -196,8 +191,8 @@ public class SQLiteProvider implements IDatabaseProvider{
         String getContextsQueryForToken2 = queryFactory.getCountedNeighborTokens(keyword2);
         try(Statement stmt = conn.createStatement()) {
 
-            HashMap<String, Double> c1 = new HashMap<String, Double>();
-            HashMap<String, Double> c2 = new HashMap<String, Double>();
+            HashMap<String, Double> c1 = new HashMap<>();
+            HashMap<String, Double> c2 = new HashMap<>();
 
             try(ResultSet rs = stmt.executeQuery(getContextsQueryForToken1)) {
                 while (rs.next()) {
@@ -220,9 +215,9 @@ public class SQLiteProvider implements IDatabaseProvider{
         try(Statement stmt = conn.createStatement()) {
             try(ResultSet rs = stmt.executeQuery(getTokensQuery)) {
 
-                List<String> tokens = new ArrayList<String>();
+                List<String> tokens = new ArrayList<>();
                 while (rs.next()) {
-                    tokens.add(rs.getString("Token"));
+                    tokens.add(rs.getString(TOKEN_COLUMN));
                 }
                 return tokens;
             }
@@ -265,7 +260,7 @@ public class SQLiteProvider implements IDatabaseProvider{
     protected List<String> getAPIs() throws SQLException {
         String getAPIsQuery = queryFactory.getAllAPIs();
 
-        List<String> apis = new ArrayList<String>();
+        List<String> apis = new ArrayList<>();
         try(Statement statement = conn.createStatement()) {
             try(ResultSet rs = statement.executeQuery(getAPIsQuery)) {
                 while (rs.next()) {
@@ -280,7 +275,7 @@ public class SQLiteProvider implements IDatabaseProvider{
     protected List<String> getContexts() throws SQLException {
         String getContextsQuery = queryFactory.getAllContexts();
 
-        List<String> contexts = new ArrayList<String>();
+        List<String> contexts = new ArrayList<>();
         try(Statement statement = conn.createStatement()) {
             try(ResultSet rs = statement.executeQuery(getContextsQuery)) {
                 while (rs.next()) {
@@ -294,7 +289,7 @@ public class SQLiteProvider implements IDatabaseProvider{
     protected List<String> getTokens() throws SQLException {
         String getTokensQuery = queryFactory.getAllTokens();
 
-        List<String> tokens = new ArrayList<String>();
+        List<String> tokens = new ArrayList<>();
         try(Statement statement = conn.createStatement()) {
             try(ResultSet rs = statement.executeQuery(getTokensQuery)) {
                 while (rs.next()) {
@@ -315,7 +310,7 @@ public class SQLiteProvider implements IDatabaseProvider{
         try(Statement stmt = conn.createStatement()) {
             try(ResultSet rs = stmt.executeQuery(getAPIQuery)) {
 
-                List<MethodName> apis = new ArrayList<MethodName>();
+                List<MethodName> apis = new ArrayList<>();
                 while (rs.next()) {
                     apis.add(new MethodName(rs.getString("API")));
                 }

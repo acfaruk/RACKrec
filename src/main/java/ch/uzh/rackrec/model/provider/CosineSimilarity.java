@@ -5,6 +5,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CosineSimilarity {
+    private CosineSimilarity() {
+
+    }
+
     protected static double compute(HashMap<String, Double> vector1, HashMap<String, Double> vector2) {
         Set<String> sharedKeys = new HashSet<>(vector1.keySet());
         Set<String> keysVector1 = vector1.keySet();

@@ -26,9 +26,12 @@ public class ModelEntryTest {
     @Before
     public void initialize(){
         String[] someTokens = { "compu", "MD5", "has" };
-        String[] someAPIs = { "Object.hashCode", "MessageDigest.digest" }; 
+        String[] someAPIs = { "Object.hashCode", "MessageDigest.digest" };
+        String[] emptyList = {};
         validTokens = Arrays.asList(someTokens);
         validAPIs = Arrays.asList(someAPIs);
+        invalidAPIs = Arrays.asList(emptyList);
+        invalidTokens = Arrays.asList(emptyList);
 
         validTypeName = mock(TypeName.class);
     }
