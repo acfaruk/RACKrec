@@ -16,21 +16,21 @@ public class CosineSimilarity {
 
         sharedKeys.retainAll(vector2.keySet());
         double sumproduct = 0;
-        double A = 0;
-        double B = 0;
+        double a = 0;
+        double b = 0;
 
         sumproduct = sharedKeys.stream()
                 .mapToDouble(key -> vector1.get(key) * vector2.get(key))
                 .sum();
 
-        A = keysVector1.stream()
+        a = keysVector1.stream()
                 .mapToDouble(key -> vector1.get(key) * vector1.get(key))
                 .sum();
 
-        B = keysVector2.stream()
+        b = keysVector2.stream()
                 .mapToDouble(key -> vector2.get(key) * vector2.get(key))
                 .sum();
 
-        return sumproduct / Math.sqrt(A * B);
+        return sumproduct / Math.sqrt(a * b);
     }
 }
