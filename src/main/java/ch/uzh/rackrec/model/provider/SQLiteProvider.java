@@ -27,18 +27,13 @@ public class SQLiteProvider implements IDatabaseProvider{
 
 
     @Inject
-    public SQLiteProvider(Properties properties, Logger logger) {
+    public SQLiteProvider(Properties properties, Logger logger) throws SQLException {
         dbLocation = properties.getProperty("database-file");
         queryFactory = new SQLQueryFactory();
         this.logger = logger;
 
-        try {
-            String url = "jdbc:sqlite:" + dbLocation;
-             conn = DriverManager.getConnection(url);
-             logger.log(null, "Connection to SQLite has been established.");
-        } catch (SQLException e) {
-             logger.log(null, e.getLocalizedMessage());
-        }
+        String url = "jdbc:sqlite:" + dbLocation;
+        conn = DriverManager.getConnection(url);
     }
 
     public boolean tableExists(String tableName) throws SQLException {

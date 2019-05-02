@@ -3,6 +3,7 @@ package ch.uzh.rackrec.model.provider;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -16,8 +17,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.mockito.Mockito.mock;
-
 public class SQLiteProviderInitializationTest {
     String testingDB = "./testdb.db";
     SQLiteProvider provider;
@@ -27,7 +26,7 @@ public class SQLiteProviderInitializationTest {
     Logger logger = mock(Logger.class);
 
     @Before
-    public void initialize() {
+    public void initialize() throws SQLException {
         Properties settings = new Properties();
         settings.put("database-file", testingDB);
         provider = new SQLiteProvider(settings, logger);
@@ -38,6 +37,13 @@ public class SQLiteProviderInitializationTest {
         provider.closeConnection();
         File file = new File(testingDB); 
         file.delete();
+    }
+
+    @Test(expected = SQLException.class)
+    public void unsuccsessfulConnection() throws SQLException {
+        Properties settings = new Properties();
+        settings.put("database-file", "/root/this/should/not/exist");
+        provider = new SQLiteProvider(settings, logger);
     }
 
     @Test
