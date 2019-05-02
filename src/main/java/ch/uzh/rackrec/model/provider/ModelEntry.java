@@ -14,12 +14,12 @@ public class ModelEntry {
     // The enclosing type of the Context (Class name)
     ITypeName enclosingContextType;
     public ModelEntry(List<String> tokens, List<String> apiReferences, ITypeName enclosingType) throws IllegalArgumentException {
-       	boolean noTokensOrAPIs = tokens.size() == 0 || apiReferences.size() == 0;
+       	boolean noTokensOrAPIs = tokens.isEmpty() || apiReferences.isEmpty();
        	boolean contextUndefined = enclosingType == null;
        	boolean invalidMenuEntry = noTokensOrAPIs || contextUndefined;
 
         if(invalidMenuEntry) {
-            throw new IllegalArgumentException();
+            throw new InvalidModelEntryException();
         }
         this.tokens = tokens;
         this.apiReferences = apiReferences;
