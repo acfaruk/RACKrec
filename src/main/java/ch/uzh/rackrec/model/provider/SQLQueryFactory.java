@@ -6,23 +6,33 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SQLQueryFactory {
+    private final String SELECT_CONTEXT = "SELECT Context ";
+    private final String FROM_TOKENREFERENCES = "FROM TokenReferences ";
+    private final String SELECT_ID = "SELECT ID ";
+    private final String FROM_TOKENS = "FROM Tokens ";
+    private final String FROM_APIREFERENCES = "FROM APIReferences ";
+    private final String FROM_APIS = "FROM apis ";
+    private final String FROM_CONTEXTS = "FROM contexts ";
+    private final String ID = "ID INTEGER PRIMARY KEY AUTOINCREMENT,";
+
+
     protected String getTopKCountedAPIsForKeyword(String keyword) {
         return ""
             + "WITH ContextsWithKeyword AS ("
-                + "SELECT Context "
-                + "FROM TokenReferences "
+                + SELECT_CONTEXT
+                + FROM_TOKENREFERENCES
                 + "WHERE Token=("
-                + "SELECT ID "
-                + "FROM tokens "
+                + SELECT_ID
+                + FROM_TOKENS
                 + "WHERE Token=\"" + keyword + "\")"
             + "),"
             + "APIReferencesWithKeyword AS ("
                 + "SELECT API as ReferencedAPI, Count "
-                + "FROM APIReferences "
+                + FROM_APIREFERENCES
                 + "WHERE Context IN ContextsWithKeyword"
             + ")"
             + "SELECT API, SUM(COUNT) "
-            + "FROM apis "
+            + FROM_APIS
             + "JOIN APIReferencesWithKeyword "
             + "ON apis.ID=APIReferencesWithKeyword.ReferencedAPI "
             + "GROUP BY API "
@@ -31,31 +41,31 @@ public class SQLQueryFactory {
     protected String getTokensForAPI(String api) {
         return ""
             + "WITH ContextsWithApi AS ("
-                + "SELECT Context "
-                + "FROM APIReferences "
-                + "WHERE API=("
-                + "SELECT ID "
-                + "FROM apis "
+                + SELECT_CONTEXT
+                + FROM_APIREFERENCES
+                + "WHERE  API=("
+                + SELECT_ID
+                + FROM_APIS
                 + "WHERE API=\"" + api + "\")"
             + "),"
             + "TokenReferencesWithApi AS ("
                 + "SELECT Token "
-                + "FROM TokenReferences "
+                + FROM_TOKENREFERENCES
                 + "WHERE Context IN ContextsWithApi"
             + ")"
             + "SELECT Token "
-            + "FROM tokens "
+            + FROM_TOKENS
             + "WHERE ID IN TokenReferencesWithApi";
     }
 
     protected String getApisFromKeywordPairQuery(String keyword1, String keyword2)  {
         return ""
             + "WITH RelevantContexts AS("
-                + "SELECT Context "
-                + "FROM TokenReferences "
+                + SELECT_CONTEXT
+                + FROM_TOKENREFERENCES
                 + "Where Token IN ("
-                    + "Select ID "
-                    + "from tokens "
+                    + SELECT_ID
+                    + FROM_TOKENS
                     + "where token=\""+ keyword1 + "\" OR "
                     + "token=\"" + keyword2 + "\""
                 + ")"
@@ -71,11 +81,11 @@ public class SQLQueryFactory {
                 + "SELECT token, SUM(count) "
                 + "FROM tokenreferences "
                 + "WHERE context IN("
-                    + "SELECT context "
+                    + SELECT_CONTEXT
                     + "FROM tokenreferences "
                     + "WHERE token=("
                         + "SELECT id "
-                        + "FROM tokens "
+                        + FROM_TOKENS
                         + "WHERE token=\""+ token +"\""
                     + ")"
                 + ") GROUP BY token";
@@ -84,28 +94,28 @@ public class SQLQueryFactory {
     protected String getAPICountForContext(String context, String api) {
         return ""
             + "SELECT Count "
-            + "FROM APIReferences "
+            + FROM_APIREFERENCES
             + "WHERE Context=(SELECT ID FROM contexts WHERE Context=\""+ context +"\")"
             + "AND "
             + "API=("
-                + "SELECT ID "
-                + "FROM apis "
-                + "WHERE API=\""+ api +"\""
+                + SELECT_ID
+                + FROM_APIS
+                + "WHERE  API=\""+ api +"\""
             + ")";
     }
 
     protected String getTokenReferences (String token, ITypeName context) {
         return ""
             + "SELECT * "
-            + "FROM TokenReferences "
+            + FROM_TOKENREFERENCES
             + "WHERE Token=("
-                + "SELECT ID "
-                + "FROM tokens "
+                + SELECT_ID
+                + FROM_TOKENS
                 + "WHERE Token=\""+ token +"\""
             + ")"
             + "AND Context=("
-                + "SELECT ID "
-                + "FROM contexts "
+                + SELECT_ID
+                + FROM_CONTEXTS
                 + "WHERE Context=\""+ context +"\""
             + ")";
     }
@@ -113,15 +123,15 @@ public class SQLQueryFactory {
     protected String getAPIReferences(String api, ITypeName context) {
         return ""
             + "SELECT * "
-            + "FROM APIReferences "
-            + "WHERE API=("
-                + "SELECT ID "
-                + "FROM apis "
-                + "WHERE API=\""+ api +"\""
+            + FROM_APIREFERENCES
+            + "WHERE   API=("
+                + SELECT_ID
+                + FROM_APIS
+                + "WHERE   API=\""+ api +"\""
             + ")"
             + "AND Context=("
-                + "SELECT ID "
-                + "FROM contexts "
+                + SELECT_ID
+                + FROM_CONTEXTS
                 + "WHERE Context=\""+ context +"\""
             + ")";
     }
@@ -129,10 +139,10 @@ public class SQLQueryFactory {
     protected String getApisForContext(String context) {
         return ""
             + "SELECT API "
-            + "FROM APIReferences "
+            + FROM_APIREFERENCES
             + "WHERE Context=("
-                + "SELECT ID "
-                + "FROM contexts "
+                + SELECT_ID
+                + FROM_CONTEXTS
                 + "WHERE Context=\""+ context +"\""
             + ")";
     }
@@ -140,10 +150,10 @@ public class SQLQueryFactory {
     protected String getTokensFromContext(String context) {
         return ""
             + "SELECT Token "
-            + "FROM TokenReferences "
+            + FROM_TOKENREFERENCES
             + "WHERE Context=("
-                + "SELECT ID "
-                + "FROM contexts "
+                + SELECT_ID
+                + FROM_CONTEXTS
                 + "WHERE Context=\""+ context +"\""
             + ")";
     }
@@ -174,7 +184,7 @@ public class SQLQueryFactory {
     protected String createContextTable() {
         return ""
             + "CREATE TABLE contexts("
-                + "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + ID
                 + "Context varchar(255) NOT NULL"
             + ")";
     }
@@ -182,7 +192,7 @@ public class SQLQueryFactory {
     protected String createAPITable() {
         return ""
             + "CREATE TABLE apis("
-                + "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + ID
                 + "API varchar(255) NOT NULL UNIQUE"
             + ")";
     }
@@ -190,7 +200,7 @@ public class SQLQueryFactory {
     protected String createTokenTable() {
         return ""
             + "CREATE TABLE tokens("
-                + "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + ID
                 + "Token varchar(255) NOT NULL UNIQUE"
             + ")";
     }
@@ -268,14 +278,14 @@ public class SQLQueryFactory {
         return ""
             + "UPDATE APIReferences "
             + "SET Count = Count + 1 "
-            + "WHERE API=("
-                + "SELECT ID "
-                + "FROM apis "
-                + "WHERE API=\""+ api +"\""
+            + "WHERE  API=("
+                + SELECT_ID
+                + FROM_APIS
+                + "WHERE    API=\""+ api +"\""
             + ")"
             + "AND Context=("
-                + "SELECT ID "
-                + "FROM contexts "
+                + SELECT_ID
+                + FROM_CONTEXTS
                 + "WHERE Context=\""+ context +"\""
             + ")";
     }
