@@ -48,7 +48,7 @@ public class IdentifierLemmatizer implements ILemmatizer {
         List <String> words = new ArrayList<>(Arrays.asList(paddedIdentifier.split(" ")));
 
         words = words.stream()
-                .map(word -> word.toLowerCase())
+                .map(String::toLowerCase)
                 .collect(Collectors.toList());
 
         if(this.removeStopWords) {
