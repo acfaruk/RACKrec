@@ -43,7 +43,7 @@ public class IdentifierLemmatizer implements ILemmatizer {
 
     @Override
     public List<String> lemmatize(String identifier){
-    	logger.log(Level.FINEST, "Lemmatizing: " + identifier);
+    	logger.log(Level.FINEST, "Lemmatizing: {0}", identifier);
         String paddedIdentifier = tokenizeSentence(identifier);
         List <String> words = new ArrayList<>(Arrays.asList(paddedIdentifier.split(" ")));
 
@@ -58,7 +58,7 @@ public class IdentifierLemmatizer implements ILemmatizer {
         }
 
         Sentence sent = new Sentence(words);
-        List<String> lemmas = new ArrayList<String>(sent.lemmas());
+        List<String> lemmas = new ArrayList<>(sent.lemmas());
 
         if (this.removeDuplicates) {
             Set<String> prunedLemmas = new LinkedHashSet<>(lemmas);
