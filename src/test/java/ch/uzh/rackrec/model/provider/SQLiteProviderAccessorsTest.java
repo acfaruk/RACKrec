@@ -96,6 +96,21 @@ public class SQLiteProviderAccessorsTest {
         assertEquals("MethodName(a.type1, project1.M1)", topKKAC.getFreqToApi().get(6).toString());
         assertEquals("MethodName(a.type2, project1.M1)", topKKAC.getFreqToApi().get(3).toString());
     }
+
+    @Test
+    public void testgetTopKEntriesForInexistingKeyword() throws Exception {
+        String[] tokensCTX2 = tokens;
+        String[] apisCTX2 = { "a.type2, project1.M1", "a.type1, project1.M1"};
+        TypeName typeNameCTX2 = mock(TypeName.class);
+        when(typeNameCTX2.toString()).thenReturn("client2");
+
+        int k = 2;
+        KAC topKKAC = provider.getTopKAPIForToken(k, "nosuchkeyword");
+        int nrOfApis = topKKAC.getFreqToApi().size();
+        boolean noApis = nrOfApis == 0;
+        assertTrue(noApis);
+        assertTrue(nrOfApis < k);
+    }
     @Test
     public void testGetTokensForAPI() throws Exception {
         List<String> tokenRows = provider.getTokens();

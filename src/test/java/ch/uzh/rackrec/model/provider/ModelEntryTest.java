@@ -41,17 +41,17 @@ public class ModelEntryTest {
         entry = null;
     }
 
-    @Test(expected=Exception.class)
+    @Test(expected=InvalidModelEntryException.class)
     public void invalidAPITest() throws Exception{
         entry = new ModelEntry(validTokens, invalidAPIs, validTypeName);
     }
 
-    @Test(expected=Exception.class)
+    @Test(expected=InvalidModelEntryException.class)
     public void invalidTokenTest() throws Exception{
         entry = new ModelEntry(invalidTokens, validAPIs, validTypeName);
     }
 
-    @Test(expected=Exception.class)
+    @Test(expected=InvalidModelEntryException.class)
     public void invalidTypeTest() throws Exception{
         entry = new ModelEntry(validTokens, validAPIs, invalidTypeName);
     }

@@ -42,9 +42,7 @@ public class SQLiteProvider implements IDatabaseProvider{
 
         try(Statement statement = conn.createStatement()) {
             try(ResultSet rs = statement.executeQuery(tableExistsQuery)) {
-                boolean tableExists = rs.next();
-
-                return tableExists;
+                return rs.next();
             }
         }
     }
@@ -293,7 +291,7 @@ public class SQLiteProvider implements IDatabaseProvider{
         try(Statement statement = conn.createStatement()) {
             try(ResultSet rs = statement.executeQuery(getTokensQuery)) {
                 while (rs.next()) {
-                    tokens.add(rs.getString("Token"));
+                    tokens.add(rs.getString(TOKEN_COLUMN));
                 }
                 return tokens;
             }
@@ -427,6 +425,6 @@ public class SQLiteProvider implements IDatabaseProvider{
     }
 
     private void parseRow(ResultSet rs, HashMap<String, Double> target) throws SQLException {
-        target.put(""+rs.getInt("Token"), (double) rs.getInt("SUM(Count)"));
+        target.put(""+rs.getInt(TOKEN_COLUMN), (double) rs.getInt("SUM(Count)"));
     }
 }
