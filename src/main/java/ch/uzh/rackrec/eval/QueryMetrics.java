@@ -58,8 +58,8 @@ public class QueryMetrics {
 		Pair<String, ArrayList<Double>> precisionMetrics = new ImmutablePair<>("Precision@K", precision);
 		Pair<String, ArrayList<Double>> recallMetrics = new ImmutablePair<>("Recall@K", recall);
 				
-		this.myMetricTable.add(accuracyMetrics);
-		this.myMetricTable.add(mrrMetrics);
+		//this.myMetricTable.add(accuracyMetrics);
+		//this.myMetricTable.add(mrrMetrics);
 		this.myMetricTable.add(precisionMetrics);
 		this.myMetricTable.add(recallMetrics);
 	}
@@ -96,14 +96,14 @@ public class QueryMetrics {
 	    Iterator<Pair<IMemberName, Double>> goldIterator = this.resultGold.iterator();
 	    Iterator<Pair<IMemberName, Double>> rackIterator = this.resultRACK.iterator();
 	    
-	    while(rackIterator.hasNext() && rackCounter < k) {
+	    while(rackIterator.hasNext() && rackCounter < k + 1) {
 	    	Pair<IMemberName, Double> rackPair = rackIterator.next();
 			Integer goldCounter = 0;
 	    	while (goldIterator.hasNext()) {
 				Pair<IMemberName, Double> goldPair = goldIterator.next();
 				if (rackPair.getLeft() == goldPair.getLeft()) {
 					goldCounter += 1;
-					continue;
+					break;
 				}
 			}
 	    	if (goldCounter == 0) {
@@ -111,15 +111,16 @@ public class QueryMetrics {
 			} else {
 				truePositives += 1;
 			}
+			goldIterator = this.resultGold.iterator();
 	    	rackCounter += 1;
 	    }
 	    if (this.resultRACK.size() == 0 || this.resultGold.size() == 0) {
 	    	precision = 0;
 			recall = 0;
 		} else {
-		    precision = truePositives / this.resultRACK.size();
-		    recall = truePositives / this.resultGold.size();
+		    precision = (double) truePositives / (double) this.resultRACK.size();
+		    recall = (double) truePositives / (double) this.resultGold.size();
 		}	
-		return Pair.of(precision, recall);
+		return Pair.of((double) Math.round(precision * 1000) / 1000, (double) Math.round(recall * 1000) / 1000);
 	}
 }

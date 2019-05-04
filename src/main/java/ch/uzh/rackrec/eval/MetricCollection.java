@@ -41,8 +41,8 @@ public class MetricCollection {
 		}
 				
 		for (int i = 0; i < metricCollection.size(); i++) {
-			Pair<String, ArrayList<Double>> precision = metricCollection.get(i).getMetricTable().get(2);
-			Pair<String, ArrayList<Double>> recall = metricCollection.get(i).getMetricTable().get(3);
+			Pair<String, ArrayList<Double>> precision = metricCollection.get(i).getMetricTable().get(0);
+			Pair<String, ArrayList<Double>> recall = metricCollection.get(i).getMetricTable().get(1);
 
 			for (int j = 0; j < precision.getRight().size(); j++) {
 				meanPrecision.set(j, meanPrecision.get(j) + precision.getRight().get(j));
@@ -52,8 +52,9 @@ public class MetricCollection {
 		
 		for (int i = 0; i < meanPrecision.size(); i++) {
 			//check for 0
-			meanPrecision.set(i, meanPrecision.get(i) / 1);
-			meanRecall.set(i, meanPrecision.get(i) / 1);
+			
+			meanPrecision.set(i, (double) Math.round(meanPrecision.get(i) / (double) metricCollection.size() * 1000) / 1000);
+			meanRecall.set(i, (double) Math.round(meanRecall.get(i) / (double) metricCollection.size() * 1000) / 1000);
 
 		}
 		Pair<String, ArrayList<Double>> meanPrecisionPair = new ImmutablePair<>("Mean Precision@K", meanPrecision);
