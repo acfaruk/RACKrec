@@ -2,13 +2,9 @@ package ch.uzh.rackrec.example;
 
 import org.jfree.chart.ChartPanel;
 
-import java.util.ArrayList;
-
-import org.apache.commons.lang3.tuple.Pair;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.ui.ApplicationFrame;
-import org.jfree.ui.RefineryUtilities;
 
 import ch.uzh.rackrec.eval.MetricTable;
 
