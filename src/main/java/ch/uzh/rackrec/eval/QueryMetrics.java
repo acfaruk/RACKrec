@@ -42,12 +42,7 @@ public class QueryMetrics {
 		ArrayList<Double> precision = new ArrayList<Double>();
 		ArrayList<Double> recall = new ArrayList<Double>();
 
-		for (int i = 0; i < maxK; i++) {
-			//accuracy.add(calculateTopKAccuracy(i));
-			//mrr.add(calculateMeanReciprocalRank(i));
-			//precision.add(calculateMeanAveragePrecision(i));
-			//recall.add(calculateMeanRecall(i));
-			
+		for (int i = 0; i < maxK; i++) {		
 			Pair<Double, Double> precisionRecall = calculatePrecisionAndRecall(i);
 			precision.add(precisionRecall.getLeft());
 			recall.add(precisionRecall.getRight());
@@ -67,28 +62,6 @@ public class QueryMetrics {
 		this.myMetricTable.add(mrrMetrics);
 		this.myMetricTable.add(precisionMetrics);
 		this.myMetricTable.add(recallMetrics);
-	}
-	
-	//does a value in the rack result appear in the gold set in the first k results?
-	private double isAccurate(Integer k) {
-		Integer goldCounter = 0;
-		Integer rackCounter = 0;
-
-	    Iterator<Pair<IMemberName, Double>> goldIterator = this.resultGold.iterator();
-	    Iterator<Pair<IMemberName, Double>> rackIterator = this.resultRACK.iterator();
-
-	    while(goldIterator.hasNext() && goldCounter < k) {
-	    	Pair<IMemberName, Double> goldPair = goldIterator.next();
-	    	while (rackIterator.hasNext() && rackCounter < k) {
-				Pair<IMemberName, Double> rackPair = rackIterator.next();
-				if (goldPair.getLeft() == rackPair.getLeft()) {
-					return 1.0;
-				}
-				rackCounter += 1;
-			}
-	    	goldCounter += 1;
-	    }
-		return 0.0;
 	}
 	
 	private Pair<Double, Double> calculatePrecisionAndRecall(Integer k) {

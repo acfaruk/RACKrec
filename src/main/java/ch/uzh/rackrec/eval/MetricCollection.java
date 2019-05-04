@@ -25,6 +25,10 @@ public class MetricCollection {
 		
 	}
 	
+	public MetricTable get() {
+		return this.meanMetrics;
+	}
+	
 	public void printMeanMetrics() {
 		this.meanMetrics.printTable();
 	}

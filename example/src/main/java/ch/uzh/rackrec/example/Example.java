@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jfree.ui.RefineryUtilities;
 
 import cc.kave.commons.model.events.completionevents.Context;
 import cc.kave.commons.model.naming.codeelements.IMemberName;
@@ -142,5 +143,10 @@ public class Example {
 		
 		metricCollection1.calculateMeanMetrics();
 		metricCollection1.printMeanMetrics();
+		
+	    LineChart_AWT chart = new LineChart_AWT("Metrics" , "k", metricCollection1.get());
+	    chart.pack( );
+	    RefineryUtilities.centerFrameOnScreen( chart );
+	    chart.setVisible( true );
     }
 }

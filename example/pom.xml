@@ -57,6 +57,12 @@
             <!-- snapshot versions only work when installed locally, bintray does not allow snapshot deploys -->
             <version>0.0.2-SNAPSHOT</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/jfree/jfreechart -->
+		<dependency>
+		    <groupId>jfree</groupId>
+		    <artifactId>jfreechart</artifactId>
+		    <version>1.0.13</version>
+		</dependency>
     </dependencies>
 
 </project>
