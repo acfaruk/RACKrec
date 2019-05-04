@@ -51,15 +51,20 @@ public class QueryMetrics {
 			Pair<Double, Double> precisionRecall = calculatePrecisionAndRecall(i);
 			precision.add(precisionRecall.getLeft());
 			recall.add(precisionRecall.getRight());
+			if (precisionRecall.getLeft() > 0.0) {
+				accuracy.add(1.0);
+			} else {
+				accuracy.add(0.0);
+			}
 		}
 				
-		Pair<String, ArrayList<Double>> accuracyMetrics = new ImmutablePair<>("Top-K Accuracy", accuracy);
-		Pair<String, ArrayList<Double>> mrrMetrics = new ImmutablePair<>("Mean Reciprocal Rank@K", mrr);
+		Pair<String, ArrayList<Double>> accuracyMetrics = new ImmutablePair<>("Accuracy@K", accuracy);
+		Pair<String, ArrayList<Double>> mrrMetrics = new ImmutablePair<>("Reciprocal Rank@K", mrr);
 		Pair<String, ArrayList<Double>> precisionMetrics = new ImmutablePair<>("Precision@K", precision);
 		Pair<String, ArrayList<Double>> recallMetrics = new ImmutablePair<>("Recall@K", recall);
 				
-		//this.myMetricTable.add(accuracyMetrics);
-		//this.myMetricTable.add(mrrMetrics);
+		this.myMetricTable.add(accuracyMetrics);
+		this.myMetricTable.add(mrrMetrics);
 		this.myMetricTable.add(precisionMetrics);
 		this.myMetricTable.add(recallMetrics);
 	}
