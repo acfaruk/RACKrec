@@ -33,6 +33,7 @@ public class LineChart_AWT extends ApplicationFrame {
           dataset.addValue( values.get(0).getRight().get(i) , values.get(0).getLeft() , Integer.toString(i + 1) );
           dataset.addValue( values.get(1).getRight().get(i) , values.get(1).getLeft() , Integer.toString(i + 1) );
           dataset.addValue( values.get(2).getRight().get(i) , values.get(2).getLeft() , Integer.toString(i + 1) );
+          dataset.addValue( values.get(3).getRight().get(i) , values.get(3).getLeft() , Integer.toString(i + 1) );
 	}
       return dataset;
    }

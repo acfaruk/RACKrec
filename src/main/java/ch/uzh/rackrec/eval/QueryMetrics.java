@@ -38,15 +38,16 @@ public class QueryMetrics {
 	private void calculateMetricTable() {
 		
 		ArrayList<Double> accuracy = new ArrayList<Double>();
-		ArrayList<Double> mrr = new ArrayList<Double>();
+		ArrayList<Double> reciprocalRank = new ArrayList<Double>();
 		ArrayList<Double> precision = new ArrayList<Double>();
 		ArrayList<Double> recall = new ArrayList<Double>();
 
 		for (int i = 0; i < maxK; i++) {		
-			Pair<Double, Double> precisionRecall = calculatePrecisionAndRecall(i);
-			precision.add(precisionRecall.getLeft());
-			recall.add(precisionRecall.getRight());
-			if (precisionRecall.getLeft() > 0.0) {
+			ArrayList<Double> precisionRecallReciprocalRank = calculatePrecisionRecallReciprocalRank(i);
+			reciprocalRank.add(precisionRecallReciprocalRank.get(0));
+			precision.add(precisionRecallReciprocalRank.get(1));
+			recall.add(precisionRecallReciprocalRank.get(2));
+			if (precisionRecallReciprocalRank.get(1) > 0.0) {
 				accuracy.add(1.0);
 			} else {
 				accuracy.add(0.0);
@@ -54,20 +55,20 @@ public class QueryMetrics {
 		}
 				
 		Pair<String, ArrayList<Double>> accuracyMetrics = new ImmutablePair<>("Accuracy@K", accuracy);
-		Pair<String, ArrayList<Double>> mrrMetrics = new ImmutablePair<>("Reciprocal Rank@K", mrr);
+		Pair<String, ArrayList<Double>> rrMetrics = new ImmutablePair<>("Reciprocal Rank@K", reciprocalRank);
 		Pair<String, ArrayList<Double>> precisionMetrics = new ImmutablePair<>("Precision@K", precision);
 		Pair<String, ArrayList<Double>> recallMetrics = new ImmutablePair<>("Recall@K", recall);
 				
 		this.myMetricTable.add(accuracyMetrics);
-		this.myMetricTable.add(mrrMetrics);
+		this.myMetricTable.add(rrMetrics);
 		this.myMetricTable.add(precisionMetrics);
 		this.myMetricTable.add(recallMetrics);
 	}
 	
-	private Pair<Double, Double> calculatePrecisionAndRecall(Integer k) {
+	private ArrayList<Double> calculatePrecisionRecallReciprocalRank(Integer k) {
 		Integer rackCounter = 0;
 		Integer truePositives = 0;
-		Integer falsePositives = 0;
+		double reciprocalRank = 0.0;
 		double precision;
 		double recall;
 
@@ -76,20 +77,20 @@ public class QueryMetrics {
 	    
 	    while(rackIterator.hasNext() && rackCounter < k + 1) {
 	    	Pair<IMemberName, Double> rackPair = rackIterator.next();
-			Integer goldCounter = 0;
-	    	while (goldIterator.hasNext()) {
+			Boolean foundInGold = false;
+	    	while (goldIterator.hasNext() && foundInGold == false) {
 				Pair<IMemberName, Double> goldPair = goldIterator.next();
 				if (rackPair.getLeft() == goldPair.getLeft()) {
-					goldCounter += 1;
+					foundInGold = true;
+					truePositives += 1;
+					if (reciprocalRank == 0.0) {
+						reciprocalRank = 1.0 / ((double) rackCounter + 1.0);
+					}
 					break;
 				}
 			}
-	    	if (goldCounter == 0) {
-				falsePositives += 1;
-			} else {
-				truePositives += 1;
-			}
 			goldIterator = this.resultGold.iterator();
+			foundInGold = false;
 	    	rackCounter += 1;
 	    }
 	    if (this.resultRACK.size() == 0 || this.resultGold.size() == 0) {
@@ -99,6 +100,12 @@ public class QueryMetrics {
 		    precision = (double) truePositives / (double) this.resultRACK.size();
 		    recall = (double) truePositives / (double) this.resultGold.size();
 		}	
-		return Pair.of((double) Math.round(precision * 1000) / 1000, (double) Math.round(recall * 1000) / 1000);
+		ArrayList<Double> returnValues = new ArrayList<Double>();
+		returnValues.add(reciprocalRank);
+		returnValues.add((double) Math.round(precision * 1000) / 1000);
+		returnValues.add((double) Math.round(recall * 1000) / 1000);
+		
+		return returnValues;
+
 	}
 }

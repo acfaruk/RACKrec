@@ -144,7 +144,7 @@ public class Example {
 		metricCollection1.calculateMeanMetrics();
 		metricCollection1.printMeanMetrics();
 		
-	    LineChart_AWT chart = new LineChart_AWT("Metrics" , "k", metricCollection1.get());
+	    LineChart_AWT chart = new LineChart_AWT("RACK Evaluation Results" , "Performance Metrics", metricCollection1.get());
 	    chart.pack( );
 	    RefineryUtilities.centerFrameOnScreen( chart );
 	    chart.setVisible( true );
