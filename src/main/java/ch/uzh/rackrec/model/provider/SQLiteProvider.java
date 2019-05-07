@@ -249,10 +249,11 @@ public class SQLiteProvider implements IDatabaseProvider{
     }
 
     protected void storeContext(ITypeName name) throws SQLException {
-        String insertContext = queryFactory.storeContext(name);
+        String insertContext = queryFactory.storeContext();
 
-        try(Statement statement = conn.createStatement()) {
-            statement.execute(insertContext);
+        try(PreparedStatement stmt = conn.prepareStatement(insertContext)) {
+            stmt.setString(1, name.toString());
+            stmt.execute();
         }
     }
 
@@ -342,8 +343,8 @@ public class SQLiteProvider implements IDatabaseProvider{
             return;
         }
 
-        try(Statement statement = conn.createStatement()) {
-            statement.execute(createContextSchema);
+        try(PreparedStatement statement = conn.prepareStatement(createContextSchema)) {
+            statement.execute();
         }
     }
 
@@ -355,8 +356,8 @@ public class SQLiteProvider implements IDatabaseProvider{
             return;
         }
 
-        try(Statement statement = conn.createStatement()) {
-            statement.execute(createAPISchema);
+        try(PreparedStatement statement = conn.prepareStatement(createAPISchema)) {
+            statement.execute();
         }
     }
 
@@ -367,8 +368,8 @@ public class SQLiteProvider implements IDatabaseProvider{
         if(tokenTableExists) {
             return;
         }
-        try(Statement statement = conn.createStatement()) {
-            statement.execute(createTokenSchema);
+        try(PreparedStatement statement = conn.prepareStatement(createTokenSchema)) {
+            statement.execute();
         }
     }
 
@@ -379,8 +380,8 @@ public class SQLiteProvider implements IDatabaseProvider{
         if(tokenRefTableExists) {
             return;
         }
-        try(Statement statement = conn.createStatement()) {
-            statement.execute(createTokenReferenceSchema);
+        try(PreparedStatement statement = conn.prepareStatement(createTokenReferenceSchema)) {
+            statement.execute();
         }
     }
 
@@ -391,24 +392,28 @@ public class SQLiteProvider implements IDatabaseProvider{
         if(apiRefTableExists) {
             return;
         }
-        try(Statement statement = conn.createStatement()) {
-            statement.execute(createAPIReferenceSchema);
+        try(PreparedStatement statement = conn.prepareStatement(createAPIReferenceSchema)) {
+            statement.execute();
         }
     }
 
     private void createNewTokenContextReference(String token, ITypeName context) throws SQLException {
-        String storeReference = queryFactory.storeNewTokenContextReference(token, context);
+        String storeReference = queryFactory.storeNewTokenContextReference();
 
-        try(Statement stmt = conn.createStatement()) {
-            stmt.execute(storeReference);
+        try(PreparedStatement stmt = conn.prepareStatement(storeReference)) {
+        	stmt.setString(1, token);
+        	stmt.setString(2, context.toString());
+            stmt.execute();
         }
     }
 
     private void updateExistingTokenContextReference(String token, ITypeName context) throws SQLException {
-        String updateReference = queryFactory.incrementCounterOfTokenRefernce(token, context);
+        String updateReference = queryFactory.incrementCounterOfTokenRefernce();
 
-        try(Statement stmt = conn.createStatement()) {
-            stmt.execute(updateReference);
+        try(PreparedStatement stmt = conn.prepareStatement(updateReference)) {
+            stmt.setString(1, token);
+            stmt.setString(2, context.toString());
+            stmt.execute();
         }
     }
 
@@ -428,18 +433,22 @@ public class SQLiteProvider implements IDatabaseProvider{
     }
 
     private void updateExistingApiContextReference(String api, ITypeName context) throws SQLException {
-        String updateReference = queryFactory.incrementCounterOfAPIReference(api, context);
+        String updateReference = queryFactory.incrementCounterOfAPIReference();
 
-        try(Statement stmt = conn.createStatement()) {
-            stmt.execute(updateReference);
+        try(PreparedStatement stmt = conn.prepareStatement(updateReference)) {
+        	stmt.setString(1, api);
+        	stmt.setString(2, context.toString());
+            stmt.execute();
         }
     }
 
     private void createNewApiContextReference (String api, ITypeName context) throws SQLException {
-        String storeReference = queryFactory.storeNewAPIContextReference(api, context);
+        String storeReference = queryFactory.storeNewAPIContextReference();
 
-        try(Statement stmt = conn.createStatement()) {
-            stmt.execute(storeReference);
+        try(PreparedStatement stmt = conn.prepareStatement(storeReference)) {
+        	stmt.setString(1, api);
+        	stmt.setString(2, context.toString());
+            stmt.execute();
         }
     }
 
