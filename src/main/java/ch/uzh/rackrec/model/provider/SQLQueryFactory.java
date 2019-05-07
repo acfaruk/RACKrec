@@ -1,7 +1,5 @@
 package ch.uzh.rackrec.model.provider;
 
-import cc.kave.commons.model.naming.types.ITypeName;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -227,11 +225,11 @@ public class SQLQueryFactory {
             + ")";
     }
 
-    protected String storeContext(ITypeName name) {
+    protected String storeContext() {
         return ""
             + "INSERT OR IGNORE "
             + "INTO Contexts (Context) "
-            +  "VALUES (\"" + name + "\")";
+            + "VALUES (?)";
     }
 
     protected String storeTokens (List<String>tokens) {
@@ -256,45 +254,45 @@ public class SQLQueryFactory {
             + values;
     }
 
-    protected String storeNewTokenContextReference(String token, ITypeName context) {
+    protected String storeNewTokenContextReference() {
         return ""
             + "INSERT INTO TokenReferences (Token, Context, Count) VALUES ("
-            + "(SELECT ID FROM tokens WHERE Token=\""+ token +"\"), "
-            + "(SELECT ID FROM contexts WHERE Context=\""+ context +"\"),"
+            + "(SELECT ID FROM tokens WHERE Token= ?), "
+            + "(SELECT ID FROM contexts WHERE Context= ?),"
             + " 1)";
     }
 
-    protected String storeNewAPIContextReference (String api, ITypeName context) {
+    protected String storeNewAPIContextReference() {
         return ""
             + "INSERT INTO APIReferences "
             + "(API, Context, Count) VALUES ("
-                + "(SELECT ID FROM apis WHERE API=\"" + api + "\"), "
-                + "(SELECT ID FROM contexts WHERE CONTEXT=\"" + context + "\"),"
+                + "(SELECT ID FROM apis WHERE API= ?), "
+                + "(SELECT ID FROM contexts WHERE CONTEXT= ?),"
                 + "1"
             + ")";
     }
 
-    protected String incrementCounterOfAPIReference(String api, ITypeName context) {
+    protected String incrementCounterOfAPIReference() {
         return ""
             + "UPDATE APIReferences "
             + "SET Count = Count + 1 "
             + "WHERE  API=("
                 + SELECT_ID
                 + FROM_APIS
-                + "WHERE    API=\""+ api +"\""
+                + "WHERE    API= ?"
             + ")"
             + "AND Context=("
                 + SELECT_ID
                 + FROM_CONTEXTS
-                + "WHERE Context=\""+ context +"\""
+                + "WHERE Context= ?"
             + ")";
     }
-    protected String incrementCounterOfTokenRefernce(String token, ITypeName context) {
+    protected String incrementCounterOfTokenRefernce() {
         return ""
             + "UPDATE TokenReferences "
             + "SET Count = Count + 1 "
-            + "WHERE Token=(SELECT ID FROM tokens WHERE Token=\""+ token +"\")"
-            + "AND Context=(SELECT ID FROM contexts WHERE Context=\""+ context +"\")";
+            + "WHERE Token=(SELECT ID FROM tokens WHERE Token= ?)"
+            + "AND Context=(SELECT ID FROM contexts WHERE Context= ?)";
     }
 
     private String terminateSqlStatement(String statement) {
