@@ -2,6 +2,7 @@ package ch.uzh.rackrec.model.provider;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -38,10 +39,11 @@ public class SQLiteProvider implements IDatabaseProvider{
     }
 
     public boolean tableExists(String tableName) throws SQLException {
-        String tableExistsQuery = queryFactory.getSQLiteTable(tableName);
+        String tableExistsQuery = queryFactory.getSQLiteTable();
 
-        try(Statement statement = conn.createStatement()) {
-            try(ResultSet rs = statement.executeQuery(tableExistsQuery)) {
+        try(PreparedStatement stmt = conn.prepareStatement(tableExistsQuery)) {
+            stmt.setString(1, tableName);
+            try(ResultSet rs = stmt.executeQuery()) {
                 return rs.next();
             }
         }
@@ -98,10 +100,11 @@ public class SQLiteProvider implements IDatabaseProvider{
     }
 
     public List<String> getApisForContext(String context) throws SQLException {
-        String getApisQuery = queryFactory.getApisForContext(context);
-        try(Statement stmt = conn.createStatement()) {
+        String getApisQuery = queryFactory.getApisForContext();
+        try(PreparedStatement stmt = conn.prepareStatement(getApisQuery)) {
+        	stmt.setString(1, context);
 
-            try (ResultSet rs = stmt.executeQuery(getApisQuery)) {
+            try (ResultSet rs = stmt.executeQuery()) {
                 List<String> apis = new ArrayList<>();
                 while (rs.next()) {
                     apis.add(rs.getString("API"));
@@ -113,10 +116,12 @@ public class SQLiteProvider implements IDatabaseProvider{
     }
 
     public int getApiCountForContext(String context, String api) throws SQLException {
-        String getApisQuery = queryFactory.getAPICountForContext(context, api);
-        try(Statement stmt = conn.createStatement()) {
+        String getApisQuery = queryFactory.getAPICountForContext();
+        try(PreparedStatement stmt = conn.prepareStatement(getApisQuery)) {
+        	stmt.setString(1, context);
+        	stmt.setString(2, api);
 
-            try(ResultSet rs = stmt.executeQuery(getApisQuery)) {
+            try(ResultSet rs = stmt.executeQuery()) {
                 int count = 0;
                 count = rs.getInt("Count");
                 return count;
@@ -126,9 +131,10 @@ public class SQLiteProvider implements IDatabaseProvider{
 
     @Override
     public List<String> getTokensForAPI(String api) throws SQLException {
-        String query = queryFactory.getTokensForAPI(api);
-        try(Statement stmt = conn.createStatement()) {
-            try(ResultSet rs = stmt.executeQuery(query)) {
+        String query = queryFactory.getTokensForAPI();
+        try(PreparedStatement stmt = conn.prepareStatement(query)) {
+        	stmt.setString(1, api);
+            try(ResultSet rs = stmt.executeQuery()) {
 
                 List<String> tokens = new ArrayList<>();
                 while (rs.next()) {
@@ -142,10 +148,11 @@ public class SQLiteProvider implements IDatabaseProvider{
 
     @Override
     public KAC getTopKAPIForToken(int k, String keyword) throws SQLException {
-        String query = queryFactory.getTopKCountedAPIsForKeyword(keyword);
+        String query = queryFactory.getTopKCountedAPIsForKeyword();
 
-        try(Statement stmt = conn.createStatement()) {
-            try(ResultSet rs = stmt.executeQuery(query)) {
+        try(PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, keyword);
+            try(ResultSet rs = stmt.executeQuery()) {
                 int counter = 0;
                 Map<Integer, MethodName> kacMap = new HashMap<>();
 
@@ -185,20 +192,23 @@ public class SQLiteProvider implements IDatabaseProvider{
         String keyword1 = keyWordPair.getKey();
         String keyword2 = keyWordPair.getValue();
 
-        String getContextsQueryForToken1 = queryFactory.getCountedNeighborTokens(keyword1);
-        String getContextsQueryForToken2 = queryFactory.getCountedNeighborTokens(keyword2);
-        try(Statement stmt = conn.createStatement()) {
+        String getContextsQueryForToken = queryFactory.getCountedNeighborTokens();
+
+        try(PreparedStatement stmt = conn.prepareStatement(getContextsQueryForToken)) {
+        	stmt.setString(1, keyword1);
 
             HashMap<String, Double> c1 = new HashMap<>();
             HashMap<String, Double> c2 = new HashMap<>();
 
-            try(ResultSet rs = stmt.executeQuery(getContextsQueryForToken1)) {
+            try(ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     parseRow(rs, c1);
                 }
             }
 
-            try(ResultSet rs = stmt.executeQuery(getContextsQueryForToken2)){
+        	stmt.setString(1, keyword2);
+
+            try(ResultSet rs = stmt.executeQuery()){
                 while (rs.next()) {
                     parseRow(rs, c2);
                 }
@@ -209,9 +219,10 @@ public class SQLiteProvider implements IDatabaseProvider{
     }
 
     public List<String> getTokensForContext(String context) throws SQLException {
-        String getTokensQuery = queryFactory.getTokensFromContext(context);
-        try(Statement stmt = conn.createStatement()) {
-            try(ResultSet rs = stmt.executeQuery(getTokensQuery)) {
+        String getTokensQuery = queryFactory.getTokensFromContext();
+        try(PreparedStatement stmt = conn.prepareStatement(getTokensQuery)) {
+        	stmt.setString(1, context);
+            try(ResultSet rs = stmt.executeQuery()) {
 
                 List<String> tokens = new ArrayList<>();
                 while (rs.next()) {
@@ -225,9 +236,11 @@ public class SQLiteProvider implements IDatabaseProvider{
 
     protected boolean apiContextReferenceExists(String api, ITypeName context) throws SQLException {
         boolean foundReference = false;
-        String query = queryFactory.getAPIReferences(api, context);
-        try(Statement stmt = conn.createStatement()) {
-            try(ResultSet rs = stmt.executeQuery(query)) {
+        String query = queryFactory.getAPIReferences();
+        try(PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, api);
+            stmt.setString(2, context.toString());
+            try(ResultSet rs = stmt.executeQuery()) {
                 foundReference = rs.next();
 
                 return foundReference;
@@ -259,8 +272,8 @@ public class SQLiteProvider implements IDatabaseProvider{
         String getAPIsQuery = queryFactory.getAllAPIs();
 
         List<String> apis = new ArrayList<>();
-        try(Statement statement = conn.createStatement()) {
-            try(ResultSet rs = statement.executeQuery(getAPIsQuery)) {
+        try(PreparedStatement statement = conn.prepareStatement(getAPIsQuery)) {
+            try(ResultSet rs = statement.executeQuery()) {
                 while (rs.next()) {
                     apis.add(rs.getString("API"));
                 }
@@ -274,8 +287,8 @@ public class SQLiteProvider implements IDatabaseProvider{
         String getContextsQuery = queryFactory.getAllContexts();
 
         List<String> contexts = new ArrayList<>();
-        try(Statement statement = conn.createStatement()) {
-            try(ResultSet rs = statement.executeQuery(getContextsQuery)) {
+        try(PreparedStatement statement = conn.prepareStatement(getContextsQuery)) {
+            try(ResultSet rs = statement.executeQuery()) {
                 while (rs.next()) {
                     contexts.add(rs.getString("Context"));
                 }
@@ -288,8 +301,8 @@ public class SQLiteProvider implements IDatabaseProvider{
         String getTokensQuery = queryFactory.getAllTokens();
 
         List<String> tokens = new ArrayList<>();
-        try(Statement statement = conn.createStatement()) {
-            try(ResultSet rs = statement.executeQuery(getTokensQuery)) {
+        try(PreparedStatement statement = conn.prepareStatement(getTokensQuery)) {
+            try(ResultSet rs = statement.executeQuery()) {
                 while (rs.next()) {
                     tokens.add(rs.getString(TOKEN_COLUMN));
                 }
@@ -303,10 +316,14 @@ public class SQLiteProvider implements IDatabaseProvider{
 	}
 
     private List<MethodName> getAPIsForKeywords(Map.Entry<String, String> keywordPair) throws SQLException {
-        String getAPIQuery = queryFactory.getApisFromKeywordPairQuery(keywordPair.getKey(), keywordPair.getValue());
+    	String firstKeyword = keywordPair.getKey();
+    	String secondKeyword = keywordPair.getValue();
+        String getAPIQuery = queryFactory.getApisFromKeywordPairQuery();
 
-        try(Statement stmt = conn.createStatement()) {
-            try(ResultSet rs = stmt.executeQuery(getAPIQuery)) {
+        try(PreparedStatement stmt = conn.prepareStatement(getAPIQuery)) {
+        	stmt.setString(1, firstKeyword);
+        	stmt.setString(2, secondKeyword);
+            try(ResultSet rs = stmt.executeQuery()) {
 
                 List<MethodName> apis = new ArrayList<>();
                 while (rs.next()) {
@@ -396,11 +413,13 @@ public class SQLiteProvider implements IDatabaseProvider{
     }
 
     private boolean tokenContextReferenceExists(String token, ITypeName context) throws SQLException {
-        String query = queryFactory.getTokenReferences(token, context);
+        String query = queryFactory.getTokenReferences();
 
         boolean foundReference = false;
-        try(Statement stmt = conn.createStatement()) {
-            try(ResultSet rs = stmt.executeQuery(query)) {
+        try(PreparedStatement stmt = conn.prepareStatement(query)) {
+        	stmt.setString(1, token);
+        	stmt.setString(2, context.toString());
+            try(ResultSet rs = stmt.executeQuery()) {
                 foundReference = rs.next();
 
                 return foundReference;
