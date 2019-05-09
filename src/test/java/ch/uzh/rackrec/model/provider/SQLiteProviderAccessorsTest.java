@@ -99,8 +99,6 @@ public class SQLiteProviderAccessorsTest {
 
     @Test
     public void testgetTopKEntriesForInexistingKeyword() throws Exception {
-        String[] tokensCTX2 = tokens;
-        String[] apisCTX2 = { "a.type2, project1.M1", "a.type1, project1.M1"};
         TypeName typeNameCTX2 = mock(TypeName.class);
         when(typeNameCTX2.toString()).thenReturn("client2");
 

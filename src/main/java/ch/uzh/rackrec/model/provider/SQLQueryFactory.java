@@ -1,8 +1,5 @@
 package ch.uzh.rackrec.model.provider;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class SQLQueryFactory {
     private final String SELECT_CONTEXT = "SELECT Context ";
     private final String FROM_TOKENREFERENCES = "FROM TokenReferences ";
@@ -287,13 +284,5 @@ public class SQLQueryFactory {
             + "SET Count = Count + 1 "
             + "WHERE Token=(SELECT ID FROM tokens WHERE Token= ?)"
             + "AND Context=(SELECT ID FROM contexts WHERE Context= ?)";
-    }
-
-    private String terminateSqlStatement(String statement) {
-        return replaceLastChar(statement, ';');
-    }
-
-    private String replaceLastChar(String target, Character newChar) {
-        return target.substring(0, target.length()-1) + newChar;
     }
 }
