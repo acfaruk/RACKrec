@@ -280,8 +280,19 @@ public class SQLiteProvider implements IDatabaseProvider{
     }
 
     protected void storeAPIS(List<String> apis) throws SQLException {
-        try(Statement statement = conn.createStatement()) {
-            statement.execute(queryFactory.storeAPIs(apis));
+        String sqlStatement = queryFactory.storeAPIs();
+        try(PreparedStatement statement = conn.prepareStatement(sqlStatement)) {
+            int batchCounter = 0;
+            for(String api: apis) {
+                statement.setString(1, api);	
+                statement.addBatch();
+                batchCounter++;
+
+                boolean executeBatch = shouldExecuteBatch(batchCounter, apis.size());
+                if(executeBatch) {
+                   statement.executeBatch();
+                }
+            }
         }
     }
 

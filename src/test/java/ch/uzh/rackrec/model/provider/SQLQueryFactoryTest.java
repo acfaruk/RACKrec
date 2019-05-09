@@ -28,12 +28,8 @@ public class SQLQueryFactoryTest {
 
     @Test
     public void testPrepareStoreAPI() {
-        String[] apis = {"someclass.somemethod", "otherclass.othermethod"};
-
-        List<String> testApis = new ArrayList<String>(Arrays.asList(apis));
-
-        String sqlStatement = factory.storeAPIs(testApis);
-        String expected = "INSERT OR IGNORE INTO apis (API) VALUES (\"someclass.somemethod\"),\n(\"otherclass.othermethod\");";
+        String sqlStatement = factory.storeAPIs();
+        String expected = "INSERT OR IGNORE INTO apis (API) VALUES (?)";
 
         assertEquals(sqlStatement, expected);
     }

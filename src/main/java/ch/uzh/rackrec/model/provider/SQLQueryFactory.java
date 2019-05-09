@@ -241,15 +241,11 @@ public class SQLQueryFactory {
     }
 
     // TODO port to batch
-    protected String storeAPIs(List<String> apis) {
-        String values = apis.stream()
-                            .map(token -> "(\"" + token + "\"),")
-                            .collect(Collectors.joining("\n"));
-
-        values = terminateSqlStatement(values);
+    protected String storeAPIs() {
         return ""
-            + "INSERT OR IGNORE INTO apis (API) VALUES "
-            + values;
+            + "INSERT OR IGNORE "
+            + "INTO apis (API) "
+            + "VALUES (?)";
     }
 
     protected String storeNewTokenContextReference() {
