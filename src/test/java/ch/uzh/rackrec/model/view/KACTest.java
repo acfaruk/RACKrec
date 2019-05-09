@@ -1,6 +1,6 @@
 package ch.uzh.rackrec.model.view;
 
-import cc.kave.commons.model.naming.IName;
+import cc.kave.commons.model.naming.impl.v0.codeelements.MethodName;
 import cc.kave.commons.model.naming.impl.v0.types.organization.AssemblyName;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,15 +13,15 @@ import static junit.framework.TestCase.assertTrue;
 public class KACTest {
     KAC sut;
     String keyword;
-    Map<Integer, IName> freqToApi;
+    Map<Integer, MethodName> freqToApi;
 
 
     @Before
     public void initialize(){
         keyword = "Test";
         freqToApi = new HashMap<>();
-        freqToApi.put(300,new AssemblyName("mscorlib"));
-        freqToApi.put(334,new AssemblyName("mscorlib"));
+        freqToApi.put(300,new MethodName("mscorlib"));
+        freqToApi.put(334,new MethodName("mscorlib"));
 
 
     }
