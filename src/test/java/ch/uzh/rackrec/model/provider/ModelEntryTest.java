@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import static org.mockito.Mockito.mock;
 
 import cc.kave.commons.model.naming.impl.v0.types.TypeName;
 import cc.kave.commons.model.naming.types.ITypeName;
@@ -25,11 +26,14 @@ public class ModelEntryTest {
     @Before
     public void initialize(){
         String[] someTokens = { "compu", "MD5", "has" };
-        String[] someAPIs = { "Object.hashCode", "MessageDigest.digest" }; 
+        String[] someAPIs = { "Object.hashCode", "MessageDigest.digest" };
+        String[] emptyList = {};
         validTokens = Arrays.asList(someTokens);
         validAPIs = Arrays.asList(someAPIs);
+        invalidAPIs = Arrays.asList(emptyList);
+        invalidTokens = Arrays.asList(emptyList);
 
-        validTypeName = new TypeName("[a.b.c.MyType, MyProject] frame,work");
+        validTypeName = mock(TypeName.class);
     }
 
     @After
@@ -37,17 +41,17 @@ public class ModelEntryTest {
         entry = null;
     }
 
-    @Test(expected=Exception.class)
+    @Test(expected=InvalidModelEntryException.class)
     public void invalidAPITest() throws Exception{
         entry = new ModelEntry(validTokens, invalidAPIs, validTypeName);
     }
 
-    @Test(expected=Exception.class)
+    @Test(expected=InvalidModelEntryException.class)
     public void invalidTokenTest() throws Exception{
         entry = new ModelEntry(invalidTokens, validAPIs, validTypeName);
     }
 
-    @Test(expected=Exception.class)
+    @Test(expected=InvalidModelEntryException.class)
     public void invalidTypeTest() throws Exception{
         entry = new ModelEntry(validTokens, validAPIs, invalidTypeName);
     }

@@ -116,7 +116,6 @@ public class ModifiedStopwordProvider implements IStopWordProvider {
             "don",
             "should"
         };
-        List<String> stopWordList = new ArrayList<String>(Arrays.asList(stopWords));
-        return stopWordList;
+        return new ArrayList<>(Arrays.asList(stopWords));
     }
 }

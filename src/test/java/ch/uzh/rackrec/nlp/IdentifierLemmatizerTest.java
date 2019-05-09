@@ -53,7 +53,7 @@ public class IdentifierLemmatizerTest {
         List<String> lemmas = sutWithoutStopWord.lemmatize(camelCaseIdentifier);
         boolean hasFiveLemmas = lemmas.size() == 5;
         assertTrue(hasFiveLemmas);
-        Mockito.verify(mockedLogger).log(Level.FINEST, "Lemmatizing: " + camelCaseIdentifier);
+        Mockito.verify(mockedLogger).log(Level.FINEST, "Lemmatizing: {0}", camelCaseIdentifier);
     }
 
     @Test
