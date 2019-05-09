@@ -1,7 +1,6 @@
 package ch.uzh.rackrec.model.view;
 
 import cc.kave.commons.model.naming.impl.v0.codeelements.MethodName;
-import cc.kave.commons.model.naming.impl.v0.types.organization.AssemblyName;
 import org.junit.Before;
 import org.junit.Test;
 

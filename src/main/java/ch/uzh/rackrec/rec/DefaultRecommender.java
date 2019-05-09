@@ -3,6 +3,7 @@ package ch.uzh.rackrec.rec;
 import cc.kave.commons.model.events.completionevents.Context;
 import cc.kave.commons.model.naming.IName;
 import cc.kave.commons.model.naming.codeelements.IMemberName;
+import cc.kave.commons.model.naming.impl.v0.codeelements.MethodName;
 import ch.uzh.rackrec.model.view.KAC;
 import ch.uzh.rackrec.rec.config.AbstractModule;
 import org.apache.commons.lang3.tuple.Pair;
@@ -36,11 +37,11 @@ public class DefaultRecommender extends AbstractRecommender {
         return 0;
     }
 
-    public Map<IName,Double> getRackRecomendations(List<String> keywords){
-        Map<IName,Double> apiWithScore = new HashMap<>();
+    public Map<MethodName,Double> getRackRecomendations(List<String> keywords){
+        Map<MethodName,Double> apiWithScore = new HashMap<>();
         List<KAC> kacList = model.getKAC(keywords, Integer.getInteger(module.getProperties().getProperty("delta")));
         for (KAC kac :kacList){
-            for (Map.Entry<IName, Double> entry : kac.getKacScore().entrySet()){
+            for (Map.Entry<MethodName, Double> entry : kac.getKacScore().entrySet()){
                 if (apiWithScore.containsKey(entry.getKey())){
                     apiWithScore.replace(entry.getKey(),entry.getValue()+apiWithScore.get(entry.getKey()));
                 }

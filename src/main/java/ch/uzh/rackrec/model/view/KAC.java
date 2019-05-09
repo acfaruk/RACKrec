@@ -8,7 +8,7 @@ import java.util.*;
 public class KAC {
     private String keyword;
     private Map<Integer, MethodName> rankToApi;
-    KAC(String keyword, Map<Integer, MethodName> freqToApi){
+    public KAC(String keyword, Map<Integer, MethodName> freqToApi){
         this.keyword = keyword;
         this.rankToApi = freqToApi;
     }

@@ -92,9 +92,9 @@ public class SQLiteProviderAccessorsTest {
         
         int k = 2;
         KAC topKKAC = provider.getTopKAPIForToken(k, "compu");
-        assertEquals(k, topKKAC.getFreqToApi().size());
-        assertEquals("MethodName(a.type1, project1.M1)", topKKAC.getFreqToApi().get(6).toString());
-        assertEquals("MethodName(a.type2, project1.M1)", topKKAC.getFreqToApi().get(3).toString());
+        assertEquals(k, topKKAC.getRankToApi().size());
+        assertEquals("MethodName(a.type1, project1.M1)", topKKAC.getRankToApi().get(6).toString());
+        assertEquals("MethodName(a.type2, project1.M1)", topKKAC.getRankToApi().get(3).toString());
     }
 
     @Test
@@ -106,7 +106,7 @@ public class SQLiteProviderAccessorsTest {
 
         int k = 2;
         KAC topKKAC = provider.getTopKAPIForToken(k, "nosuchkeyword");
-        int nrOfApis = topKKAC.getFreqToApi().size();
+        int nrOfApis = topKKAC.getRankToApi().size();
         boolean noApis = nrOfApis == 0;
         assertTrue(noApis);
         assertTrue(nrOfApis < k);
