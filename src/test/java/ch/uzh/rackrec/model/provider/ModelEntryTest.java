@@ -61,7 +61,7 @@ public class ModelEntryTest {
         try {
             entry = new ModelEntry(validTokens, validAPIs, validTypeName);
         } catch (Exception e) {
-        fail("ModelEntry instantiation should not fail with valid parameters");
+            fail("ModelEntry instantiation should not fail with valid parameters");
         }
     }
 }
