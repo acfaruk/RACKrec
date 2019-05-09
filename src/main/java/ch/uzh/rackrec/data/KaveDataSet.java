@@ -1,5 +1,8 @@
 package ch.uzh.rackrec.data;
 
+import cc.kave.commons.model.events.completionevents.Context;
+
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -11,4 +14,6 @@ public abstract class KaveDataSet {
     	this.logger = logger;
         this.properties = properties;
     }
+
+    public abstract List<Context> getContextData();
 }
