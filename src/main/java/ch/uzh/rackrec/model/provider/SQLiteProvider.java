@@ -26,7 +26,7 @@ public class SQLiteProvider implements IDatabaseProvider{
     private SQLQueryFactory queryFactory;
     private Logger logger;
     private final String TOKEN_COLUMN = "Token";
-
+    private final int BATCH_SIZE = 100;
 
     @Inject
     public SQLiteProvider(Properties properties, Logger logger) throws SQLException {
@@ -258,9 +258,25 @@ public class SQLiteProvider implements IDatabaseProvider{
     }
 
     protected void storeTokens(List<String> tokens) throws SQLException {
-        try(Statement statement = conn.createStatement()) {
-            statement.execute(queryFactory.storeTokens(tokens));
+        try(PreparedStatement statement = conn.prepareStatement(queryFactory.storeTokens())) {
+            int batchCounter = 0;
+            for(String token: tokens) {
+                statement.setString(1, token);
+                statement.addBatch();
+                batchCounter++;
+
+                boolean executeBatch = shouldExecuteBatch(batchCounter, tokens.size());
+                if(executeBatch) {
+                   statement.executeBatch();
+                }
+            }
         }
+    }
+
+    protected boolean shouldExecuteBatch(int batchCounter, int nrOfItems) {
+        boolean batchSizeReached = batchCounter % BATCH_SIZE == 0;
+        boolean itemsDepleated = batchCounter == nrOfItems;
+        return batchSizeReached || itemsDepleated;
     }
 
     protected void storeAPIS(List<String> apis) throws SQLException {

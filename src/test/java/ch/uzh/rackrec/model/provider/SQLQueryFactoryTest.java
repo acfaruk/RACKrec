@@ -20,12 +20,10 @@ public class SQLQueryFactoryTest {
 
     @Test
     public void testPrepareStoreTokens() {
-        String[] tokens = {"comput", "MD5", "Hash"};
-
-        String sqlStatement = factory.storeTokens(Arrays.asList(tokens));
-        String expected = "INSERT OR IGNORE INTO tokens (Token) VALUES (\"comput\"),\n(\"MD5\"),\n(\"Hash\");";
+        String sqlStatement = factory.storeTokens();
+        String expected = "INSERT OR IGNORE INTO tokens (Token) VALUES (?)";
     
-        assertEquals(sqlStatement, expected);
+        assertEquals(expected, sqlStatement);
     }
 
     @Test

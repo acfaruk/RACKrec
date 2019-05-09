@@ -52,7 +52,7 @@ public class SQLiteProviderAccessorsTest {
         when(typeNameCTX2.toString()).thenReturn("client2");
         
         ModelEntry entryCTX2 = new ModelEntry(Arrays.asList(tokensCTX2), Arrays.asList(apisCTX2), typeNameCTX2);
-		provider.saveMinedContext(entryCTX2);
+        provider.saveMinedContext(entryCTX2);
 
         String[] tokensCTX3 = tokens;
         String[] apisCTX3 = {"a.type1, project1.M1", "a.type1, project1.M1", "a.type1, project1.M1", "a.type1, project1.M1", "thirdAPI.thridmeth", "fourthAPI.fourthmeth", "fifthAPI.fifthMeth" };
@@ -69,7 +69,7 @@ public class SQLiteProviderAccessorsTest {
         
         ModelEntry entryCTX4 = new ModelEntry(Arrays.asList(tokensCTX4), Arrays.asList(apisCTX4), typeNameCTX4);
         provider.saveMinedContext(entryCTX4);
-    
+
         List<String> tokenRows = provider.getTokens();
         int nrOfTokens = tokenRows.size();
         int expectedNrOfTokens = 4;

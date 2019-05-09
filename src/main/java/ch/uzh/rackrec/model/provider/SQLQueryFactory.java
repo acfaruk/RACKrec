@@ -232,17 +232,15 @@ public class SQLQueryFactory {
             + "VALUES (?)";
     }
 
-    protected String storeTokens (List<String>tokens) {
-        String values = tokens.stream()
-                .map(token -> "(\"" + token + "\"),")
-                .collect(Collectors.joining("\n"));
-
-        values = terminateSqlStatement(values);
+    // TODO port to batch
+    protected String storeTokens () {
         return ""
-            + "INSERT OR IGNORE INTO tokens (Token) VALUES "
-            + values;
+            + "INSERT OR IGNORE "
+            + "INTO tokens (Token) "
+            + "VALUES (?)";
     }
 
+    // TODO port to batch
     protected String storeAPIs(List<String> apis) {
         String values = apis.stream()
                             .map(token -> "(\"" + token + "\"),")
