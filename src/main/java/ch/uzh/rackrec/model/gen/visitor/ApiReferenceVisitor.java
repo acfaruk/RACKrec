@@ -16,6 +16,8 @@ package ch.uzh.rackrec.model.gen.visitor;
  * the License.
  */
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cc.kave.commons.model.ssts.ISST;
@@ -50,263 +52,40 @@ import ch.uzh.rackrec.model.gen.nlp.IdentifierLemmatizer;
 public class ApiReferenceVisitor extends AbstractTraversingNodeVisitor<List<String>, Void> {
 
     private final IdentifierLemmatizer lemmatizer;
+    private final List<String> apis;
 
     public ApiReferenceVisitor(IdentifierLemmatizer lemmatizer, String[] apis) {
         this.lemmatizer = lemmatizer;
-    }
-
-    @Override
-    public Void visit(ISST sst, List<String> strings) {
-        return super.visit(sst, strings);
-    }
-
-    @Override
-    public Void visit(IDelegateDeclaration stmt, List<String> strings) {
-        return super.visit(stmt, strings);
-    }
-
-    @Override
-    public Void visit(IEventDeclaration stmt, List<String> strings) {
-        return super.visit(stmt, strings);
+        this.apis = Arrays.asList(apis);
     }
 
     @Override
     public Void visit(IFieldDeclaration stmt, List<String> strings) {
+        String assembly = stmt.getName().getValueType().getAssembly().getName();
+        if (apis.contains(assembly) == false)
+            return super.visit(stmt, strings);
+
+        strings.add(stmt.getName().getValueType().getName());
         return super.visit(stmt, strings);
-    }
-
-    @Override
-    public Void visit(IMethodDeclaration decl, List<String> strings) {
-        return super.visit(decl, strings);
-    }
-
-    @Override
-    public Void visit(IPropertyDeclaration decl, List<String> strings) {
-        return super.visit(decl, strings);
     }
 
     @Override
     public Void visit(IVariableDeclaration stmt, List<String> strings) {
+        String assembly = stmt.getType().getAssembly().getName();
+        if (apis.contains(assembly) == false)
+            return super.visit(stmt, strings);
+
+        strings.add(stmt.getType().getName());
         return super.visit(stmt, strings);
-    }
-
-    @Override
-    public Void visit(IAssignment stmt, List<String> strings) {
-        return super.visit(stmt, strings);
-    }
-
-    @Override
-    public Void visit(IBreakStatement stmt, List<String> strings) {
-        return super.visit(stmt, strings);
-    }
-
-    @Override
-    public Void visit(IContinueStatement stmt, List<String> strings) {
-        return super.visit(stmt, strings);
-    }
-
-    @Override
-    public Void visit(IEventSubscriptionStatement stmt, List<String> strings) {
-        return super.visit(stmt, strings);
-    }
-
-    @Override
-    public Void visit(IExpressionStatement stmt, List<String> strings) {
-        return super.visit(stmt, strings);
-    }
-
-    @Override
-    public Void visit(IGotoStatement stmt, List<String> strings) {
-        return super.visit(stmt, strings);
-    }
-
-    @Override
-    public Void visit(ILabelledStatement stmt, List<String> strings) {
-        return super.visit(stmt, strings);
-    }
-
-    @Override
-    public Void visit(IReturnStatement stmt, List<String> strings) {
-        return super.visit(stmt, strings);
-    }
-
-    @Override
-    public Void visit(IThrowStatement stmt, List<String> strings) {
-        return super.visit(stmt, strings);
-    }
-
-    @Override
-    public Void visit(IDoLoop block, List<String> strings) {
-        return super.visit(block, strings);
-    }
-
-    @Override
-    protected List<Void> visit(List<IStatement> body, List<String> strings) {
-        return super.visit(body, strings);
-    }
-
-    @Override
-    public Void visit(IForEachLoop block, List<String> strings) {
-        return super.visit(block, strings);
-    }
-
-    @Override
-    public Void visit(IForLoop block, List<String> strings) {
-        return super.visit(block, strings);
-    }
-
-    @Override
-    public Void visit(IIfElseBlock block, List<String> strings) {
-        return super.visit(block, strings);
-    }
-
-    @Override
-    public Void visit(ILockBlock stmt, List<String> strings) {
-        return super.visit(stmt, strings);
-    }
-
-    @Override
-    public Void visit(ISwitchBlock block, List<String> strings) {
-        return super.visit(block, strings);
-    }
-
-    @Override
-    public Void visit(ITryBlock block, List<String> strings) {
-        return super.visit(block, strings);
-    }
-
-    @Override
-    public Void visit(IUncheckedBlock block, List<String> strings) {
-        return super.visit(block, strings);
-    }
-
-    @Override
-    public Void visit(IUnsafeBlock block, List<String> strings) {
-        return super.visit(block, strings);
-    }
-
-    @Override
-    public Void visit(IUsingBlock block, List<String> strings) {
-        return super.visit(block, strings);
-    }
-
-    @Override
-    public Void visit(IWhileLoop block, List<String> strings) {
-        return super.visit(block, strings);
-    }
-
-    @Override
-    public Void visit(ICompletionExpression entity, List<String> strings) {
-        return super.visit(entity, strings);
-    }
-
-    @Override
-    public Void visit(IComposedExpression expr, List<String> strings) {
-        return super.visit(expr, strings);
-    }
-
-    @Override
-    public Void visit(IIfElseExpression expr, List<String> strings) {
-        return super.visit(expr, strings);
     }
 
     @Override
     public Void visit(IInvocationExpression expr, List<String> strings) {
+        String assembly = expr.getMethodName().getDeclaringType().getAssembly().getName();
+        if (apis.contains(assembly) == false)
+            return super.visit(expr, strings);
+
+        strings.add(expr.getMethodName().getName());
         return super.visit(expr, strings);
-    }
-
-    @Override
-    public Void visit(ILambdaExpression expr, List<String> strings) {
-        return super.visit(expr, strings);
-    }
-
-    @Override
-    public Void visit(ILoopHeaderBlockExpression expr, List<String> strings) {
-        return super.visit(expr, strings);
-    }
-
-    @Override
-    public Void visit(IConstantValueExpression expr, List<String> strings) {
-        return super.visit(expr, strings);
-    }
-
-    @Override
-    public Void visit(INullExpression expr, List<String> strings) {
-        return super.visit(expr, strings);
-    }
-
-    @Override
-    public Void visit(IReferenceExpression expr, List<String> strings) {
-        return super.visit(expr, strings);
-    }
-
-    @Override
-    public Void visit(ICastExpression expr, List<String> strings) {
-        return super.visit(expr, strings);
-    }
-
-    @Override
-    public Void visit(IIndexAccessExpression expr, List<String> strings) {
-        return super.visit(expr, strings);
-    }
-
-    @Override
-    public Void visit(ITypeCheckExpression expr, List<String> strings) {
-        return super.visit(expr, strings);
-    }
-
-    @Override
-    public Void visit(IBinaryExpression expr, List<String> strings) {
-        return super.visit(expr, strings);
-    }
-
-    @Override
-    public Void visit(IUnaryExpression expr, List<String> strings) {
-        return super.visit(expr, strings);
-    }
-
-    @Override
-    public Void visit(IEventReference ref, List<String> strings) {
-        return super.visit(ref, strings);
-    }
-
-    @Override
-    public Void visit(IFieldReference ref, List<String> strings) {
-        return super.visit(ref, strings);
-    }
-
-    @Override
-    public Void visit(IMethodReference ref, List<String> strings) {
-        return super.visit(ref, strings);
-    }
-
-    @Override
-    public Void visit(IPropertyReference ref, List<String> strings) {
-        return super.visit(ref, strings);
-    }
-
-    @Override
-    public Void visit(IVariableReference ref, List<String> strings) {
-        return super.visit(ref, strings);
-    }
-
-    @Override
-    public Void visit(IIndexAccessReference ref, List<String> strings) {
-        return super.visit(ref, strings);
-    }
-
-    @Override
-    public Void visit(IUnknownReference ref, List<String> strings) {
-        return super.visit(ref, strings);
-    }
-
-    @Override
-    public Void visit(IUnknownExpression unknownExpr, List<String> strings) {
-        return super.visit(unknownExpr, strings);
-    }
-
-    @Override
-    public Void visit(IUnknownStatement unknownStmt, List<String> strings) {
-        return super.visit(unknownStmt, strings);
     }
 }

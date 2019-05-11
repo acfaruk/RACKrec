@@ -44,7 +44,6 @@ public class TokenVisitor extends AbstractTraversingNodeVisitor<List<String>, Vo
 
     private final IdentifierLemmatizer lemmatizer;
 
-    @Inject
     public TokenVisitor(IdentifierLemmatizer lemmatizer){
         this.lemmatizer = lemmatizer;
     }
