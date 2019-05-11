@@ -21,6 +21,7 @@ import cc.kave.commons.model.ssts.impl.visitor.AbstractThrowingNodeVisitor;
 import cc.kave.commons.model.ssts.impl.visitor.AbstractTraversingNodeVisitor;
 import cc.kave.commons.model.ssts.statements.*;
 import cc.kave.commons.model.ssts.visitor.ISSTNodeVisitor;
+import ch.uzh.rackrec.model.gen.nlp.ILemmatizer;
 import ch.uzh.rackrec.model.gen.nlp.IdentifierLemmatizer;
 import com.google.inject.Inject;
 
@@ -42,9 +43,9 @@ import java.util.logging.Logger;
  */
 public class TokenVisitor extends AbstractTraversingNodeVisitor<List<String>, Void> {
 
-    private final IdentifierLemmatizer lemmatizer;
+    private final ILemmatizer lemmatizer;
 
-    public TokenVisitor(IdentifierLemmatizer lemmatizer){
+    public TokenVisitor(ILemmatizer lemmatizer){
         this.lemmatizer = lemmatizer;
     }
 

@@ -13,6 +13,7 @@ public class ModelEntry {
 
     // The enclosing type of the Context (Class name)
     ITypeName enclosingContextType;
+
     public ModelEntry(List<String> tokens, List<String> apiReferences, ITypeName enclosingType) throws IllegalArgumentException {
        	boolean noTokensOrAPIs = tokens.isEmpty() || apiReferences.isEmpty();
        	boolean contextUndefined = enclosingType == null;
@@ -25,4 +26,14 @@ public class ModelEntry {
         this.apiReferences = apiReferences;
         this.enclosingContextType = enclosingType;
     }
+
+    @Override
+    public String toString() {
+        return "ModelEntry{" +
+                "tokens=" + tokens +
+                ", apiReferences=" + apiReferences +
+                ", enclosingContextType=" + enclosingContextType +
+                '}';
+    }
+
 }

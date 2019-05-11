@@ -35,6 +35,7 @@ import cc.kave.commons.model.ssts.impl.visitor.AbstractTraversingNodeVisitor;
 import cc.kave.commons.model.ssts.references.*;
 import cc.kave.commons.model.ssts.statements.*;
 import cc.kave.commons.model.ssts.visitor.ISSTNodeVisitor;
+import ch.uzh.rackrec.model.gen.nlp.ILemmatizer;
 import ch.uzh.rackrec.model.gen.nlp.IdentifierLemmatizer;
 
 /**
@@ -51,16 +52,21 @@ import ch.uzh.rackrec.model.gen.nlp.IdentifierLemmatizer;
  */
 public class ApiReferenceVisitor extends AbstractTraversingNodeVisitor<List<String>, Void> {
 
-    private final IdentifierLemmatizer lemmatizer;
+    private final ILemmatizer lemmatizer;
     private final List<String> apis;
 
-    public ApiReferenceVisitor(IdentifierLemmatizer lemmatizer, String[] apis) {
+    public ApiReferenceVisitor(ILemmatizer lemmatizer, List<String> apis) {
         this.lemmatizer = lemmatizer;
-        this.apis = Arrays.asList(apis);
+        this.apis = apis;
     }
 
     @Override
     public Void visit(IFieldDeclaration stmt, List<String> strings) {
+        if (apis == null){
+            strings.add(stmt.getName().getValueType().getName());
+            return super.visit(stmt, strings);
+        }
+
         String assembly = stmt.getName().getValueType().getAssembly().getName();
         if (apis.contains(assembly) == false)
             return super.visit(stmt, strings);
@@ -71,6 +77,11 @@ public class ApiReferenceVisitor extends AbstractTraversingNodeVisitor<List<Stri
 
     @Override
     public Void visit(IVariableDeclaration stmt, List<String> strings) {
+        if (apis == null){
+            strings.add(stmt.getType().getName());
+            return super.visit(stmt, strings);
+        }
+
         String assembly = stmt.getType().getAssembly().getName();
         if (apis.contains(assembly) == false)
             return super.visit(stmt, strings);
@@ -81,6 +92,11 @@ public class ApiReferenceVisitor extends AbstractTraversingNodeVisitor<List<Stri
 
     @Override
     public Void visit(IInvocationExpression expr, List<String> strings) {
+        if (apis == null){
+            strings.add(expr.getMethodName().getName());
+            return super.visit(expr, strings);
+        }
+
         String assembly = expr.getMethodName().getDeclaringType().getAssembly().getName();
         if (apis.contains(assembly) == false)
             return super.visit(expr, strings);
