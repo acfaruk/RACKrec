@@ -5,6 +5,7 @@ import cc.kave.commons.model.naming.IName;
 import cc.kave.commons.model.naming.codeelements.IMemberName;
 import cc.kave.commons.model.naming.impl.v0.codeelements.MethodName;
 import ch.uzh.rackrec.model.view.KAC;
+import ch.uzh.rackrec.model.view.KKC;
 import ch.uzh.rackrec.rec.config.AbstractModule;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -50,8 +51,14 @@ public class DefaultRecommender extends AbstractRecommender {
                 }
             }
         }
-
-        //TO-DOO Implement KKC
+        List<KKC> kkcList = model.getKKC(kacList,Double.parseDouble(module.getProperties().getProperty("lambda")));
+        for (KKC kkc :kkcList){
+            for (MethodName name :kkc.getApis()){
+                if (apiWithScore.containsKey(name)){
+                    apiWithScore.replace(name,kkc.getKkcScore()+apiWithScore.get(name));
+                }
+            }
+        }
         return apiWithScore;
 
     }

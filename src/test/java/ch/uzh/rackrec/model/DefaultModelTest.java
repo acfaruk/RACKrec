@@ -5,10 +5,11 @@ import ch.uzh.rackrec.data.KaveDataSet;
 import ch.uzh.rackrec.model.gen.DefaultModelGenerator;
 
 import ch.uzh.rackrec.model.gen.ModelGenerator;
+import ch.uzh.rackrec.model.provider.SQLiteProvider;
+import ch.uzh.rackrec.model.provider.SQLiteProviderInitializationTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +25,15 @@ public class DefaultModelTest {
     Properties properties;
     ModelGenerator generatorMock;
     Logger loggerMock;
+    SQLiteProvider sqliteMock;
 
     @Before
     public void initialize(){
         properties = new Properties();
         generatorMock = mock(ModelGenerator.class);
         loggerMock = mock(Logger.class);
-        sut = new DefaultModel(properties, generatorMock, loggerMock);
+        sqliteMock = mock(SQLiteProvider.class);
+        sut = new DefaultModel(properties, generatorMock, loggerMock, sqliteMock);
     }
 
     @Test
