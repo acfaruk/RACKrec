@@ -19,6 +19,12 @@ public class DefaultModel extends Model {
     @Inject
     public DefaultModel(Properties properties, ModelGenerator modelGenerator, Logger logger, SQLiteProvider sqLiteProvider) {
         super(properties, modelGenerator, logger, sqLiteProvider);
+        try {
+            sqLiteProvider.prepareSchemas();
+            for()
+            sqLiteProvider.saveMinedContext(modelGenerator.)
+        }
+
     }
 
     @Override
