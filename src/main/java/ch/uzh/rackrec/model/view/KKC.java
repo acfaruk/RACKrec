@@ -8,6 +8,8 @@ import java.util.Map;
 public class KKC {
     protected Map.Entry<String,String> keywordPair;
     protected List<MethodName> apis;
+    protected List<String> Context1;
+    protected List<String> Context2;
     protected Double score;
 
     public KKC (Map.Entry<String,String> keywordPair, List<MethodName> apis, Double score){
@@ -24,7 +26,7 @@ public class KKC {
         return apis;
     }
 
-    public Double getScore() {
+    public Double getKkcScore() {
         return score;
     }
 }

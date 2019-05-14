@@ -8,6 +8,7 @@ import ch.uzh.rackrec.model.gen.DefaultModelGenerator;
 import ch.uzh.rackrec.model.gen.ModelGenerator;
 import ch.uzh.rackrec.model.gen.nlp.IStopWordProvider;
 import ch.uzh.rackrec.model.gen.nlp.NLTKStopWordProvider;
+import ch.uzh.rackrec.model.provider.SQLiteProvider;
 
 import java.util.Properties;
 
@@ -34,5 +35,6 @@ public class KaveContextModule extends AbstractModule {
         bind(IStopWordProvider.class).to(NLTKStopWordProvider.class);
 
         bind(Properties.class).toInstance(properties);
+        bind(SQLiteProvider.class).to(SQLiteProvider.class);
     }
 }

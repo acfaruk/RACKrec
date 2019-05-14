@@ -34,7 +34,7 @@ public class KKCTest {
         sut = new KKC(keywordpair,apis,score);
         boolean keywordsAreTrue = sut.getKeywordPair() == keywordpair;
         boolean apiListIsTrue = sut.getApis() == apis;
-        boolean scoreIsTrue = sut.getScore() == 0.86547;
+        boolean scoreIsTrue = sut.getKkcScore() == 0.86547;
         assertTrue(keywordsAreTrue);
         assertTrue(apiListIsTrue);
         assertTrue(scoreIsTrue);

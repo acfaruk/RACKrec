@@ -23,7 +23,6 @@ public class KAC {
 
     public Map<MethodName,Double> getKacScore(){
         Map<MethodName, Double> kacScore = new HashMap<>();
-        Map<Integer,MethodName> rankToApi = this.getRankToApi();
         int size = rankToApi.size();
         Set<Integer> keyset = rankToApi.keySet();
         ArrayList<Integer> keylist = new ArrayList(keyset);
