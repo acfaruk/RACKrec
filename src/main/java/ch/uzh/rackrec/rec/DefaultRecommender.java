@@ -4,18 +4,23 @@ import cc.kave.commons.model.events.completionevents.Context;
 import cc.kave.commons.model.naming.IName;
 import cc.kave.commons.model.naming.codeelements.IMemberName;
 import cc.kave.commons.model.naming.impl.v0.codeelements.MethodName;
+import ch.uzh.rackrec.model.gen.visitor.TokenVisitor;
 import ch.uzh.rackrec.model.view.KAC;
 import ch.uzh.rackrec.model.view.KKC;
 import ch.uzh.rackrec.rec.config.AbstractModule;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 public class DefaultRecommender extends AbstractRecommender {
 
-
+    private TokenVisitor tokenParser;
     public DefaultRecommender(AbstractModule module) {
         super(module);
+        this.tokenParser = new TokenVisitor(this.lemmatizer.enableDuplicateRemoval());
     }
 
     @Override
@@ -25,7 +30,10 @@ public class DefaultRecommender extends AbstractRecommender {
 
     @Override
     public Set<Pair<IMemberName, Double>> query(Context ctx) {
-        return null;
+        List<String> tokensInContext = this.getTokensFromContext(ctx);
+        Map<MethodName, Double> result = this.getRackRecomendations(tokensInContext);
+        Set<Pair<IMemberName, Double>> collector = this.collectPairSet(result);
+        return collector;
     }
 
     @Override
@@ -36,6 +44,26 @@ public class DefaultRecommender extends AbstractRecommender {
     @Override
     public int getLastModelSize() {
         return 0;
+    }
+    
+    public Set<Pair<IMemberName, Double>> collectPairSet(Map<MethodName, Double> inputMap) {
+        Set<Pair<IMemberName, Double>> collector = new HashSet<>();
+        Iterator<Entry<MethodName, Double>> it = inputMap.entrySet().iterator();
+        while(it.hasNext()) {
+            Entry<MethodName, Double> entry = it.next();
+            IMemberName name = entry.getKey();
+            Double score = entry.getValue();
+            ImmutablePair <IMemberName, Double> pair = new ImmutablePair<IMemberName, Double>(name, score);
+            collector.add(pair);
+        }
+        return collector;
+    }
+
+    public List<String> getTokensFromContext(Context ctx) {
+        List<String> tokenCollector = new ArrayList<>();
+        ctx.getSST().accept(this.tokenParser, tokenCollector);
+
+        return tokenCollector;
     }
 
     public Map<MethodName,Double> getRackRecomendations(List<String> keywords){

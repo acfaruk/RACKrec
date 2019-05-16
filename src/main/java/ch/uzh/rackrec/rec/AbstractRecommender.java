@@ -4,6 +4,8 @@ import cc.kave.commons.model.events.completionevents.Context;
 import cc.kave.commons.model.naming.IName;
 import cc.kave.commons.model.naming.codeelements.IMemberName;
 import ch.uzh.rackrec.model.Model;
+import ch.uzh.rackrec.model.gen.nlp.ILemmatizer;
+import ch.uzh.rackrec.model.gen.nlp.IdentifierLemmatizer;
 import ch.uzh.rackrec.rec.config.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -17,11 +19,13 @@ public abstract class AbstractRecommender implements IRecommender<IQuery> {
     protected AbstractModule module;
     protected Injector injector;
     protected Model model;
+    protected ILemmatizer lemmatizer;
 
     public AbstractRecommender(AbstractModule module){
         this.module = module;
         this.injector = Guice.createInjector(module);
         this.model = injector.getInstance(Model.class);
+        this.lemmatizer = injector.getInstance(IdentifierLemmatizer.class);
     }
 
     @Override
