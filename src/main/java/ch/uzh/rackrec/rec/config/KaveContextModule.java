@@ -10,6 +10,7 @@ import ch.uzh.rackrec.model.gen.nlp.ILemmatizer;
 import ch.uzh.rackrec.model.gen.nlp.IStopWordProvider;
 import ch.uzh.rackrec.model.gen.nlp.IdentifierLemmatizer;
 import ch.uzh.rackrec.model.gen.nlp.NLTKStopWordProvider;
+import ch.uzh.rackrec.model.provider.IDatabaseProvider;
 import ch.uzh.rackrec.model.provider.SQLiteProvider;
 
 import java.util.Properties;
@@ -37,6 +38,6 @@ public class KaveContextModule extends AbstractModule {
         bind(IStopWordProvider.class).to(NLTKStopWordProvider.class);
         bind(ILemmatizer.class).to(IdentifierLemmatizer.class);
         bind(Properties.class).toInstance(properties);
-        bind(SQLiteProvider.class).to(SQLiteProvider.class);
+        bind(IDatabaseProvider.class).to(SQLiteProvider.class);
     }
 }

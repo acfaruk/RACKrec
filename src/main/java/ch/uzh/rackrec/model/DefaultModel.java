@@ -1,6 +1,7 @@
 package ch.uzh.rackrec.model;
 
 import ch.uzh.rackrec.model.gen.ModelGenerator;
+import ch.uzh.rackrec.model.provider.IDatabaseProvider;
 import ch.uzh.rackrec.model.provider.ModelEntry;
 import ch.uzh.rackrec.model.provider.SQLiteProvider;
 import ch.uzh.rackrec.model.view.KAC;
@@ -15,7 +16,7 @@ import java.util.logging.Logger;
 public class DefaultModel extends Model {
 
     @Inject
-    public DefaultModel(Properties properties, ModelGenerator modelGenerator, Logger logger, SQLiteProvider sqLiteProvider) {
+    public DefaultModel(Properties properties, ModelGenerator modelGenerator, Logger logger, IDatabaseProvider sqLiteProvider) {
         super(properties, modelGenerator, logger, sqLiteProvider);
         try {
             sqLiteProvider.prepareSchemas();
