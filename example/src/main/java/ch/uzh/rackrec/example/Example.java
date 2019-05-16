@@ -23,7 +23,9 @@ import cc.kave.commons.model.naming.types.ITypeName;
 public class Example {
 
     public static void main(String[] args) {
-
+    	
+    	//CompletionEventsNew.readAllEvents();
+    	
         //set up properties object, see the readme for available properties depending on the module type
         Properties props = new Properties();
         props.setProperty("base-path", "/home/luc/Documents/RACK");
@@ -40,7 +42,7 @@ public class Example {
                 
         //create dummy context for now
         //Context ctx = new Context();
-        Set<Pair<IMemberName, Double>> eventResult = new LinkedHashSet<Pair<IMemberName,Double>>(10);
+        Set<Pair<IMemberName, Double>> eventResult = new LinkedHashSet<Pair<IMemberName,Double>>(3);
         Set<Pair<IMemberName, Double>> reccommenderResult = new LinkedHashSet<Pair<IMemberName,Double>>(6);
         Set<Pair<IMemberName, Double>> reccommenderResult2 = new LinkedHashSet<Pair<IMemberName,Double>>(6);
 
@@ -91,28 +93,19 @@ public class Example {
         eventResult.add(pair1);
         eventResult.add(pair2);
         eventResult.add(pair3);
-        eventResult.add(pair4);
-        eventResult.add(pair5);
-        eventResult.add(pair6);
-        eventResult.add(pair7);
-        eventResult.add(pair8);
-        eventResult.add(pair9);
-        eventResult.add(pair10);
-        eventResult.add(pair11);
-        eventResult.add(pair12);
         
-        reccommenderResult.add(pair15);
         reccommenderResult.add(pair6);
-        reccommenderResult.add(pair9);
         reccommenderResult.add(pair1);
+        reccommenderResult.add(pair9);
+        reccommenderResult.add(pair11);
         reccommenderResult.add(pair16);
         reccommenderResult.add(pair18);
         
-        reccommenderResult2.add(pair1);
-        reccommenderResult2.add(pair4);
+        reccommenderResult2.add(pair2);
+        reccommenderResult2.add(pair5);
         reccommenderResult2.add(pair6);
         reccommenderResult2.add(pair8);
-        reccommenderResult2.add(pair10);
+        reccommenderResult2.add(pair1);
         reccommenderResult2.add(pair12);
                                 
         //For a real evaluation we need a large amount of rack results and the corresponding gold sets, the paper used 150
@@ -148,5 +141,7 @@ public class Example {
 	    chart.pack( );
 	    RefineryUtilities.centerFrameOnScreen( chart );
 	    chart.setVisible( true );
+	    
+	    
     }
 }

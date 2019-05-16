@@ -24,4 +24,8 @@ public class MetricTable {
 	public Pair<String, ArrayList<Double>> get(int i) {
 		return metricTable.get(i);
 	}
+	
+	public ArrayList<Pair<String, ArrayList<Double>>> getMetricTable() {
+		return this.metricTable;
+	}
 }
