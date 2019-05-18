@@ -72,9 +72,5 @@ public class DefaultModel extends Model {
         return KKCs;
     }
 
-    @Override
-    public List<String> getContext(String keyword) {
-        return new ArrayList<>();
-    }
 
 }

@@ -28,5 +28,4 @@ public abstract class Model {
     }
     public abstract List<KAC> getKAC (List<String> keyword, Integer sigma);
     public abstract List<KKC> getKKC (List<KAC> kac, Double similarity);
-    public abstract List<String> getContext (String keyword);
 }

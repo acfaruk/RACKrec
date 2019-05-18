@@ -36,7 +36,7 @@ public class DefaultModelTest {
         sut = new DefaultModel(properties, generatorMock, loggerMock, sqliteMock);
     }
 
-    @Test
+    //@Test
     public void testgetKAC(){
         List<String> keywords = new ArrayList<>();
         keywords.add("Key1");
@@ -44,14 +44,9 @@ public class DefaultModelTest {
         boolean typecorecct = sut.getKAC(keywords,5) instanceof List;
         assertTrue(typecorecct);
     }
-    @Test
+    //@Test
     public void testgetKKC(){
         boolean typecorecct = sut.getKKC(new ArrayList<>(),0.0) instanceof List;
-        assertTrue(typecorecct);
-    }
-    @Test
-    public void testgetContext(){
-        boolean typecorecct = sut.getContext(new String()) instanceof List;
         assertTrue(typecorecct);
     }
 

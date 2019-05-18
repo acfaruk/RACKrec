@@ -27,7 +27,7 @@ public class DefaultModelGenerator extends ModelGenerator {
     @Inject
     public DefaultModelGenerator(ILemmatizer lemmatizer, Properties properties, KaveDataSet kaveDataSet, Logger logger) {
         super(properties, kaveDataSet, logger);
-        this.lemmatizer = lemmatizer.enableDuplicateRemoval();
+        this.lemmatizer = lemmatizer.enableDuplicateRemoval().enableStopWordRemoval();
 
         if (properties.getProperty("apis") == null){
             logger.log(Level.INFO, "There are no api's specified for modelgeneration! Checking all apis now.");
@@ -53,7 +53,14 @@ public class DefaultModelGenerator extends ModelGenerator {
             context.getSST().accept(new ApiReferenceVisitor(lemmatizer, apisToCheck), apiReferences);
             context.getSST().accept(new TokenVisitor(lemmatizer), tokens);
 
+
             try{
+                while (apiReferences.remove("???")){
+
+                }
+                while (apiReferences.remove(".ctor")){
+
+                }
                 modelEntries.add(new ModelEntry(tokens, apiReferences, enclosingContextType));
             }catch(InvalidModelEntryException ex){
                 //swallow
