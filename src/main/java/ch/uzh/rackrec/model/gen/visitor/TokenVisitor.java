@@ -51,7 +51,7 @@ public class TokenVisitor extends AbstractTraversingNodeVisitor<List<String>, Vo
 
     @Override
     public Void visit(IFieldDeclaration stmt, List<String> strings) {
-        String name = stmt.getName().toString();
+        String name = stmt.getName().getName();
         List<String> names = lemmatizer.lemmatize(name);
 
         strings.addAll(names);
@@ -60,21 +60,22 @@ public class TokenVisitor extends AbstractTraversingNodeVisitor<List<String>, Vo
 
     @Override
     public Void visit(IMethodDeclaration decl, List<String> strings) {
-        String name = decl.getName().toString();
+        String name = decl.getName().getName();
         List<String> names = lemmatizer.lemmatize(name);
 
         strings.addAll(names);
         return super.visit(decl, strings);
     }
 
-    @Override
-    public Void visit(IPropertyDeclaration decl, List<String> strings) {
-        String name = decl.getName().toString();
-        List<String> names = lemmatizer.lemmatize(name);
-
-        strings.addAll(names);
-        return super.visit(decl, strings);
-    }
+    // TODO
+//    @Override
+//    public Void visit(IPropertyDeclaration decl, List<String> strings) {
+//        String name = decl.getName().getIdentifier();
+//        List<String> names = lemmatizer.lemmatize(name);
+//
+//        strings.addAll(names);
+//        return super.visit(decl, strings);
+//    }
 
     @Override
     public Void visit(IVariableDeclaration stmt, List<String> strings) {
