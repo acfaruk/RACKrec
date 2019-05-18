@@ -33,7 +33,6 @@ public class DefaultModelGenerator extends ModelGenerator {
             this.apisToCheck = Arrays.asList(properties.getProperty("apis").split(","));
         }
 
-        calculateModelEntries();
     }
 
     @Override
@@ -80,12 +79,6 @@ public class DefaultModelGenerator extends ModelGenerator {
                 };
             }
         };
-    }
-
-    private void calculateModelEntries() {
-        for (Context context : kaveDataSet.getContextData()){
-
-        }
     }
 
 
