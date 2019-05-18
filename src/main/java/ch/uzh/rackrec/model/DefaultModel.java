@@ -8,30 +8,34 @@ import ch.uzh.rackrec.model.view.KAC;
 import ch.uzh.rackrec.model.view.KKC;
 import com.google.inject.Inject;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DefaultModel extends Model {
 
     @Inject
-    public DefaultModel(Properties properties, ModelGenerator modelGenerator, Logger logger, IDatabaseProvider sqLiteProvider) {
-        super(properties, modelGenerator, logger, sqLiteProvider);
-        try {
-            sqLiteProvider.prepareSchemas();
-            for(ModelEntry m : modelGenerator.getModelEntries()) {
-                try {
-                    sqLiteProvider.saveMinedContext(m);
+    public DefaultModel(Properties properties, ModelGenerator modelGenerator, Logger logger, IDatabaseProvider databaseProvider) {
+        super(properties, modelGenerator, logger, databaseProvider);
+
+
+        if (!databaseProvider.isFileReady()) {
+            try {
+                databaseProvider.prepareSchemas();
+                for (ModelEntry m : modelGenerator.getModelEntries()) {
+                    try {
+                        databaseProvider.saveMinedContext(m);
+                    } catch (SQLException e) {
+                        logger.log(Level.FINE, "Context not saved" + e.getMessage());
+                    }
                 }
-                catch (SQLException e){
-                    logger.log(Level.FINE,"Context not saved"+e.getMessage());
-                }
+            } catch (SQLException e) {
+                logger.log(Level.SEVERE, e.getMessage());
+                System.exit(-1);
             }
-        }
-        catch (SQLException e){
-            logger.log(Level.SEVERE,e.getMessage());
-            System.exit(-1);
         }
 
     }

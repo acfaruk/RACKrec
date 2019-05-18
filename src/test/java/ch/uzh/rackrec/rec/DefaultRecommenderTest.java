@@ -17,10 +17,10 @@ public class DefaultRecommenderTest {
         URL resource = DefaultRecommender.class.getResource("/");
         properties.setProperty("base-path", resource.getPath());
         properties.setProperty("context-path", "context/");
-        properties.setProperty("model-path", "model/");
-        properties.setProperty("database-file", resource.getPath()+"dbfile");
+        //properties.setProperty("model-path", "model/");
+        properties.setProperty("database-file", resource.getPath()+"DefaultModel");
         properties.setProperty("delta", "5");
-        properties.setProperty("apis", "mscorlib");
+        //properties.setProperty("apis", "mscorlib");
         properties.setProperty("lambda", "0");
     }
 

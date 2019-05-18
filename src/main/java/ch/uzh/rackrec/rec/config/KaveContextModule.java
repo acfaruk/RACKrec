@@ -26,8 +26,8 @@ public class KaveContextModule extends AbstractModule {
         if (properties.getProperty("base-path") == null)
             throw new RuntimeException("The base path was not set. Please set a base path in the properties!");
 
-        if (properties.getProperty("model-path") == null)
-            throw new RuntimeException("The model path was not set. Please set a model path in the properties!");
+//        if (properties.getProperty("model-path") == null)
+//            throw new RuntimeException("The model path was not set. Please set a model path in the properties!");
     }
 
     @Override
