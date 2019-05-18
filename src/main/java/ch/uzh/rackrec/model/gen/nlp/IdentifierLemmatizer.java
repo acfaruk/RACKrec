@@ -59,6 +59,7 @@ public class IdentifierLemmatizer implements ILemmatizer {
                     .filter(this.isNotNoise)
                     .collect(Collectors.toList());
         }
+        while (words.remove(""));
         if (words.isEmpty()){
             return new ArrayList<String>();
         }

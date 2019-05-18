@@ -53,7 +53,7 @@ public class DefaultModelGenerator extends ModelGenerator {
 
                         ModelEntry result = null;
 
-                        while(result == null){
+                        while(result == null && contextIterator.hasNext()){
                             Context context = contextIterator.next();
                             List<String> tokens = new ArrayList<>();
                             List<String> apiReferences = new ArrayList<>();
@@ -70,7 +70,7 @@ public class DefaultModelGenerator extends ModelGenerator {
                                 result = new ModelEntry(tokens, apiReferences, enclosingContextType);
                             }catch(InvalidModelEntryException ex){
                                 //swallow
-                                logger.log(Level.INFO, "Invalid Model Entry");
+                                logger.log(Level.FINEST, "Invalid Model Entry");
                                 result = null;
                             }
                         }
