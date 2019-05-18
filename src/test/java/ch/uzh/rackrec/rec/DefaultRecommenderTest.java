@@ -18,9 +18,9 @@ public class DefaultRecommenderTest {
         properties.setProperty("base-path", resource.getPath());
         properties.setProperty("context-path", "context/");
         //properties.setProperty("model-path", "model/");
-        properties.setProperty("database-file", resource.getPath()+"DefaultModel");
+        properties.setProperty("database-file", resource.getPath()+"DefaultModel-Mscorlib");
         properties.setProperty("delta", "5");
-        //properties.setProperty("apis", "mscorlib");
+        properties.setProperty("apis", "mscorlib");
         properties.setProperty("lambda", "0");
     }
 

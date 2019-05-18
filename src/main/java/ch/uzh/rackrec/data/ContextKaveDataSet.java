@@ -68,7 +68,7 @@ public class ContextKaveDataSet extends KaveDataSet {
         Set<String> slnZips = IoHelper.findAllZips(contextPath);
 
         for (String slnZip : slnZips) {
-            logger.log(Level.INFO, "\n#### processing solution zip: %s #####\n", slnZip);
+            logger.log(Level.INFO, "\n#### processing solution zip: "+slnZip+" #####\n");
             processSlnZip(slnZip);
         }
     }
@@ -76,7 +76,7 @@ public class ContextKaveDataSet extends KaveDataSet {
     private void processSlnZip(String slnZip) {
         // open the .zip file ...
         try (IReadingArchive ra = new ReadingArchive(new File(contextPath, slnZip))) {
-            logger.log(Level.INFO, "Reading contexts from ");
+            logger.log(Level.INFO, "Reading contexts from "+slnZip);
             contexts = ra.getAll(Context.class);
         }
     }
