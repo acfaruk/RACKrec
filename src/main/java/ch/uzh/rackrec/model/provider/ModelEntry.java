@@ -31,7 +31,7 @@ public class ModelEntry {
     public String toString() {
         return "ModelEntry{" +
                 "tokens=" + tokens +
-                ", apiReferences=" + apiReferences + apiReferences.size() +
+                ", apiReferences=" + apiReferences +
                 ", enclosingContextType=" + enclosingContextType +
                 '}';
     }

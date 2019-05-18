@@ -11,10 +11,7 @@ import ch.uzh.rackrec.model.provider.InvalidModelEntryException;
 import ch.uzh.rackrec.model.provider.ModelEntry;
 import com.google.inject.Inject;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,31 +38,53 @@ public class DefaultModelGenerator extends ModelGenerator {
 
     @Override
     public Iterable<ModelEntry> getModelEntries() {
-        return modelEntries;
+        return new Iterable<ModelEntry>() {
+            @Override
+            public Iterator<ModelEntry> iterator() {
+                return new Iterator<ModelEntry>() {
+                    Iterator<Context> contextIterator = kaveDataSet.getContextData().iterator();
+
+                    @Override
+                    public boolean hasNext() {
+                        return contextIterator.hasNext();
+                    }
+
+                    @Override
+                    public ModelEntry next() {
+
+                        ModelEntry result = null;
+
+                        while(result == null){
+                            Context context = contextIterator.next();
+                            List<String> tokens = new ArrayList<>();
+                            List<String> apiReferences = new ArrayList<>();
+                            ITypeName enclosingContextType = context.getSST().getEnclosingType();
+
+                            context.getSST().accept(new ApiReferenceVisitor(lemmatizer, apisToCheck), apiReferences);
+                            context.getSST().accept(new TokenVisitor(lemmatizer), tokens);
+
+
+                            try{
+                                while (apiReferences.remove("???"));
+                                while (apiReferences.remove(".ctor"));
+
+                                result = new ModelEntry(tokens, apiReferences, enclosingContextType);
+                            }catch(InvalidModelEntryException ex){
+                                //swallow
+                                logger.log(Level.INFO, "Invalid Model Entry");
+                                result = null;
+                            }
+                        }
+                        return result;
+                    }
+                };
+            }
+        };
     }
 
     private void calculateModelEntries() {
         for (Context context : kaveDataSet.getContextData()){
-            List<String> tokens = new ArrayList<>();
-            List<String> apiReferences = new ArrayList<>();
-            ITypeName enclosingContextType = context.getSST().getEnclosingType();
 
-            context.getSST().accept(new ApiReferenceVisitor(lemmatizer, apisToCheck), apiReferences);
-            context.getSST().accept(new TokenVisitor(lemmatizer), tokens);
-
-
-            try{
-                while (apiReferences.remove("???")){
-
-                }
-                while (apiReferences.remove(".ctor")){
-
-                }
-                modelEntries.add(new ModelEntry(tokens, apiReferences, enclosingContextType));
-            }catch(InvalidModelEntryException ex){
-                //swallow
-                logger.log(Level.FINEST, "Invalid Model Entry");
-            }
         }
     }
 
