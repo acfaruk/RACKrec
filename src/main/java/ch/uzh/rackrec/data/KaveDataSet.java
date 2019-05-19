@@ -15,5 +15,5 @@ public abstract class KaveDataSet {
         this.properties = properties;
     }
 
-    public abstract List<Context> getContextData();
+    public abstract Iterable<Context> getContextData();
 }

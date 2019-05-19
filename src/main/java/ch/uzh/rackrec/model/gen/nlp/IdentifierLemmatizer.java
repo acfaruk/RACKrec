@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
@@ -24,6 +25,7 @@ public class IdentifierLemmatizer implements ILemmatizer {
 
 
     private Predicate<String> isNotAStopWord = p-> !stopWordProvider.isStopWord(p);
+    private Predicate<String> isNotNoise = p-> !Pattern.matches("\\$\\d+",p);
 
     @Inject
     public IdentifierLemmatizer (IStopWordProvider stopWordProvider, Logger logger){
@@ -43,22 +45,27 @@ public class IdentifierLemmatizer implements ILemmatizer {
 
     @Override
     public List<String> lemmatize(String identifier){
-    	logger.log(Level.FINEST, "Lemmatizing: " + identifier);
+    	logger.log(Level.FINEST, "Lemmatizing: {0}", identifier);
         String paddedIdentifier = tokenizeSentence(identifier);
         List <String> words = new ArrayList<>(Arrays.asList(paddedIdentifier.split(" ")));
 
         words = words.stream()
-                .map(word -> word.toLowerCase())
+                .map(String::toLowerCase)
                 .collect(Collectors.toList());
 
         if(this.removeStopWords) {
             words = words.stream()
                     .filter(this.isNotAStopWord)
+                    .filter(this.isNotNoise)
                     .collect(Collectors.toList());
+        }
+        while (words.remove(""));
+        if (words.isEmpty()){
+            return new ArrayList<String>();
         }
 
         Sentence sent = new Sentence(words);
-        List<String> lemmas = new ArrayList<String>(sent.lemmas());
+        List<String> lemmas = new ArrayList<>(sent.lemmas());
 
         if (this.removeDuplicates) {
             Set<String> prunedLemmas = new LinkedHashSet<>(lemmas);
