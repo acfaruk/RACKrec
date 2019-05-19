@@ -127,6 +127,21 @@ public class CompletionEventsNew {
 						IMemberName memberName = name;
 						//System.out.println(name);
 						Double rank = Double.MAX_VALUE;
+						//System.out.println(memberName.getFullName());
+						//System.out.println(memberName.getIdentifier());
+						//System.out.println(memberName.getName());
+						//System.out.println(memberName.getDeclaringType());
+						//System.out.println(memberName.getDeclaringType().getFullName());
+						//System.out.println(memberName.getDeclaringType().getIdentifier());
+						System.out.println(memberName.getDeclaringType().getName());
+						//System.out.println(memberName.getDeclaringType().getAssembly());
+						//System.out.println(memberName.getDeclaringType().getAssembly().getIdentifier());
+						//System.out.println(memberName.getDeclaringType().getAssembly().getName());
+						//System.out.println(memberName.getDeclaringType().getDeclaringType());
+						//System.out.println(memberName.getDeclaringType().getNamespace());
+						//System.out.println(memberName.getDeclaringType().getDeclaringType());
+						//System.out.println(memberName.getValueType());
+
 				        Pair<IMemberName, Double> topPair = Pair.of(memberName, rank);
 						completionEvents.add(topPair);
 						//System.out.println("added top pair " + memberName);
