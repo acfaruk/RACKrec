@@ -141,7 +141,7 @@ public class CompletionEventsNew {
 						//System.out.println(memberName.getDeclaringType().getNamespace());
 						//System.out.println(memberName.getDeclaringType().getDeclaringType());
 						//System.out.println(memberName.getValueType());
-
+						// IMemberName finalName = (MethodName) memberName.getDeclaringType().getName();
 				        Pair<IMemberName, Double> topPair = Pair.of(memberName, rank);
 						completionEvents.add(topPair);
 						//System.out.println("added top pair " + memberName);
