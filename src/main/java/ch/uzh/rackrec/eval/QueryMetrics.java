@@ -113,7 +113,7 @@ public class QueryMetrics {
 	    	precision = 0;
 			recall = 0;
 		} else {
-		    precision = (double) truePositives / (double) k;
+		    precision = (double) truePositives / ((double) k + 1);
 		    recall = (double) truePositives / (double) this.resultGold.size();
 		}	
 		ArrayList<Double> returnValues = new ArrayList<Double>();
