@@ -8,6 +8,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import cc.kave.commons.model.naming.codeelements.IMemberName;
+import cc.kave.commons.model.naming.impl.v0.codeelements.MethodName;
 
 public class QueryMetrics {
 	
@@ -43,14 +44,24 @@ public class QueryMetrics {
 		ArrayList<Double> recall = new ArrayList<Double>();
 
 		for (int i = 0; i < maxK; i++) {		
-			ArrayList<Double> precisionRecallReciprocalRank = calculatePrecisionRecallReciprocalRank(i);
-			reciprocalRank.add(precisionRecallReciprocalRank.get(0));
-			precision.add(precisionRecallReciprocalRank.get(1));
-			recall.add(precisionRecallReciprocalRank.get(2));
-			if (precisionRecallReciprocalRank.get(1) > 0.0) {
-				accuracy.add(1.0);
+			// if i > resultRack else set null
+			//System.out.println(i);
+			//System.out.println(this.resultRACK.size());
+			if (i < this.resultRACK.size()) {
+				ArrayList<Double> precisionRecallReciprocalRank = calculatePrecisionRecallReciprocalRank(i);
+				reciprocalRank.add(precisionRecallReciprocalRank.get(0));
+				precision.add(precisionRecallReciprocalRank.get(1));
+				recall.add(precisionRecallReciprocalRank.get(2));
+				if (precisionRecallReciprocalRank.get(1) > 0.0) {
+					accuracy.add(1.0);
+				} else {
+					accuracy.add(0.0);
+				}
 			} else {
-				accuracy.add(0.0);
+				reciprocalRank.add(null);
+				precision.add(null);
+				recall.add(null);
+				accuracy.add(null);
 			}
 		}
 				
@@ -80,7 +91,12 @@ public class QueryMetrics {
 			Boolean foundInGold = false;
 	    	while (goldIterator.hasNext() && foundInGold == false) {
 				Pair<IMemberName, Double> goldPair = goldIterator.next();
-				if (rackPair.getLeft() == goldPair.getLeft()) {
+				//System.out.print(rackPair.getLeft().toString() + " ");
+		        IMemberName name1 = new MethodName(goldPair.getLeft().getFullName());
+		        //System.out.print(name1.toString() + " ");
+		        //System.out.println(rackPair.getLeft().toString().equals(name1.toString()) );
+			
+				if (rackPair.getLeft().toString().equals(name1.toString())) {
 					foundInGold = true;
 					truePositives += 1;
 					if (reciprocalRank == 0.0) {
@@ -97,7 +113,7 @@ public class QueryMetrics {
 	    	precision = 0;
 			recall = 0;
 		} else {
-		    precision = (double) truePositives / (double) this.resultRACK.size();
+		    precision = (double) truePositives / (double) k;
 		    recall = (double) truePositives / (double) this.resultGold.size();
 		}	
 		ArrayList<Double> returnValues = new ArrayList<Double>();

@@ -45,7 +45,7 @@ public class DefaultModel extends Model {
         List<KAC> KACs = new ArrayList<>();
         for (String keyword :keywords) {
             try {
-                KACs.add(sqLiteProvider.getTopKAPIForToken(delta, keyword));
+                KACs.add(sqLiteProvider.getTopKAPIForToken(5, keyword));
             }
             catch (SQLException e){
                 this.logger.log(Level.FINE,e.getMessage());

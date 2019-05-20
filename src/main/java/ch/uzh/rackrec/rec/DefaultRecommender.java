@@ -14,13 +14,14 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class DefaultRecommender extends AbstractRecommender {
 
     private TokenVisitor tokenParser;
     public DefaultRecommender(AbstractModule module) {
         super(module);
-        this.tokenParser = new TokenVisitor(this.lemmatizer.enableDuplicateRemoval());
+        this.tokenParser = new TokenVisitor(this.lemmatizer.enableDuplicateRemoval().enableStopWordRemoval());
     }
 
     @Override
@@ -87,7 +88,13 @@ public class DefaultRecommender extends AbstractRecommender {
                 }
             }
         }
-        return apiWithScore;
+        
+        Map<MethodName, Double> sortedMap = apiWithScore.entrySet().stream()
+        .sorted(Entry.comparingByValue(Comparator.reverseOrder()))
+        .collect(Collectors.toMap(Entry::getKey, Entry::getValue,
+        (e1, e2) -> e1, LinkedHashMap::new));
+        
+        return sortedMap;
 
     }
 

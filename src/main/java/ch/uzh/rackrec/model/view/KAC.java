@@ -29,7 +29,7 @@ public class KAC {
         Collections.sort(keylist);
         for(int i = 0; i < size;i++){
             MethodName api = rankToApi.get(keylist.get(i));
-            double score =1.0- keylist.get(i).doubleValue() / size;
+            double score =1.0- ( i / (double) size);
             kacScore.put(api,score);
         }
         return kacScore;

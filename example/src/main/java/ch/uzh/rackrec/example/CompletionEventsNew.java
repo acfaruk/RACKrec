@@ -25,8 +25,7 @@ import cc.kave.commons.model.naming.Names;
 import cc.kave.commons.model.naming.codeelements.IMemberName;
 import cc.kave.commons.model.naming.impl.v0.codeelements.MethodName;
 import cc.kave.commons.model.naming.impl.v0.types.TypeName;
-import cc.kave.commons.utils.json.JsonUtils;
-import cc.recommenders.io.ReadingArchive;
+import cc.kave.commons.utils.io.ReadingArchive;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 
@@ -61,7 +60,7 @@ public class CompletionEventsNew {
 	 * dataset from our website, please unzip the archive and point to the
 	 * containing folder here.
 	 */
-	private static final String DIR_USERDATA = "/Users/luc/Documents/RACK/Events-170301-2";
+	private static final String DIR_USERDATA = "/home/luc/Documents/RACK/Events-170301-2";
 
 	/**
 	 * 1: Find all users in the dataset.
@@ -96,7 +95,9 @@ public class CompletionEventsNew {
 				// afterwards, you can process it as a Java object
 				
 				CompletionEventData completionEventData = process(e);
-				eventsData.add(completionEventData);
+				if (!completionEventData.getEventResult().isEmpty()) {
+					eventsData.add(completionEventData);
+				}
 			}
 			ra.close();
 		}
@@ -119,48 +120,30 @@ public class CompletionEventsNew {
 			// ...and access the special context for this kind of event
 			if (ce.terminatedState == TerminationState.Applied) {
 				if (ce.getLastSelectedProposal().getName() instanceof MethodName){
-					//REMOVE DUPLICATE
 					MethodName name = (MethodName) ce.getLastSelectedProposal().getName();
+					
 					String assemblyName = name.getDeclaringType().getAssembly().getName();
-					if (assemblyName.equals("mscorlib")) {
-						//System.out.println("mscorlib found");
-						IMemberName memberName = name;
-						//System.out.println(name);
-						Double rank = Double.MAX_VALUE;
-						//System.out.println(memberName.getFullName());
-						//System.out.println(memberName.getIdentifier());
-						//System.out.println(memberName.getName());
-						//System.out.println(memberName.getDeclaringType());
-						//System.out.println(memberName.getDeclaringType().getFullName());
-						//System.out.println(memberName.getDeclaringType().getIdentifier());
-						System.out.println(memberName.getDeclaringType().getName());
-						//System.out.println(memberName.getDeclaringType().getAssembly());
-						//System.out.println(memberName.getDeclaringType().getAssembly().getIdentifier());
-						//System.out.println(memberName.getDeclaringType().getAssembly().getName());
-						//System.out.println(memberName.getDeclaringType().getDeclaringType());
-						//System.out.println(memberName.getDeclaringType().getNamespace());
-						//System.out.println(memberName.getDeclaringType().getDeclaringType());
-						//System.out.println(memberName.getValueType());
-						// IMemberName finalName = (MethodName) memberName.getDeclaringType().getName();
-				        Pair<IMemberName, Double> topPair = Pair.of(memberName, rank);
-						completionEvents.add(topPair);
-						//System.out.println("added top pair " + memberName);
-						
-						rank = Double.MAX_VALUE - 1;
-						for (IProposal p : ce.getProposalCollection()) {
-							if (p.getName() instanceof MethodName) {
-								name = (MethodName) p.getName();
-								assemblyName = name.getDeclaringType().getAssembly().getName();
-								if (assemblyName.equals("mscorlib")) {
-									memberName = name;
-							        Pair<IMemberName, Double> currentPair = Pair.of(memberName, rank);
-									completionEvents.add(currentPair);
-									rank--;
-								}
-								
-							}
+					IMemberName memberName = name;
+
+					Double rank = Double.MAX_VALUE;
+
+					// IMemberName finalName = (MethodName) memberName.getDeclaringType().getName();
+			        //Pair<IMemberName, Double> topPair = Pair.of(memberName, rank);
+					//completionEvents.add(topPair);
+					//System.out.println("added top pair " + memberName);
+					
+					rank = Double.MAX_VALUE - 1;
+					for (IProposal p : ce.getProposalCollection()) {
+						if (p.getName() instanceof MethodName) {
+							name = (MethodName) p.getName();
+							assemblyName = name.getDeclaringType().getAssembly().getName();
+							if (assemblyName.equals("mscorlib") && !memberName.getFullName().toString().equals(".ctor")) {
+								memberName = name;
+						        Pair<IMemberName, Double> currentPair = Pair.of(memberName, rank);
+								completionEvents.add(currentPair);
+								rank--;
+							}							
 						}
-						System.out.println(completionEvents);
 					}
 				}
 			}

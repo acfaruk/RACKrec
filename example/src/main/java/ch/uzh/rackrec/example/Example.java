@@ -4,10 +4,10 @@ import ch.uzh.rackrec.eval.MetricCollection;
 import ch.uzh.rackrec.eval.QueryMetrics;
 import ch.uzh.rackrec.rec.DefaultRecommender;
 import ch.uzh.rackrec.rec.config.KaveContextModule;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -24,24 +24,78 @@ public class Example {
 
     public static void main(String[] args) {
     	
-    	CompletionEventsNew.readAllEvents();
-    	/*
+    	
+    	List<CompletionEventData> eventData = CompletionEventsNew.readAllEvents();
+    	
         //set up properties object, see the readme for available properties depending on the module type
         Properties props = new Properties();
-        props.setProperty("base-path", "/home/luc/Documents/RACK");
-        props.setProperty("model-path", "/model");
-        props.setProperty("context-path", "/Contexts-170503");
+        props.setProperty("database-file", Example.class.getResource("/").getPath() + "DefaultModel-Mscorlib");
+        props.setProperty("base-path", Example.class.getResource("/").getPath());
+        props.setProperty("context-path", "context/");
+        props.setProperty("delta", "5");
+        props.setProperty("lambda", "0");
         
-        Integer k = 5;
 
         //choose your module, see the readme for available modules
-        //KaveContextModule module = new KaveContextModule(props);
+        KaveContextModule module = new KaveContextModule(props);
 
         //create your Recommender, see the readme for available recommenders
-        //DefaultRecommender rec = new DefaultRecommender(module);
+        DefaultRecommender rec = new DefaultRecommender(module);
+        
+        //feed  the context into the reccommender
+        Integer k = 10;
+
+		MetricCollection metricCollection1 = new MetricCollection(k);
+
+        for (int i = 0; i < eventData.size(); i++) {
+            Set<Pair<IMemberName, Double>> reccommenderResult = rec.query(eventData.get(i).getEventContext());
+            //System.out.println(reccommenderResult);
+
+    		QueryMetrics metrics = new QueryMetrics(reccommenderResult, eventData.get(i).getEventResult(), k);
+    		metrics.print();
+
+    		metricCollection1.add(metrics);
+
+		}        
+        
+        /*
+        Set<Pair<IMemberName, Double>> reccommenderResult = new LinkedHashSet<Pair<IMemberName,Double>>(6);
+        
+        IMemberName name1 = new MethodName("method1");
+        IMemberName name2 = new MethodName("method2");
+        IMemberName name3 = new MethodName("method3");
+        IMemberName name4 = new MethodName("method4");
+        IMemberName name5 = new MethodName("method5");
+        IMemberName name6 = new MethodName("method6");
+        
+        Pair<IMemberName, Double> pair1 = Pair.of(name1, 0.9);
+        Pair<IMemberName, Double> pair2 = Pair.of(name2, 0.8);
+        Pair<IMemberName, Double> pair3 = Pair.of(name3, 0.7);
+        Pair<IMemberName, Double> pair4 = Pair.of(name4, 0.6);
+        Pair<IMemberName, Double> pair5 = Pair.of(name5, 0.5);
+        Pair<IMemberName, Double> pair6 = Pair.of(name6, 0.4);
+        
+        reccommenderResult.add(pair1);
+        reccommenderResult.add(pair2);
+        reccommenderResult.add(pair3);
+        reccommenderResult.add(pair4);
+        reccommenderResult.add(pair5);
+        reccommenderResult.add(pair6);
+        */
+        
+		metricCollection1.calculateMeanMetrics();
+		System.out.println(metricCollection1.size());
+		metricCollection1.printMeanMetrics();
+		
+	    LineChart_AWT chart = new LineChart_AWT("RACK Evaluation Results" , "Performance Metrics", metricCollection1.get());
+	    chart.pack( );
+	    RefineryUtilities.centerFrameOnScreen( chart );
+	    chart.setVisible( true );
+
                 
         //create dummy context for now
         //Context ctx = new Context();
+        /*
         Set<Pair<IMemberName, Double>> eventResult = new LinkedHashSet<Pair<IMemberName,Double>>(3);
         Set<Pair<IMemberName, Double>> reccommenderResult = new LinkedHashSet<Pair<IMemberName,Double>>(6);
         Set<Pair<IMemberName, Double>> reccommenderResult2 = new LinkedHashSet<Pair<IMemberName,Double>>(6);
@@ -113,8 +167,6 @@ public class Example {
         //a metrics object only has one result.
         //collection of metrics has function merge or smth that calculates the mean of all queries
         
-        //feed  the context into the reccommender
-        //Set<Pair<IMemberName, Double>> reccommenderResult = rec.query(ctx);
         
 		QueryMetrics metrics1 = new QueryMetrics(reccommenderResult, eventResult, k);
 		QueryMetrics metrics2 = new QueryMetrics(reccommenderResult2, eventResult, k);

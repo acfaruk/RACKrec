@@ -54,10 +54,13 @@ public class MetricCollection {
 			Pair<String, ArrayList<Double>> recall = metricCollection.get(i).getMetricTable().get(3);
 
 			for (int j = 0; j < precision.getRight().size(); j++) {
-				meanAccuracy.set(j, meanAccuracy.get(j) + accuracy.getRight().get(j));
-				meanReciprocalRank.set(j, meanReciprocalRank.get(j) + reciprocalRank.getRight().get(j));
-				meanPrecision.set(j, meanPrecision.get(j) + precision.getRight().get(j));
-				meanRecall.set(j, meanRecall.get(j) + recall.getRight().get(j));
+				// if accuracy.getRight.get(j) not null
+				if (accuracy.getRight().get(j) != null) {
+					meanAccuracy.set(j, meanAccuracy.get(j) + accuracy.getRight().get(j));
+					meanReciprocalRank.set(j, meanReciprocalRank.get(j) + reciprocalRank.getRight().get(j));
+					meanPrecision.set(j, meanPrecision.get(j) + precision.getRight().get(j));
+					meanRecall.set(j, meanRecall.get(j) + recall.getRight().get(j));
+				}
 			}
 		}
 		
@@ -78,5 +81,9 @@ public class MetricCollection {
 		this.meanMetrics.add(meanReciprocalRankPair);
 		this.meanMetrics.add(meanPrecisionPair);
 		this.meanMetrics.add(meanRecallPair);
+	}
+
+	public Integer size() {
+		return this.metricCollection.size();
 	}
 }
