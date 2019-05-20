@@ -38,13 +38,14 @@ public class MetricCollection {
 		ArrayList<Double> meanReciprocalRank = new ArrayList<Double>();
 		ArrayList<Double> meanPrecision = new ArrayList<Double>();
 		ArrayList<Double> meanRecall = new ArrayList<Double>();
-
+		ArrayList<Integer> nullAt = new ArrayList<Integer>();
 		
 		for (int i = 0; i < this.k; i++) {
 			meanAccuracy.add(0.0);
 			meanReciprocalRank.add(0.0);
 			meanPrecision.add(0.0);
 			meanRecall.add(0.0);
+			nullAt.add(0);
 		}
 				
 		for (int i = 0; i < metricCollection.size(); i++) {
@@ -60,16 +61,18 @@ public class MetricCollection {
 					meanReciprocalRank.set(j, meanReciprocalRank.get(j) + reciprocalRank.getRight().get(j));
 					meanPrecision.set(j, meanPrecision.get(j) + precision.getRight().get(j));
 					meanRecall.set(j, meanRecall.get(j) + recall.getRight().get(j));
+				} else {
+					nullAt.set(j, nullAt.get(j)+ 1);
 				}
 			}
 		}
 		
 		for (int i = 0; i < meanPrecision.size(); i++) {
 			//check for 0
-			meanAccuracy.set(i, (double) Math.round(meanAccuracy.get(i) / (double) metricCollection.size() * 1000) / 1000);
-			meanReciprocalRank.set(i, (double) Math.round(meanReciprocalRank.get(i) / (double) metricCollection.size() * 1000) / 1000);
-			meanPrecision.set(i, (double) Math.round(meanPrecision.get(i) / (double) metricCollection.size() * 1000) / 1000);
-			meanRecall.set(i, (double) Math.round(meanRecall.get(i) / (double) metricCollection.size() * 1000) / 1000);
+			meanAccuracy.set(i, (double) Math.round(meanAccuracy.get(i) / ((double) metricCollection.size() - nullAt.get(i)) * 1000) / 1000);
+			meanReciprocalRank.set(i, (double) Math.round(meanReciprocalRank.get(i) / ((double) metricCollection.size() - nullAt.get(i)) * 1000) / 1000);
+			meanPrecision.set(i, (double) Math.round(meanPrecision.get(i) / ((double) metricCollection.size() - nullAt.get(i)) * 1000) / 1000);
+			meanRecall.set(i, (double) Math.round(meanRecall.get(i) / ((double) metricCollection.size() - nullAt.get(i)) * 1000) / 1000);
 
 		}
 		Pair<String, ArrayList<Double>> meanAccuracyPair = new ImmutablePair<>("Top-K Accuracy", meanAccuracy);
