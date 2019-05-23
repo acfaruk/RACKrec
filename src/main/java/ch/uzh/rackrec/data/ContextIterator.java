@@ -52,8 +52,14 @@ public class ContextIterator implements Iterator<Context> {
 
             String slnZip = slnZips.next();
             logger.log(Level.INFO, "Looking at sln zip: " + slnZip);
-            IReadingArchive ra = new ReadingArchive(new File(contextPath, slnZip));
-            currentContexts = ra.getAll(Context.class).iterator();
+            IReadingArchive ra = null;
+            try{
+                ra = new ReadingArchive(new File(contextPath, slnZip));
+                currentContexts = ra.getAll(Context.class).iterator();
+            }finally{
+                ra.close();
+            }
+
         }
     }
 }
