@@ -1,5 +1,6 @@
 package ch.uzh.rackrec.rec;
 
+import cc.kave.commons.model.events.completionevents.Context;
 import ch.uzh.rackrec.rec.config.KaveContextModule;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,5 +28,7 @@ public class DefaultRecommenderTest {
     public void defaultRecommenderCreation(){
         KaveContextModule module = new KaveContextModule(properties);
         DefaultRecommender sut = new DefaultRecommender(module);
+        Context ctx = new Context();
+        sut.query(ctx);
     }
 }

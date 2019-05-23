@@ -69,7 +69,7 @@ public class DefaultRecommender extends AbstractRecommender {
 
     public Map<MethodName,Double> getRackRecomendations(List<String> keywords){
         Map<MethodName,Double> apiWithScore = new HashMap<>();
-        List<KAC> kacList = model.getKAC(keywords, Integer.getInteger(module.getProperties().getProperty("delta")));
+        List<KAC> kacList = model.getKAC(keywords, Integer.parseInt(module.getProperties().getProperty("delta")));
         for (KAC kac :kacList){
             for (Map.Entry<MethodName, Double> entry : kac.getKacScore().entrySet()){
                 if (apiWithScore.containsKey(entry.getKey())){

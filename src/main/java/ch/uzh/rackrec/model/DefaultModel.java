@@ -45,7 +45,7 @@ public class DefaultModel extends Model {
         List<KAC> KACs = new ArrayList<>();
         for (String keyword :keywords) {
             try {
-                KACs.add(sqLiteProvider.getTopKAPIForToken(5, keyword));
+                KACs.add(sqLiteProvider.getTopKAPIForToken(delta, keyword));
             }
             catch (SQLException e){
                 this.logger.log(Level.FINE,e.getMessage());
@@ -63,7 +63,7 @@ public class DefaultModel extends Model {
                 if (kac1 != kac2){
                     try {
                         KKC kkc = sqLiteProvider.getKKCForKeywords(new AbstractMap.SimpleEntry<>(kac1.getKeyword(),kac2.getKeyword()));
-                        if (kkc.getKkcScore() >= 0) {
+                        if (kkc.getKkcScore() >= similarity) {
                             KKCs.add(kkc);
                         }
                     }
