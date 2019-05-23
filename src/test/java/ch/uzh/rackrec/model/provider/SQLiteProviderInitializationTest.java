@@ -65,6 +65,7 @@ public class SQLiteProviderInitializationTest {
 
         assertTrue(apiTableDoesExist);
         assertTrue(tableDoesExist);
+        assertTrue(provider.isFileReady());
     }
     
     @Test
