@@ -19,8 +19,11 @@ public class KACTest {
     public void initialize(){
         keyword = "Test";
         freqToApi = new HashMap<>();
-        freqToApi.put(300,new MethodName("mscorlib"));
-        freqToApi.put(334,new MethodName("mscorlib"));
+        freqToApi.put(300,new MethodName("test"));
+        freqToApi.put(255,new MethodName("homo"));
+        freqToApi.put(60,new MethodName("wayne"));
+        freqToApi.put(80,new MethodName("okey"));
+        freqToApi.put(3465,new MethodName("mscorlib"));
 
 
     }
@@ -30,5 +33,15 @@ public class KACTest {
         boolean keywordIsTrue = sut.getKeyword().equals("Test");
         boolean mapIsTrue = sut.getRankToApi() == freqToApi;
         assertTrue(keywordIsTrue&&mapIsTrue);
+    }
+    @Test
+    public void getScoreTest(){
+        sut = new KAC(keyword,freqToApi);
+        Map<MethodName,Double> kacScore = sut.getKacScore();
+        assertTrue(kacScore.size() == 5);
+        double msScore = kacScore.get(new MethodName("mscorlib"));
+        assertTrue(msScore == 1);
+        double wayneScore = kacScore.get(new MethodName("wayne"));
+        assertTrue(wayneScore == 1.0- ( 4 / 5.0));
     }
 }

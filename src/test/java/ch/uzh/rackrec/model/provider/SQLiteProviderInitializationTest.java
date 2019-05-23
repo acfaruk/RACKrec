@@ -66,6 +66,20 @@ public class SQLiteProviderInitializationTest {
         assertTrue(apiTableDoesExist);
         assertTrue(tableDoesExist);
     }
+
+    @Test
+    public void testFileIsReady() {
+
+        assertTrue(!provider.isFileReady());
+        try {
+            provider.prepareSchemas();;
+        } catch (SQLException e) {
+            fail(e.getMessage());
+            e.printStackTrace();
+        }
+        assertTrue(provider.isFileReady());
+
+    }
     
     @Test
     public void testMultipleCreation() throws SQLException {

@@ -26,6 +26,7 @@ public class DefaultModel extends Model {
             try {
                 databaseProvider.prepareSchemas();
                 for (ModelEntry m : modelGenerator.getModelEntries()) {
+                    if (m == null) continue;
                     try {
                         databaseProvider.saveMinedContext(m);
                     } catch (SQLException e) {
