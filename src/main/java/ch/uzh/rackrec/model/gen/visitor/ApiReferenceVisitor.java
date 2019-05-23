@@ -92,8 +92,11 @@ public class ApiReferenceVisitor extends AbstractTraversingNodeVisitor<List<Stri
 
     @Override
     public Void visit(IInvocationExpression expr, List<String> strings) {
+        String methodName = expr.getMethodName().getName();
+        String fullName = expr.getMethodName().getDeclaringType().getName() + "." + methodName;
+
         if (apis == null){
-            strings.add(expr.getMethodName().getName());
+            strings.add(fullName);
             return super.visit(expr, strings);
         }
 
@@ -101,7 +104,7 @@ public class ApiReferenceVisitor extends AbstractTraversingNodeVisitor<List<Stri
         if (apis.contains(assembly) == false)
             return super.visit(expr, strings);
 
-        strings.add(expr.getMethodName().getName());
+        strings.add(fullName);
         return super.visit(expr, strings);
     }
 }

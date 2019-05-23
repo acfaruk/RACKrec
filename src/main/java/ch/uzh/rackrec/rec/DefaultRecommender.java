@@ -80,11 +80,13 @@ public class DefaultRecommender extends AbstractRecommender {
                 }
             }
         }
-        List<KKC> kkcList = model.getKKC(kacList,Double.parseDouble(module.getProperties().getProperty("lambda")));
-        for (KKC kkc :kkcList){
-            for (MethodName name :kkc.getApis()){
-                if (apiWithScore.containsKey(name)){
-                    apiWithScore.replace(name,kkc.getKkcScore()+apiWithScore.get(name));
+        if (Boolean.parseBoolean(module.getProperties().getProperty("use-KKC"))) {
+            List<KKC> kkcList = model.getKKC(kacList, Double.parseDouble(module.getProperties().getProperty("lambda")));
+            for (KKC kkc : kkcList) {
+                for (MethodName name : kkc.getApis()) {
+                    if (apiWithScore.containsKey(name)) {
+                        apiWithScore.replace(name, kkc.getKkcScore() + apiWithScore.get(name));
+                    }
                 }
             }
         }

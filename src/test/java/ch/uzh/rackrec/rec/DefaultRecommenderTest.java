@@ -30,6 +30,7 @@ public class DefaultRecommenderTest {
         properties.setProperty("delta", "5");
         properties.setProperty("apis", "mscorlib");
         properties.setProperty("lambda", "0");
+        properties.setProperty("use-KKC","true");
         mockedLogger = mock(Logger.class);
         dataSet = new ContextKaveDataSet(properties,mockedLogger);
     }
