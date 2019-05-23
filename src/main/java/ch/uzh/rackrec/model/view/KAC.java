@@ -26,7 +26,7 @@ public class KAC {
         int size = rankToApi.size();
         Set<Integer> keyset = rankToApi.keySet();
         ArrayList<Integer> keylist = new ArrayList(keyset);
-        Collections.sort(keylist);
+        Collections.sort(keylist, Collections.reverseOrder());
         for(int i = 0; i < size;i++){
             MethodName api = rankToApi.get(keylist.get(i));
             double score =1.0- ( i / (double) size);
