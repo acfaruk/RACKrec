@@ -57,7 +57,9 @@ public class ContextIterator implements Iterator<Context> {
                 ra = new ReadingArchive(new File(contextPath, slnZip));
                 currentContexts = ra.getAll(Context.class).iterator();
             }finally{
-                ra.close();
+                if(ra!= null) {
+                    ra.close();
+                }
             }
 
         }
