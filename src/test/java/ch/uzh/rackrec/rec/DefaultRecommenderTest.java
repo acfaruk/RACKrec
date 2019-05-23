@@ -28,7 +28,6 @@ public class DefaultRecommenderTest {
     public void defaultRecommenderCreation(){
         KaveContextModule module = new KaveContextModule(properties);
         DefaultRecommender sut = new DefaultRecommender(module);
-        Context ctx = new Context();
-        sut.query(ctx);
+
     }
 }
