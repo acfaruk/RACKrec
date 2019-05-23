@@ -101,7 +101,7 @@ public class SQLQueryFactory {
 
     protected String getTokenReferences () {
         return ""
-            + "SELECT * "
+            + "SELECT 1 "
             + FROM_TOKENREFERENCES
             + "WHERE Token=("
                 + SELECT_ID
@@ -117,7 +117,7 @@ public class SQLQueryFactory {
 
     protected String getAPIReferences() {
         return ""
-            + "SELECT * "
+            + "SELECT 1 "
             + FROM_APIREFERENCES
             + "WHERE   API=("
                 + SELECT_ID
