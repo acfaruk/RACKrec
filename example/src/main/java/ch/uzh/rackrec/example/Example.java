@@ -59,7 +59,6 @@ public class Example {
 		}        
            
 		metricCollection1.calculateMeanMetrics();
-		System.out.println(metricCollection1.size());
 		metricCollection1.printMeanMetrics();
 		
 	    LineChart_AWT chart = new LineChart_AWT("RACK Evaluation Results" , "Performance Metrics", metricCollection1.getMeanMetrics());
