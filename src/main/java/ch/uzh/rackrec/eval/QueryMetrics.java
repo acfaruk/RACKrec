@@ -25,7 +25,6 @@ public class QueryMetrics {
 		
 		this.myMetricTable = new MetricTable(this.maxK);
 		
-		calculateMetricTable();
 	}
 	
 	public void print() {
@@ -36,7 +35,7 @@ public class QueryMetrics {
 		return this.myMetricTable;
 	}
 	
-	private void calculateMetricTable() {
+	public void calculateMetricTable() {
 		
 		ArrayList<Double> accuracy = new ArrayList<Double>();
 		ArrayList<Double> reciprocalRank = new ArrayList<Double>();
@@ -44,9 +43,6 @@ public class QueryMetrics {
 		ArrayList<Double> recall = new ArrayList<Double>();
 
 		for (int i = 0; i < maxK; i++) {		
-			// if i > resultRack else set null
-			//System.out.println(i);
-			//System.out.println(this.resultRACK.size());
 			if (i < this.resultRACK.size()) {
 				ArrayList<Double> precisionRecallReciprocalRank = calculatePrecisionRecallReciprocalRank(i);
 				reciprocalRank.add(precisionRecallReciprocalRank.get(0));
@@ -91,11 +87,7 @@ public class QueryMetrics {
 			Boolean foundInGold = false;
 	    	while (goldIterator.hasNext() && foundInGold == false) {
 				Pair<IMemberName, Double> goldPair = goldIterator.next();
-				//System.out.print(rackPair.getLeft().toString() + " ");
-		        IMemberName name1 = new MethodName(goldPair.getLeft().getFullName());
-		        //System.out.print(name1.toString() + " ");
-		        //System.out.println(rackPair.getLeft().toString().equals(name1.toString()) );
-			
+		        IMemberName name1 = new MethodName(goldPair.getLeft().getFullName());		
 				if (rackPair.getLeft().toString().equals(name1.toString())) {
 					foundInGold = true;
 					truePositives += 1;

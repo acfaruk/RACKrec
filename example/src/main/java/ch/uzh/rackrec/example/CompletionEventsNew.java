@@ -97,6 +97,8 @@ public class CompletionEventsNew {
 				CompletionEventData completionEventData = process(e);
 				if (!completionEventData.getEventResult().isEmpty()) {
 					eventsData.add(completionEventData);
+					System.out.println(e);
+					System.out.println("---------------------------------------------------------------");
 				}
 			}
 			ra.close();
