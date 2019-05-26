@@ -1,5 +1,6 @@
 package ch.uzh.rackrec.data;
 
+import cc.kave.commons.model.events.completionevents.Context;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,7 +34,11 @@ public class ContextKaveDataSetTest {
 
         ContextKaveDataSet sut = new ContextKaveDataSet(properties, mockedLogger);
 
-        assertEquals(29,sut.getContextData().size());
+        int counter = 0;
+        for(Context c : sut.getContextData()){
+            counter++;
+        }
+        assertEquals(29, counter);
     }
 
     @Test

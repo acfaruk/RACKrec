@@ -16,6 +16,7 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -34,12 +35,16 @@ public class ContextKaveDataSet extends KaveDataSet {
         super(properties, logger);
         loadProperties();
         checkFolder();
-        loadDataSet();
     }
 
     @Override
-    public List<Context> getContextData() {
-        return contexts;
+    public Iterable<Context> getContextData() {
+        return new Iterable<Context>() {
+            @Override
+            public Iterator<Context> iterator() {
+                return new ContextIterator(contextPath);
+            }
+        };
     }
 
     private void loadProperties(){
@@ -62,23 +67,6 @@ public class ContextKaveDataSet extends KaveDataSet {
             logger.log(Level.SEVERE, message);
             throw new RuntimeException(message);
         };
-    }
-
-    private void loadDataSet(){
-        Set<String> slnZips = IoHelper.findAllZips(contextPath);
-
-        for (String slnZip : slnZips) {
-            logger.log(Level.INFO, "\n#### processing solution zip: %s #####\n", slnZip);
-            processSlnZip(slnZip);
-        }
-    }
-
-    private void processSlnZip(String slnZip) {
-        // open the .zip file ...
-        try (IReadingArchive ra = new ReadingArchive(new File(contextPath, slnZip))) {
-            logger.log(Level.INFO, "Reading contexts from ");
-            contexts = ra.getAll(Context.class);
-        }
     }
 
 }

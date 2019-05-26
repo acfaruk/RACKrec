@@ -24,7 +24,7 @@ public class KKC {
         return apis;
     }
 
-    public Double getScore() {
+    public Double getKkcScore() {
         return score;
     }
 }

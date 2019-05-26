@@ -231,6 +231,16 @@ public class SQLiteProvider implements IDatabaseProvider{
             }
         }
     }
+    @Override
+    public boolean isFileReady(){
+        try {
+            return this.tableExists("contexts")&&this.tableExists("apis")&&this.tableExists("tokens")&&this.tableExists("TokenReferences")&&this.tableExists("APIReferences");
+
+        }
+        catch (SQLException e) {
+            return false;
+        }
+    }
 
 
     protected boolean apiContextReferenceExists(String api, ITypeName context) throws SQLException {

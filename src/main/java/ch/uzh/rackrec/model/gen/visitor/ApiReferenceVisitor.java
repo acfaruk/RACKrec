@@ -60,40 +60,43 @@ public class ApiReferenceVisitor extends AbstractTraversingNodeVisitor<List<Stri
         this.apis = apis;
     }
 
-    @Override
-    public Void visit(IFieldDeclaration stmt, List<String> strings) {
-        if (apis == null){
-            strings.add(stmt.getName().getValueType().getName());
-            return super.visit(stmt, strings);
-        }
-
-        String assembly = stmt.getName().getValueType().getAssembly().getName();
-        if (apis.contains(assembly) == false)
-            return super.visit(stmt, strings);
-
-        strings.add(stmt.getName().getValueType().getName());
-        return super.visit(stmt, strings);
-    }
-
-    @Override
-    public Void visit(IVariableDeclaration stmt, List<String> strings) {
-        if (apis == null){
-            strings.add(stmt.getType().getName());
-            return super.visit(stmt, strings);
-        }
-
-        String assembly = stmt.getType().getAssembly().getName();
-        if (apis.contains(assembly) == false)
-            return super.visit(stmt, strings);
-
-        strings.add(stmt.getType().getName());
-        return super.visit(stmt, strings);
-    }
+//    @Override
+//    public Void visit(IFieldDeclaration stmt, List<String> strings) {
+//        if (apis == null){
+//            strings.add(stmt.getName().getValueType().getName());
+//            return super.visit(stmt, strings);
+//        }
+//
+//        String assembly = stmt.getName().getValueType().getAssembly().getName();
+//        if (apis.contains(assembly) == false)
+//            return super.visit(stmt, strings);
+//
+//        strings.add(stmt.getName().getValueType().getName());
+//        return super.visit(stmt, strings);
+//    }
+//
+//    @Override
+//    public Void visit(IVariableDeclaration stmt, List<String> strings) {
+//        if (apis == null){
+//            strings.add(stmt.getType().getName());
+//            return super.visit(stmt, strings);
+//        }
+//
+//        String assembly = stmt.getType().getAssembly().getName();
+//        if (apis.contains(assembly) == false)
+//            return super.visit(stmt, strings);
+//
+//        strings.add(stmt.getType().getName());
+//        return super.visit(stmt, strings);
+//    }
 
     @Override
     public Void visit(IInvocationExpression expr, List<String> strings) {
+        String methodName = expr.getMethodName().getName();
+        String fullName = expr.getMethodName().getDeclaringType().getName() + "." + methodName;
+
         if (apis == null){
-            strings.add(expr.getMethodName().getName());
+            strings.add(fullName);
             return super.visit(expr, strings);
         }
 
@@ -101,7 +104,7 @@ public class ApiReferenceVisitor extends AbstractTraversingNodeVisitor<List<Stri
         if (apis.contains(assembly) == false)
             return super.visit(expr, strings);
 
-        strings.add(expr.getMethodName().getName());
+        strings.add(fullName);
         return super.visit(expr, strings);
     }
 }

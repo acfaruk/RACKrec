@@ -114,7 +114,9 @@ public class ModifiedStopwordProvider implements IStopWordProvider {
             "will",
             "just",
             "don",
-            "should"
+            "should",
+                ".ctor",
+                "???"
         };
         return new ArrayList<>(Arrays.asList(stopWords));
     }

@@ -10,6 +10,8 @@ import ch.uzh.rackrec.model.gen.nlp.ILemmatizer;
 import ch.uzh.rackrec.model.gen.nlp.IStopWordProvider;
 import ch.uzh.rackrec.model.gen.nlp.IdentifierLemmatizer;
 import ch.uzh.rackrec.model.gen.nlp.NLTKStopWordProvider;
+import ch.uzh.rackrec.model.provider.IDatabaseProvider;
+import ch.uzh.rackrec.model.provider.SQLiteProvider;
 
 import java.util.Properties;
 
@@ -24,8 +26,8 @@ public class KaveContextModule extends AbstractModule {
         if (properties.getProperty("base-path") == null)
             throw new RuntimeException("The base path was not set. Please set a base path in the properties!");
 
-        if (properties.getProperty("model-path") == null)
-            throw new RuntimeException("The model path was not set. Please set a model path in the properties!");
+//        if (properties.getProperty("model-path") == null)
+//            throw new RuntimeException("The model path was not set. Please set a model path in the properties!");
     }
 
     @Override
@@ -36,5 +38,6 @@ public class KaveContextModule extends AbstractModule {
         bind(IStopWordProvider.class).to(NLTKStopWordProvider.class);
         bind(ILemmatizer.class).to(IdentifierLemmatizer.class);
         bind(Properties.class).toInstance(properties);
+        bind(IDatabaseProvider.class).to(SQLiteProvider.class);
     }
 }

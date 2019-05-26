@@ -11,10 +11,7 @@ import ch.uzh.rackrec.model.provider.InvalidModelEntryException;
 import ch.uzh.rackrec.model.provider.ModelEntry;
 import com.google.inject.Inject;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,7 +24,7 @@ public class DefaultModelGenerator extends ModelGenerator {
     @Inject
     public DefaultModelGenerator(ILemmatizer lemmatizer, Properties properties, KaveDataSet kaveDataSet, Logger logger) {
         super(properties, kaveDataSet, logger);
-        this.lemmatizer = lemmatizer.enableDuplicateRemoval();
+        this.lemmatizer = lemmatizer.enableDuplicateRemoval().enableStopWordRemoval();
 
         if (properties.getProperty("apis") == null){
             logger.log(Level.INFO, "There are no api's specified for modelgeneration! Checking all apis now.");
@@ -36,30 +33,52 @@ public class DefaultModelGenerator extends ModelGenerator {
             this.apisToCheck = Arrays.asList(properties.getProperty("apis").split(","));
         }
 
-        calculateModelEntries();
     }
 
     @Override
     public Iterable<ModelEntry> getModelEntries() {
-        return modelEntries;
-    }
+        return new Iterable<ModelEntry>() {
+            @Override
+            public Iterator<ModelEntry> iterator() {
+                return new Iterator<ModelEntry>() {
+                    Iterator<Context> contextIterator = kaveDataSet.getContextData().iterator();
 
-    private void calculateModelEntries() {
-        for (Context context : kaveDataSet.getContextData()){
-            List<String> tokens = new ArrayList<>();
-            List<String> apiReferences = new ArrayList<>();
-            ITypeName enclosingContextType = context.getSST().getEnclosingType();
+                    @Override
+                    public boolean hasNext() {
+                        return contextIterator.hasNext();
+                    }
 
-            context.getSST().accept(new ApiReferenceVisitor(lemmatizer, apisToCheck), apiReferences);
-            context.getSST().accept(new TokenVisitor(lemmatizer), tokens);
+                    @Override
+                    public ModelEntry next() {
 
-            try{
-                modelEntries.add(new ModelEntry(tokens, apiReferences, enclosingContextType));
-            }catch(InvalidModelEntryException ex){
-                //swallow
-                logger.log(Level.FINEST, "Invalid Model Entry");
+                        ModelEntry result = null;
+
+                        while(result == null && contextIterator.hasNext()){
+                            Context context = contextIterator.next();
+                            List<String> tokens = new ArrayList<>();
+                            List<String> apiReferences = new ArrayList<>();
+                            ITypeName enclosingContextType = context.getSST().getEnclosingType();
+
+                            context.getSST().accept(new ApiReferenceVisitor(lemmatizer, apisToCheck), apiReferences);
+                            context.getSST().accept(new TokenVisitor(lemmatizer), tokens);
+
+
+                            try{
+                                while (apiReferences.remove("???"));
+                                while (apiReferences.remove(".ctor"));
+
+                                result = new ModelEntry(tokens, apiReferences, enclosingContextType);
+                            }catch(InvalidModelEntryException ex){
+                                //swallow
+                                logger.log(Level.FINEST, "Invalid Model Entry");
+                                result = null;
+                            }
+                        }
+                        return result;
+                    }
+                };
             }
-        }
+        };
     }
 
 

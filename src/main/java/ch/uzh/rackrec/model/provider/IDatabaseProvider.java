@@ -16,4 +16,5 @@ public interface IDatabaseProvider {
     boolean saveMinedContext(ModelEntry modelEntry) throws SQLException;
     boolean tableExists(String tableName) throws SQLException;
 	double getKKCScore(Map.Entry<String, String> keywordPair) throws SQLException;
+	boolean isFileReady();
 }

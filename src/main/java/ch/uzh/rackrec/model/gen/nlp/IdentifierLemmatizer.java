@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
@@ -24,6 +25,7 @@ public class IdentifierLemmatizer implements ILemmatizer {
 
 
     private Predicate<String> isNotAStopWord = p-> !stopWordProvider.isStopWord(p);
+    private Predicate<String> isNotNoise = p-> !Pattern.matches("\\$\\d+",p);
 
     @Inject
     public IdentifierLemmatizer (IStopWordProvider stopWordProvider, Logger logger){
@@ -54,7 +56,12 @@ public class IdentifierLemmatizer implements ILemmatizer {
         if(this.removeStopWords) {
             words = words.stream()
                     .filter(this.isNotAStopWord)
+                    .filter(this.isNotNoise)
                     .collect(Collectors.toList());
+        }
+        while (words.remove(""));
+        if (words.isEmpty()){
+            return new ArrayList<String>();
         }
 
         Sentence sent = new Sentence(words);
