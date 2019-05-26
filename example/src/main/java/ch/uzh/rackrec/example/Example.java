@@ -62,7 +62,7 @@ public class Example {
 		System.out.println(metricCollection1.size());
 		metricCollection1.printMeanMetrics();
 		
-	    LineChart_AWT chart = new LineChart_AWT("RACK Evaluation Results" , "Performance Metrics", metricCollection1.get());
+	    LineChart_AWT chart = new LineChart_AWT("RACK Evaluation Results" , "Performance Metrics", metricCollection1.getMeanMetrics());
 	    chart.pack( );
 	    RefineryUtilities.centerFrameOnScreen( chart );
 	    chart.setVisible( true );

@@ -24,7 +24,10 @@ public class QueryMetrics {
 		this.maxK = maxK;
 		
 		this.myMetricTable = new MetricTable(this.maxK);
-		
+	}
+	
+	public QueryMetrics(MetricTable newMetricTable) {
+		this.myMetricTable = newMetricTable;
 	}
 	
 	public void print() {
@@ -87,7 +90,8 @@ public class QueryMetrics {
 			Boolean foundInGold = false;
 	    	while (goldIterator.hasNext() && foundInGold == false) {
 				Pair<IMemberName, Double> goldPair = goldIterator.next();
-		        IMemberName name1 = new MethodName(goldPair.getLeft().getFullName());		
+		        IMemberName name1 = new MethodName(goldPair.getLeft().getFullName());	
+
 				if (rackPair.getLeft().toString().equals(name1.toString())) {
 					foundInGold = true;
 					truePositives += 1;
@@ -101,13 +105,10 @@ public class QueryMetrics {
 			foundInGold = false;
 	    	rackCounter += 1;
 	    }
-	    if (this.resultRACK.size() == 0 || this.resultGold.size() == 0) {
-	    	precision = 0;
-			recall = 0;
-		} else {
-		    precision = (double) truePositives / ((double) k + 1);
-		    recall = (double) truePositives / (double) this.resultGold.size();
-		}	
+
+	    precision = (double) truePositives / ((double) k + 1);
+	    recall = (double) truePositives / (double) this.resultGold.size();
+
 		ArrayList<Double> returnValues = new ArrayList<Double>();
 		returnValues.add(reciprocalRank);
 		returnValues.add((double) Math.round(precision * 1000) / 1000);

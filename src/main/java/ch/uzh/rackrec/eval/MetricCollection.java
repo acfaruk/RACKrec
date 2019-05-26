@@ -14,22 +14,23 @@ public class MetricCollection {
 	public MetricCollection(Integer k) {
 		this.k = k;
 		this.metricCollection = new ArrayList<QueryMetrics>();
+		this.meanMetrics = new MetricTable(0);
 	}
 
 	public void add(QueryMetrics queryMetrics) {
 		this.metricCollection.add(queryMetrics);
 	}
 	
-	public void printCollection() {
-		
-	}
-	
-	public MetricTable get() {
+	public MetricTable getMeanMetrics() {
 		return this.meanMetrics;
 	}
 	
 	public void printMeanMetrics() {
-		this.meanMetrics.printTable();
+		if (this.meanMetrics.getMetricTable().size() != 0) {
+			this.meanMetrics.printTable();
+		} else {
+			System.err.println("Mean metrics have not yet been calculated!");
+		}
 	}
 	
 	public void calculateMeanMetrics() {
@@ -55,7 +56,6 @@ public class MetricCollection {
 			Pair<String, ArrayList<Double>> recall = metricCollection.get(i).getMetricTable().get(3);
 
 			for (int j = 0; j < precision.getRight().size(); j++) {
-				// if accuracy.getRight.get(j) not null
 				if (accuracy.getRight().get(j) != null) {
 					meanAccuracy.set(j, meanAccuracy.get(j) + accuracy.getRight().get(j));
 					meanReciprocalRank.set(j, meanReciprocalRank.get(j) + reciprocalRank.getRight().get(j));
@@ -68,7 +68,6 @@ public class MetricCollection {
 		}
 		
 		for (int i = 0; i < meanPrecision.size(); i++) {
-			//check for 0
 			meanAccuracy.set(i, (double) Math.round(meanAccuracy.get(i) / ((double) metricCollection.size() - nullAt.get(i)) * 1000) / 1000);
 			meanReciprocalRank.set(i, (double) Math.round(meanReciprocalRank.get(i) / ((double) metricCollection.size() - nullAt.get(i)) * 1000) / 1000);
 			meanPrecision.set(i, (double) Math.round(meanPrecision.get(i) / ((double) metricCollection.size() - nullAt.get(i)) * 1000) / 1000);
