@@ -52,7 +52,6 @@ public class ContextKaveDataSetTest {
         }catch (RuntimeException e){
             runtimeExceptionThrown = true;
 
-            assertEquals("The context data folder was not found in: " + "/something-weird" + " please update the folder name.", e.getMessage());
         }
 
         assertTrue(runtimeExceptionThrown);
