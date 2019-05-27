@@ -23,7 +23,7 @@ public class ContextKaveDataSetTest {
     @Before
     public void initialize(){
         properties = new Properties();
-
+        properties.setProperty("generate-model", "true");
         mockedLogger = mock(Logger.class);
     }
 

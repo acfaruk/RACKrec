@@ -46,7 +46,7 @@ public class ContextKaveDataSet extends KaveDataSet {
     }
 
     private void checkFolder() {
-        if (contextPath == null){
+        if (contextPath == null && Boolean.parseBoolean(properties.getProperty("generate-model")) == true){
             String message = "The context path was not found in the properties object. The data can't be loaded!";
             logger.log(Level.SEVERE, message);
             throw new RuntimeException(message);
@@ -55,7 +55,7 @@ public class ContextKaveDataSet extends KaveDataSet {
         Path path = Paths.get(URI.create("file://" + contextPath));
 
 
-        if (Files.isDirectory(path) == false){
+        if (Files.isDirectory(path) == false && Boolean.parseBoolean(properties.getProperty("generate-model")) == true){
             String message = "The context data folder was not found in: " + path + " please update the folder name.";
             logger.log(Level.SEVERE, message);
             throw new RuntimeException(message);
