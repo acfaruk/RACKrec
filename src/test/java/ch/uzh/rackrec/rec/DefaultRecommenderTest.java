@@ -24,8 +24,7 @@ public class DefaultRecommenderTest {
     public void initialize(){
         properties = new Properties();
         URL resource = DefaultRecommender.class.getResource("/");
-        properties.setProperty("base-path", resource.getPath());
-        properties.setProperty("context-path", "context/");
+        properties.setProperty("context-path", resource.getPath() + "context/");
         properties.setProperty("database-file", resource.getPath()+"DefaultModel-Mscorlib.data");
         properties.setProperty("delta", "5");
         properties.setProperty("apis", "mscorlib");

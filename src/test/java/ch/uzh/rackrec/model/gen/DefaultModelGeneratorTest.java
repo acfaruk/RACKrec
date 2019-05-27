@@ -26,8 +26,7 @@ public class DefaultModelGeneratorTest {
     public void initialize(){
         properties = new Properties();
         URL resource = ContextKaveDataSetTest.class.getResource("/");
-        properties.setProperty("base-path", resource.getPath());
-        properties.setProperty("context-path", "context/");
+        properties.setProperty("context-path", resource.getPath() + "context/");
         mockedLogger = mock(Logger.class);
 
         kaveDataSet = new ContextKaveDataSet(properties, mockedLogger);
