@@ -28,7 +28,7 @@ whatever is better for you. The following properties can be set:
 
 | Property     | Value / Explanation         | Required      |
 | :---         | :---           |           ---:|
-|`generate-model` | `true` or `false` (false if not set) | ✗ |
+|`generate-model` | `true` or `false` (false if not set) if this is set to true, then a new file in `database-file` is generated | ✗ |
 |`context-path` | `path` to folder with the context data from KaVE | if `generate-model = true` |
 |`apis`| comma separated list of assembly names to generate the model from | if `generate-model = true`
 |`delta`| `int` value (check paper for meaning)| ✔ | 

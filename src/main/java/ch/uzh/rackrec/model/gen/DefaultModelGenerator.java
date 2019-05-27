@@ -27,7 +27,8 @@ public class DefaultModelGenerator extends ModelGenerator {
         this.lemmatizer = lemmatizer.enableDuplicateRemoval().enableStopWordRemoval();
 
         if (properties.getProperty("apis") == null){
-            logger.log(Level.INFO, "There are no api's specified for modelgeneration! Checking all apis now.");
+            if (Boolean.parseBoolean(properties.getProperty("generate-model")))
+                logger.log(Level.INFO, "There are no api's specified for modelgeneration! Checking all apis now.");
             this.apisToCheck = null;
         }else{
             this.apisToCheck = Arrays.asList(properties.getProperty("apis").split(","));

@@ -3,15 +3,12 @@ package ch.uzh.rackrec.model;
 import ch.uzh.rackrec.model.gen.ModelGenerator;
 import ch.uzh.rackrec.model.provider.IDatabaseProvider;
 import ch.uzh.rackrec.model.provider.ModelEntry;
-import ch.uzh.rackrec.model.provider.SQLiteProvider;
 import ch.uzh.rackrec.model.view.KAC;
 import ch.uzh.rackrec.model.view.KKC;
 import com.google.inject.Inject;
 
-import java.io.File;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,8 +18,8 @@ public class DefaultModel extends Model {
     public DefaultModel(Properties properties, ModelGenerator modelGenerator, Logger logger, IDatabaseProvider databaseProvider) {
         super(properties, modelGenerator, logger, databaseProvider);
 
-
-        if (!databaseProvider.isFileReady()) {
+        if (Boolean.parseBoolean(properties.getProperty("generate-model"))) {
+            logger.log(Level.INFO, "Generating model.");
             try {
                 databaseProvider.prepareSchemas();
                 for (ModelEntry m : modelGenerator.getModelEntries()) {
