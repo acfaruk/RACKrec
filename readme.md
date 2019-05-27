@@ -28,12 +28,13 @@ whatever is better for you. The following properties can be set:
 
 | Property     | Value / Explanation         | Required      |
 | :---         | :---           |           ---:|
-|`generate-model` | `true` or `false` | ✔ |
+|`generate-model` | `true` or `false` (false if not set) | ✗ |
 |`context-path` | `path` to folder with the context data from KaVE | if `generate-model = true` |
 |`apis`| comma separated list of assembly names to generate the model from | if `generate-model = true`
 |`delta`| `int` value (check paper for meaning)| ✔ | 
 |`lamda`| `double` value (check paper for meaning)| ✔ |
 |`database-file`| `path` to sqlite db file (generated model) | ✔ |
+|`use-KKC`| `true` or `false` (false if not set) check paper for KKC definition | ✗ |
 
 ### Creating the Recommender
 After you created the properties object, you can instantiate the recommender like this:
