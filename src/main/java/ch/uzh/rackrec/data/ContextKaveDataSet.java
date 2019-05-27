@@ -52,7 +52,7 @@ public class ContextKaveDataSet extends KaveDataSet {
             throw new RuntimeException(message);
         }
 
-        Path path = Paths.get(contextPath);
+        Path path = Paths.get(URI.create("file://" + contextPath));
 
 
         if (Files.isDirectory(path) == false){
