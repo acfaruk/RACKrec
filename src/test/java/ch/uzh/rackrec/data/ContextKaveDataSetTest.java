@@ -23,14 +23,14 @@ public class ContextKaveDataSetTest {
     @Before
     public void initialize(){
         properties = new Properties();
-        URL resource = ContextKaveDataSetTest.class.getResource("/");
-        properties.setProperty("base-path", resource.getPath());
+
         mockedLogger = mock(Logger.class);
     }
 
     @Test
     public void createKontextCaveDataSet(){
-        properties.setProperty("context-path", "context/");
+        URL resource = ContextKaveDataSetTest.class.getResource("/");
+        properties.setProperty("context-path", resource.getPath());
 
         ContextKaveDataSet sut = new ContextKaveDataSet(properties, mockedLogger);
 
@@ -43,7 +43,7 @@ public class ContextKaveDataSetTest {
 
     @Test
     public void testWrongContextFolder(){
-        properties.setProperty("context-path", "wrong/");
+        properties.setProperty("context-path", "/something-weird");
 
         boolean runtimeExceptionThrown = false;
 
@@ -52,8 +52,6 @@ public class ContextKaveDataSetTest {
         }catch (RuntimeException e){
             runtimeExceptionThrown = true;
 
-            Path path = Paths.get(URI.create("file://" + properties.getProperty("base-path") + properties.getProperty("context-path")));
-            assertEquals("The context data folder was not found in: " + path + " please update the folder name.", e.getMessage());
         }
 
         assertTrue(runtimeExceptionThrown);

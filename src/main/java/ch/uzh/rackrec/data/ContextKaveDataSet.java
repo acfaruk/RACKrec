@@ -25,15 +25,13 @@ import java.util.logging.Logger;
 
 public class ContextKaveDataSet extends KaveDataSet {
 
-    private String basePath;
-    private String relativeContextPath;
     private String contextPath;
     private List<Context> contexts;
 
     @Inject
     public ContextKaveDataSet(Properties properties, Logger logger){
         super(properties, logger);
-        loadProperties();
+        contextPath = properties.getProperty("context-path");
         checkFolder();
     }
 
@@ -47,20 +45,15 @@ public class ContextKaveDataSet extends KaveDataSet {
         };
     }
 
-    private void loadProperties(){
-        basePath = properties.getProperty("base-path");
-        relativeContextPath = properties.getProperty("context-path");
-        contextPath = basePath + relativeContextPath;
-    }
-
     private void checkFolder() {
-        if (relativeContextPath == null){
+        if (contextPath == null){
             String message = "The context path was not found in the properties object. The data can't be loaded!";
             logger.log(Level.SEVERE, message);
             throw new RuntimeException(message);
         }
 
-        Path path = Paths.get(URI.create("file://" + basePath + relativeContextPath));
+        Path path = Paths.get(URI.create("file://" + contextPath));
+
 
         if (Files.isDirectory(path) == false){
             String message = "The context data folder was not found in: " + path + " please update the folder name.";
