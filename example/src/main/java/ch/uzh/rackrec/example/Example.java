@@ -31,9 +31,10 @@ public class Example {
         Properties props = new Properties();
         props.setProperty("database-file", Example.class.getResource("/").getPath() + "DefaultModel-Mscorlib");
         props.setProperty("base-path", Example.class.getResource("/").getPath());
-        props.setProperty("context-path", "context/");
+        props.setProperty("context-path", Example.class.getResource("/").getPath() + "context/");
         props.setProperty("delta", "5");
         props.setProperty("lambda", "0");
+        props.setProperty("generate-model", "false");
         
 
         //choose your module, see the readme for available modules

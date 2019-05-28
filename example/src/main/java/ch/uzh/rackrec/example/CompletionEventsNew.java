@@ -97,8 +97,6 @@ public class CompletionEventsNew {
 				CompletionEventData completionEventData = process(e);
 				if (!completionEventData.getEventResult().isEmpty()) {
 					eventsData.add(completionEventData);
-					System.out.println(e);
-					System.out.println("---------------------------------------------------------------");
 				}
 			}
 			ra.close();
@@ -119,29 +117,18 @@ public class CompletionEventsNew {
 			// if the correct type is identified, you can cast it...
 			CompletionEvent ce = (CompletionEvent) event;
 			eventContext = ce.getContext();
-			// ...and access the special context for this kind of event
 			if (ce.terminatedState == TerminationState.Applied) {
 				if (ce.getLastSelectedProposal().getName() instanceof MethodName){
-					MethodName name = (MethodName) ce.getLastSelectedProposal().getName();
-					
-					String assemblyName = name.getDeclaringType().getAssembly().getName();
-					IMemberName memberName = name;
-
+				
 					Double rank = Double.MAX_VALUE;
-
-					// IMemberName finalName = (MethodName) memberName.getDeclaringType().getName();
-			        //Pair<IMemberName, Double> topPair = Pair.of(memberName, rank);
-					//completionEvents.add(topPair);
-					//System.out.println("added top pair " + memberName);
 					
-					rank = Double.MAX_VALUE - 1;
 					for (IProposal p : ce.getProposalCollection()) {
 						if (p.getName() instanceof MethodName) {
-							name = (MethodName) p.getName();
-							assemblyName = name.getDeclaringType().getAssembly().getName();
-							if (assemblyName.equals("mscorlib") && !memberName.getFullName().toString().equals(".ctor")) {
-								memberName = name;
-						        Pair<IMemberName, Double> currentPair = Pair.of(memberName, rank);
+							MethodName name = (MethodName) p.getName();
+							String assemblyName = name.getDeclaringType().getAssembly().getName();
+							if (assemblyName.equals("mscorlib") && !name.getFullName().toString().equals(".ctor")) {
+								System.out.println("MethodName name: " + name.getDeclaringType().getName());
+						        Pair<IMemberName, Double> currentPair = Pair.of(name, rank);
 								completionEvents.add(currentPair);
 								rank--;
 							}							
@@ -149,10 +136,6 @@ public class CompletionEventsNew {
 					}
 				}
 			}
-		} else {
-			// there a many different event types to process, it is recommended
-			// that you browse the package to see all types and consult the
-			// website for the documentation of the semantics of each event...
 		}
 		CompletionEventData eventData = new CompletionEventData(completionEvents, eventContext);
 		return eventData;
