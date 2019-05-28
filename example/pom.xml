@@ -55,7 +55,8 @@
             <groupId>ch.uzh.rackrec</groupId>
             <artifactId>RACKrec</artifactId>
             <!-- snapshot versions only work when installed locally, bintray does not allow snapshot deploys -->
-            <version>0.0.2-SNAPSHOT</version>
+            <version>0.1.0</version>
+            <type>pom</type>
         </dependency>
         <!-- https://mvnrepository.com/artifact/jfree/jfreechart -->
 		<dependency>
