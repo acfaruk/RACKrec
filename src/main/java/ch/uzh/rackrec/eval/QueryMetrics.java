@@ -107,7 +107,7 @@ public class QueryMetrics {
 						}
 						break;
 					}
-				} else if (this.databaseType.equals("basic")) {
+				} else if (this.databaseType.equals("simple")) {
 			        System.out.print(rackPair.getLeft().toString() + " ");
 			        System.out.println(name1.toString());
 					

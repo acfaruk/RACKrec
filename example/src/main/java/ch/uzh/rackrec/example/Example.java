@@ -26,7 +26,7 @@ public class Example {
         	
         //set up properties object, see the readme for available properties depending on the module type
         Properties props = new Properties();
-        props.setProperty("database-file", Example.class.getResource("/").getPath() + "Model_Extended");
+        props.setProperty("database-file", Example.class.getResource("/").getPath() + "DefaultModel-Mscorlib-simple");
         props.setProperty("context-path", Example.class.getResource("/").getPath() + "context/");
         props.setProperty("delta", "5");
         props.setProperty("lambda", "0");
@@ -38,7 +38,7 @@ public class Example {
         
         // Set the type of the database, currently it's either extended or basic
         //String databaseType = "extended";
-        String databaseType = "basic";
+        String databaseType = "simple";
 
         // Retrieve relevant events from the data set
     	List<CompletionEventData> eventData = CompletionEventsNew.readAllEvents(eventDataLocation, databaseType);

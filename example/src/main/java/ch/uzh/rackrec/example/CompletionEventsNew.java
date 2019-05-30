@@ -60,7 +60,6 @@ public class CompletionEventsNew {
 	 * dataset from our website, please unzip the archive and point to the
 	 * containing folder here.
 	 */
-	private static final String DIR_USERDATA = "/home/luc/Documents/RACK/Events-170301-2";
 	private static String databaseType = "";
 
 	/**
@@ -138,7 +137,7 @@ public class CompletionEventsNew {
 									rank--;
 								}
 							}
-							else if (databaseType.equals("basic")) {
+							else if (databaseType.equals("simple")) {
 								if (assemblyName.equals("mscorlib") && !name.getFullName().toString().equals(".ctor")) {
 									//System.out.print("MethodName name: " + name.getDeclaringType().getName());
 									//System.out.println(" ");
