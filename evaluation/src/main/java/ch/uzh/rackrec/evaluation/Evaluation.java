@@ -26,7 +26,7 @@ public class Evaluation {
         	
         //set up properties object, see the readme for available properties depending on the module type
         Properties props = new Properties();
-        props.setProperty("database-file", Evaluation.class.getResource("/").getPath() + "DefaultModel-Mscorlib-simple");
+        props.setProperty("database-file", Evaluation.class.getResource("/").getPath() + "DefaultModel-Mscorlib-simple.data");
         props.setProperty("context-path", Evaluation.class.getResource("/").getPath() + "context/");
         props.setProperty("delta", "5");
         props.setProperty("lambda", "0");

@@ -11,7 +11,7 @@
     -->
 
     <groupId>ch.uzh.rackrec</groupId>
-    <artifactId>example</artifactId>
+    <artifactId>evaluation</artifactId>
     <packaging>jar</packaging>
     <version>0.0.2-SNAPSHOT</version>
 
@@ -30,7 +30,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>ch.uzh.rackrec.example.Example</mainClass>
+                            <mainClass>ch.uzh.rackrec.evaluation.Evaluation</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
