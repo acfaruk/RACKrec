@@ -66,7 +66,7 @@ public class QueryMetricsTest {
         eventResult.add(pair2);
         eventResult.add(pair3);
         
-    	testMetrics = new QueryMetrics(recommenderResult, eventResult, maxK, "basic");
+    	testMetrics = new QueryMetrics(recommenderResult, eventResult, maxK, "simple");
     	
     	testMetrics.calculateMetricTable();
     	testMetrics.print();
@@ -81,7 +81,7 @@ public class QueryMetricsTest {
         
         eventResult.add(pair2);
         
-    	testMetrics = new QueryMetrics(recommenderResult, eventResult, maxK, "basic");
+    	testMetrics = new QueryMetrics(recommenderResult, eventResult, maxK, "simple");
     	testMetrics.calculateMetricTable();
     	testMetrics.print();
     	
@@ -97,7 +97,7 @@ public class QueryMetricsTest {
         
         recommenderResult.add(pair2);
         
-    	testMetrics = new QueryMetrics(recommenderResult, eventResult, maxK, "basic");
+    	testMetrics = new QueryMetrics(recommenderResult, eventResult, maxK, "simple");
     	testMetrics.calculateMetricTable();
     	testMetrics.print();
     	
@@ -110,7 +110,20 @@ public class QueryMetricsTest {
     @Test
     public void testCalculateMetricTableEmptyBoth() {
                 
-    	testMetrics = new QueryMetrics(recommenderResult, eventResult, maxK, "basic");
+    	testMetrics = new QueryMetrics(recommenderResult, eventResult, maxK, "simple");
+    	testMetrics.calculateMetricTable();
+    	testMetrics.print();
+    	
+    	MetricTable result = testMetrics.getMetricTable();
+    	String expected = "[(Accuracy@K,[null, null, null, null]), (Reciprocal Rank@K,[null, null, null, null]), (Precision@K,[null, null, null, null]), (Recall@K,[null, null, null, null])]";
+    	assertEquals(expected, result.getMetricTable().toString());
+    	
+    }
+    
+    @Test
+    public void testExtended() {
+                
+    	testMetrics = new QueryMetrics(recommenderResult, eventResult, maxK, "extended");
     	testMetrics.calculateMetricTable();
     	testMetrics.print();
     	

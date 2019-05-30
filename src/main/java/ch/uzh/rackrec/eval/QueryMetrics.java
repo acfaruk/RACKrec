@@ -93,32 +93,22 @@ public class QueryMetrics {
 	    	while (goldIterator.hasNext() && foundInGold == false) {
 				Pair<IMemberName, Double> goldPair = goldIterator.next();
 		        IMemberName name1 = new MethodName(goldPair.getLeft().getFullName());
+		        String finalGoldString = new String();
 		        
 		        if (this.databaseType.equals("extended")) {
-			        //System.out.print(rackPair.getLeft().toString() + " ");
-			        String finalGoldString = "MethodName(" + goldPair.getLeft().getDeclaringType().getName() + "." + goldPair.getLeft().getFullName() + ")";
-			        //System.out.println(finalGoldString);
-
-					if (rackPair.getLeft().toString().equals(finalGoldString)) {
-						foundInGold = true;
-						truePositives += 1;
-						if (reciprocalRank == 0.0) {
-							reciprocalRank = 1.0 / ((double) rackCounter + 1.0);
-						}
-						break;
-					}
+			        finalGoldString = "MethodName(" + goldPair.getLeft().getDeclaringType().getName() + "." + goldPair.getLeft().getFullName() + ")";
 				} else if (this.databaseType.equals("simple")) {
-			        //System.out.print(rackPair.getLeft().toString() + " ");
-			        //System.out.println(name1.toString());
-					
-					if (rackPair.getLeft().toString().equals(name1.toString())) {
-						foundInGold = true;
-						truePositives += 1;
-						if (reciprocalRank == 0.0) {
-							reciprocalRank = 1.0 / ((double) rackCounter + 1.0);
-						}
-						break;
+					finalGoldString = name1.toString();
+				}
+		        System.out.print(rackPair.getLeft().toString() + " ");
+		        System.out.println(finalGoldString);
+				if (rackPair.getLeft().toString().equals(finalGoldString)) {
+					foundInGold = true;
+					truePositives += 1;
+					if (reciprocalRank == 0.0) {
+						reciprocalRank = 1.0 / ((double) rackCounter + 1.0);
 					}
+					break;
 				}
 			}
 			goldIterator = this.resultGold.iterator();

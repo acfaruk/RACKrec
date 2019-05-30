@@ -1,4 +1,4 @@
-package ch.uzh.rackrec.example;
+package ch.uzh.rackrec.evaluation;
 /**
  * Copyright 2016 Technische Universität Darmstadt
  * 

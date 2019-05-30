@@ -1,4 +1,4 @@
-package ch.uzh.rackrec.example;
+package ch.uzh.rackrec.evaluation;
 
 import ch.uzh.rackrec.eval.MetricCollection;
 import ch.uzh.rackrec.eval.QueryMetrics;
@@ -20,21 +20,21 @@ import cc.kave.commons.model.naming.codeelements.IMemberName;
 import cc.kave.commons.model.naming.impl.v0.codeelements.MethodName;
 import cc.kave.commons.model.naming.types.ITypeName;
 
-public class Example {
+public class Evaluation {
 
     public static void main(String[] args) {
         	
         //set up properties object, see the readme for available properties depending on the module type
         Properties props = new Properties();
-        props.setProperty("database-file", Example.class.getResource("/").getPath() + "DefaultModel-Mscorlib-simple");
-        props.setProperty("context-path", Example.class.getResource("/").getPath() + "context/");
+        props.setProperty("database-file", Evaluation.class.getResource("/").getPath() + "DefaultModel-Mscorlib-simple");
+        props.setProperty("context-path", Evaluation.class.getResource("/").getPath() + "context/");
         props.setProperty("delta", "5");
         props.setProperty("lambda", "0");
         props.setProperty("generate-model", "false");
-        props.setProperty("use-KKC", "false");
+        props.setProperty("use-KKC", "true");
         
         // Set the location for the event data set
-        String eventDataLocation = Example.class.getResource("/").getPath() + "Events/";
+        String eventDataLocation = Evaluation.class.getResource("/").getPath() + "Events/";
         
         // Set the type of the database, currently it's either extended or basic
         //String databaseType = "extended";

@@ -1,4 +1,4 @@
-package ch.uzh.rackrec.example;
+package ch.uzh.rackrec.evaluation;
 
 import cc.kave.commons.model.events.completionevents.Context;
 import cc.kave.commons.model.naming.codeelements.IMemberName;

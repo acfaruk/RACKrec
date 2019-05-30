@@ -1,4 +1,3 @@
-# RACK Recommender
 ## Code Completion Recommender - ASE19 Project
 [![Build Status](https://dev.azure.com/facibal/RACKrec/_apis/build/status/acfaruk.RACKrec?branchName=master)](https://dev.azure.com/facibal/RACKrec/_build/latest?definitionId=1&branchName=master)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ch.uzh.rackrec%3ARACKrec&metric=alert_status)](https://sonarcloud.io/dashboard?id=ch.uzh.rackrec%3ARACKrec)
@@ -9,12 +8,12 @@ This repository is a group project at the UZH for the Advanced Software Engineer
 Our teams recommender is based on the following paper: https://doi.org/10.1109/SANER.2016.80
 
 ## Setup / Installation
-The project consists of two maven projects in the folders example and src respectively.
-The first project is the example project which runs an evaluation on the RACK recommender using the second project as a
+The project consists of two maven projects in the folders evaluation and src respectively.
+The first project is the evaluation project which runs an evaluation on the RACK recommender using the second project as a
 dependency. The second project is the RACK recommender implementation usable as a library.
 
-If you want to run the example you have to run `mvn install` on the library project, to install in your local repository,
-so that the example project can access it as a dependency.
+If you want to run the evaluation you have to run `mvn install` on the library project, to install in your local repository,
+so that the evaluation project can access it as a dependency.
 
 ## Maven Repository
 If you just want to consume the library, then you can use our package at [bintray](https://bintray.com/acfaruk/uzh/RACKrec).
