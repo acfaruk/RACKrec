@@ -95,9 +95,9 @@ public class QueryMetrics {
 		        IMemberName name1 = new MethodName(goldPair.getLeft().getFullName());
 		        
 		        if (this.databaseType.equals("extended")) {
-			        System.out.print(rackPair.getLeft().toString() + " ");
+			        //System.out.print(rackPair.getLeft().toString() + " ");
 			        String finalGoldString = "MethodName(" + goldPair.getLeft().getDeclaringType().getName() + "." + goldPair.getLeft().getFullName() + ")";
-			        System.out.println(finalGoldString);
+			        //System.out.println(finalGoldString);
 
 					if (rackPair.getLeft().toString().equals(finalGoldString)) {
 						foundInGold = true;
@@ -108,8 +108,8 @@ public class QueryMetrics {
 						break;
 					}
 				} else if (this.databaseType.equals("simple")) {
-			        System.out.print(rackPair.getLeft().toString() + " ");
-			        System.out.println(name1.toString());
+			        //System.out.print(rackPair.getLeft().toString() + " ");
+			        //System.out.println(name1.toString());
 					
 					if (rackPair.getLeft().toString().equals(name1.toString())) {
 						foundInGold = true;

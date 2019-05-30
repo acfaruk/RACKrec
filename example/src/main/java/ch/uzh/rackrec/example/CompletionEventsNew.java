@@ -130,8 +130,6 @@ public class CompletionEventsNew {
 							//check which database type is used as the names and contents are different
 							if (databaseType.equals("extended")) {
 								if (assemblyName.equals("mscorlib")) {
-									//System.out.print("MethodName name: " + name.getDeclaringType().getName());
-									//System.out.println(" ");
 							        Pair<IMemberName, Double> currentPair = Pair.of(name, rank);
 									completionEvents.add(currentPair);
 									rank--;
@@ -139,8 +137,6 @@ public class CompletionEventsNew {
 							}
 							else if (databaseType.equals("simple")) {
 								if (assemblyName.equals("mscorlib") && !name.getFullName().toString().equals(".ctor")) {
-									//System.out.print("MethodName name: " + name.getDeclaringType().getName());
-									//System.out.println(" ");
 							        Pair<IMemberName, Double> currentPair = Pair.of(name, rank);
 									completionEvents.add(currentPair);
 									rank--;

@@ -34,7 +34,7 @@ public class Example {
         props.setProperty("use-KKC", "false");
         
         // Set the location for the event data set
-        String eventDataLocation = Example.class.getResource("/").getPath() + "Events";
+        String eventDataLocation = Example.class.getResource("/").getPath() + "Events/";
         
         // Set the type of the database, currently it's either extended or basic
         //String databaseType = "extended";
