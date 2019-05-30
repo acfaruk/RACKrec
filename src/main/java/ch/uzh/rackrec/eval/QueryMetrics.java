@@ -100,8 +100,8 @@ public class QueryMetrics {
 				} else if (this.databaseType.equals("simple")) {
 					finalGoldString = name1.toString();
 				}
-		        System.out.print(rackPair.getLeft().toString() + " ");
-		        System.out.println(finalGoldString);
+		        //System.out.print(rackPair.getLeft().toString() + " ");
+		        //System.out.println(finalGoldString);
 				if (rackPair.getLeft().toString().equals(finalGoldString)) {
 					foundInGold = true;
 					truePositives += 1;

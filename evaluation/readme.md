@@ -1,6 +1,7 @@
 # RACK Recommender Evaluation
 This part of the repository uses and evaluates the recommender with a model of choice. A context from a completion event from the KaVe events dataset is fed into the recommender and compaired against the proposals from the same completion event.
 
+
 ## Configuring Evaluation.java
 All files used in this evaluation have to be put into the */target/classes/* directory. This includes a model/database file and an *Events/* folder where .zip files containing completion events are located.
 
