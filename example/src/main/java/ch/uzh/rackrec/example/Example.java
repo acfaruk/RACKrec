@@ -75,7 +75,7 @@ public class Example {
 		metricCollection1.printMeanMetrics();
 		
 		//Put the data in a chart and display it
-	    LineChart_AWT chart = new LineChart_AWT("RACK Evaluation Results" , "Performance Metrics of " + metricCollection1.size() + " queries", metricCollection1.getMeanMetrics());
+	    LineChart_AWT chart = new LineChart_AWT("RACK Evaluation Results" , "Performance Metrics of " + metricCollection1.size() + " queries, with the " + databaseType + " database", metricCollection1.getMeanMetrics());
 	    chart.pack( );
 	    RefineryUtilities.centerFrameOnScreen( chart );
 	    chart.setVisible( true );
