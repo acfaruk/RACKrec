@@ -31,7 +31,7 @@ public class Evaluation {
         props.setProperty("delta", "5");
         props.setProperty("lambda", "0");
         props.setProperty("generate-model", "false");
-        props.setProperty("use-KKC", "true");
+        props.setProperty("use-KKC", "false");
         
         // Set the location for the event data set
         String eventDataLocation = Evaluation.class.getResource("/").getPath() + "Events/";
