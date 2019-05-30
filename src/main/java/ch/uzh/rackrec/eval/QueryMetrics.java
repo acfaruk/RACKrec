@@ -15,13 +15,15 @@ public class QueryMetrics {
 	private Set<Pair<IMemberName, Double>> resultRACK;
 	private Set<Pair<IMemberName, Double>> resultGold;
 	private Integer maxK;
+	private String databaseType;
 	
 	private MetricTable myMetricTable;
 		
-	public QueryMetrics(Set<Pair<IMemberName, Double>> resultRACK, Set<Pair<IMemberName, Double>> resultGold, Integer maxK) {
+	public QueryMetrics(Set<Pair<IMemberName, Double>> resultRACK, Set<Pair<IMemberName, Double>> resultGold, Integer maxK, String databaseType) {
 		this.resultRACK = resultRACK;
 		this.resultGold = resultGold;
 		this.maxK = maxK;
+		this.databaseType = databaseType;
 		
 		this.myMetricTable = new MetricTable(this.maxK);
 	}
@@ -90,9 +92,17 @@ public class QueryMetrics {
 			Boolean foundInGold = false;
 	    	while (goldIterator.hasNext() && foundInGold == false) {
 				Pair<IMemberName, Double> goldPair = goldIterator.next();
-		        IMemberName name1 = new MethodName(goldPair.getLeft().getFullName());	
-
-				if (rackPair.getLeft().toString().equals(name1.toString())) {
+		        IMemberName name1 = new MethodName(goldPair.getLeft().getFullName());
+		        String finalGoldString = new String();
+		        
+		        if (this.databaseType.equals("extended")) {
+			        finalGoldString = "MethodName(" + goldPair.getLeft().getDeclaringType().getName() + "." + goldPair.getLeft().getFullName() + ")";
+				} else if (this.databaseType.equals("simple")) {
+					finalGoldString = name1.toString();
+				}
+		        //System.out.print(rackPair.getLeft().toString() + " ");
+		        //System.out.println(finalGoldString);
+				if (rackPair.getLeft().toString().equals(finalGoldString)) {
 					foundInGold = true;
 					truePositives += 1;
 					if (reciprocalRank == 0.0) {

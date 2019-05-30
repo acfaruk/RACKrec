@@ -1,4 +1,4 @@
-package ch.uzh.rackrec.example;
+package ch.uzh.rackrec.evaluation;
 /**
  * Copyright 2016 Technische Universität Darmstadt
  * 
@@ -60,18 +60,18 @@ public class CompletionEventsNew {
 	 * dataset from our website, please unzip the archive and point to the
 	 * containing folder here.
 	 */
-	private static final String DIR_USERDATA = "/home/luc/Documents/RACK/Events-170301-2";
+	private static String databaseType = "";
 
 	/**
 	 * 1: Find all users in the dataset.
 	 */
-	public static List<String> findAllUsers() {
+	public static List<String> findAllUsers(String eventDataLocation) {
 		// This step is straight forward, as events are grouped by user. Each
 		// .zip file in the dataset corresponds to one user.
 
 		List<String> zips = Lists.newLinkedList();
 		int i = 0;
-		for (File f : FileUtils.listFiles(new File(DIR_USERDATA), new String[] { "zip" }, true)) {
+		for (File f : FileUtils.listFiles(new File(eventDataLocation), new String[] { "zip" }, true)) {
 			zips.add(f.getAbsolutePath());
 			i++;
 		}
@@ -81,9 +81,11 @@ public class CompletionEventsNew {
 	/**
 	 * 2: Reading events
 	 */
-	public static List<CompletionEventData> readAllEvents() {
+	public static List<CompletionEventData> readAllEvents(String eventDataLocation, String newDatabaseType) {
+		databaseType = newDatabaseType;
+				
 		// each .zip file corresponds to a user
-		List<String> userZips = findAllUsers();
+		List<String> userZips = findAllUsers(eventDataLocation);
 		ArrayList<CompletionEventData> eventsData = new ArrayList<>();
 		for (String user : userZips) {
 			// you can use our helper to open a file...
@@ -97,8 +99,6 @@ public class CompletionEventsNew {
 				CompletionEventData completionEventData = process(e);
 				if (!completionEventData.getEventResult().isEmpty()) {
 					eventsData.add(completionEventData);
-					System.out.println(e);
-					System.out.println("---------------------------------------------------------------");
 				}
 			}
 			ra.close();
@@ -119,40 +119,33 @@ public class CompletionEventsNew {
 			// if the correct type is identified, you can cast it...
 			CompletionEvent ce = (CompletionEvent) event;
 			eventContext = ce.getContext();
-			// ...and access the special context for this kind of event
 			if (ce.terminatedState == TerminationState.Applied) {
 				if (ce.getLastSelectedProposal().getName() instanceof MethodName){
-					MethodName name = (MethodName) ce.getLastSelectedProposal().getName();
-					
-					String assemblyName = name.getDeclaringType().getAssembly().getName();
-					IMemberName memberName = name;
-
+				
 					Double rank = Double.MAX_VALUE;
-
-					// IMemberName finalName = (MethodName) memberName.getDeclaringType().getName();
-			        //Pair<IMemberName, Double> topPair = Pair.of(memberName, rank);
-					//completionEvents.add(topPair);
-					//System.out.println("added top pair " + memberName);
-					
-					rank = Double.MAX_VALUE - 1;
 					for (IProposal p : ce.getProposalCollection()) {
 						if (p.getName() instanceof MethodName) {
-							name = (MethodName) p.getName();
-							assemblyName = name.getDeclaringType().getAssembly().getName();
-							if (assemblyName.equals("mscorlib") && !memberName.getFullName().toString().equals(".ctor")) {
-								memberName = name;
-						        Pair<IMemberName, Double> currentPair = Pair.of(memberName, rank);
-								completionEvents.add(currentPair);
-								rank--;
+							MethodName name = (MethodName) p.getName();
+							String assemblyName = name.getDeclaringType().getAssembly().getName();
+							//check which database type is used as the names and contents are different
+							if (databaseType.equals("extended")) {
+								if (assemblyName.equals("mscorlib")) {
+							        Pair<IMemberName, Double> currentPair = Pair.of(name, rank);
+									completionEvents.add(currentPair);
+									rank--;
+								}
+							}
+							else if (databaseType.equals("simple")) {
+								if (assemblyName.equals("mscorlib") && !name.getFullName().toString().equals(".ctor")) {
+							        Pair<IMemberName, Double> currentPair = Pair.of(name, rank);
+									completionEvents.add(currentPair);
+									rank--;
+								}
 							}							
 						}
 					}
 				}
 			}
-		} else {
-			// there a many different event types to process, it is recommended
-			// that you browse the package to see all types and consult the
-			// website for the documentation of the semantics of each event...
 		}
 		CompletionEventData eventData = new CompletionEventData(completionEvents, eventContext);
 		return eventData;

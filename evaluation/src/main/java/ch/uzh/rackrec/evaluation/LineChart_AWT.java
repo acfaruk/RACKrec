@@ -1,4 +1,4 @@
-package ch.uzh.rackrec.example;
+package ch.uzh.rackrec.evaluation;
 
 import org.jfree.chart.ChartPanel;
 
