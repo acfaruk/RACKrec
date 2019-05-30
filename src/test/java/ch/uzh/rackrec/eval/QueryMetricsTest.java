@@ -66,7 +66,7 @@ public class QueryMetricsTest {
         eventResult.add(pair2);
         eventResult.add(pair3);
         
-    	testMetrics = new QueryMetrics(recommenderResult, eventResult, maxK);
+    	testMetrics = new QueryMetrics(recommenderResult, eventResult, maxK, "basic");
     	
     	testMetrics.calculateMetricTable();
     	testMetrics.print();
@@ -81,7 +81,7 @@ public class QueryMetricsTest {
         
         eventResult.add(pair2);
         
-    	testMetrics = new QueryMetrics(recommenderResult, eventResult, maxK);
+    	testMetrics = new QueryMetrics(recommenderResult, eventResult, maxK, "basic");
     	testMetrics.calculateMetricTable();
     	testMetrics.print();
     	
@@ -97,7 +97,7 @@ public class QueryMetricsTest {
         
         recommenderResult.add(pair2);
         
-    	testMetrics = new QueryMetrics(recommenderResult, eventResult, maxK);
+    	testMetrics = new QueryMetrics(recommenderResult, eventResult, maxK, "basic");
     	testMetrics.calculateMetricTable();
     	testMetrics.print();
     	
@@ -110,7 +110,7 @@ public class QueryMetricsTest {
     @Test
     public void testCalculateMetricTableEmptyBoth() {
                 
-    	testMetrics = new QueryMetrics(recommenderResult, eventResult, maxK);
+    	testMetrics = new QueryMetrics(recommenderResult, eventResult, maxK, "basic");
     	testMetrics.calculateMetricTable();
     	testMetrics.print();
     	

@@ -15,13 +15,15 @@ public class QueryMetrics {
 	private Set<Pair<IMemberName, Double>> resultRACK;
 	private Set<Pair<IMemberName, Double>> resultGold;
 	private Integer maxK;
+	private String databaseType;
 	
 	private MetricTable myMetricTable;
 		
-	public QueryMetrics(Set<Pair<IMemberName, Double>> resultRACK, Set<Pair<IMemberName, Double>> resultGold, Integer maxK) {
+	public QueryMetrics(Set<Pair<IMemberName, Double>> resultRACK, Set<Pair<IMemberName, Double>> resultGold, Integer maxK, String databaseType) {
 		this.resultRACK = resultRACK;
 		this.resultGold = resultGold;
 		this.maxK = maxK;
+		this.databaseType = databaseType;
 		
 		this.myMetricTable = new MetricTable(this.maxK);
 	}
@@ -90,15 +92,33 @@ public class QueryMetrics {
 			Boolean foundInGold = false;
 	    	while (goldIterator.hasNext() && foundInGold == false) {
 				Pair<IMemberName, Double> goldPair = goldIterator.next();
-		        IMemberName name1 = new MethodName(goldPair.getLeft().getFullName());	
+		        IMemberName name1 = new MethodName(goldPair.getLeft().getFullName());
+		        
+		        if (this.databaseType.equals("extended")) {
+			        System.out.print(rackPair.getLeft().toString() + " ");
+			        String finalGoldString = "MethodName(" + goldPair.getLeft().getDeclaringType().getName() + "." + goldPair.getLeft().getFullName() + ")";
+			        System.out.println(finalGoldString);
 
-				if (rackPair.getLeft().toString().equals(name1.toString())) {
-					foundInGold = true;
-					truePositives += 1;
-					if (reciprocalRank == 0.0) {
-						reciprocalRank = 1.0 / ((double) rackCounter + 1.0);
+					if (rackPair.getLeft().toString().equals(finalGoldString)) {
+						foundInGold = true;
+						truePositives += 1;
+						if (reciprocalRank == 0.0) {
+							reciprocalRank = 1.0 / ((double) rackCounter + 1.0);
+						}
+						break;
 					}
-					break;
+				} else if (this.databaseType.equals("basic")) {
+			        System.out.print(rackPair.getLeft().toString() + " ");
+			        System.out.println(name1.toString());
+					
+					if (rackPair.getLeft().toString().equals(name1.toString())) {
+						foundInGold = true;
+						truePositives += 1;
+						if (reciprocalRank == 0.0) {
+							reciprocalRank = 1.0 / ((double) rackCounter + 1.0);
+						}
+						break;
+					}
 				}
 			}
 			goldIterator = this.resultGold.iterator();

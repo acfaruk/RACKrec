@@ -61,17 +61,18 @@ public class CompletionEventsNew {
 	 * containing folder here.
 	 */
 	private static final String DIR_USERDATA = "/home/luc/Documents/RACK/Events-170301-2";
+	private static String databaseType = "";
 
 	/**
 	 * 1: Find all users in the dataset.
 	 */
-	public static List<String> findAllUsers() {
+	public static List<String> findAllUsers(String eventDataLocation) {
 		// This step is straight forward, as events are grouped by user. Each
 		// .zip file in the dataset corresponds to one user.
 
 		List<String> zips = Lists.newLinkedList();
 		int i = 0;
-		for (File f : FileUtils.listFiles(new File(DIR_USERDATA), new String[] { "zip" }, true)) {
+		for (File f : FileUtils.listFiles(new File(eventDataLocation), new String[] { "zip" }, true)) {
 			zips.add(f.getAbsolutePath());
 			i++;
 		}
@@ -81,9 +82,11 @@ public class CompletionEventsNew {
 	/**
 	 * 2: Reading events
 	 */
-	public static List<CompletionEventData> readAllEvents() {
+	public static List<CompletionEventData> readAllEvents(String eventDataLocation, String newDatabaseType) {
+		databaseType = newDatabaseType;
+				
 		// each .zip file corresponds to a user
-		List<String> userZips = findAllUsers();
+		List<String> userZips = findAllUsers(eventDataLocation);
 		ArrayList<CompletionEventData> eventsData = new ArrayList<>();
 		for (String user : userZips) {
 			// you can use our helper to open a file...
@@ -121,16 +124,28 @@ public class CompletionEventsNew {
 				if (ce.getLastSelectedProposal().getName() instanceof MethodName){
 				
 					Double rank = Double.MAX_VALUE;
-					
 					for (IProposal p : ce.getProposalCollection()) {
 						if (p.getName() instanceof MethodName) {
 							MethodName name = (MethodName) p.getName();
 							String assemblyName = name.getDeclaringType().getAssembly().getName();
-							if (assemblyName.equals("mscorlib") && !name.getFullName().toString().equals(".ctor")) {
-								System.out.println("MethodName name: " + name.getDeclaringType().getName());
-						        Pair<IMemberName, Double> currentPair = Pair.of(name, rank);
-								completionEvents.add(currentPair);
-								rank--;
+							//check which database type is used as the names and contents are different
+							if (databaseType.equals("extended")) {
+								if (assemblyName.equals("mscorlib")) {
+									//System.out.print("MethodName name: " + name.getDeclaringType().getName());
+									//System.out.println(" ");
+							        Pair<IMemberName, Double> currentPair = Pair.of(name, rank);
+									completionEvents.add(currentPair);
+									rank--;
+								}
+							}
+							else if (databaseType.equals("basic")) {
+								if (assemblyName.equals("mscorlib") && !name.getFullName().toString().equals(".ctor")) {
+									//System.out.print("MethodName name: " + name.getDeclaringType().getName());
+									//System.out.println(" ");
+							        Pair<IMemberName, Double> currentPair = Pair.of(name, rank);
+									completionEvents.add(currentPair);
+									rank--;
+								}
 							}							
 						}
 					}
